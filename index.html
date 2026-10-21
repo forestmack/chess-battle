@@ -714,6 +714,82 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 .promo-badge{width:150px;height:150px;animation:popin .8s var(--spring) both;filter:drop-shadow(0 18px 30px rgba(0,0,0,.6))}
 .cardimg{width:100%;max-width:300px;border-radius:18px;box-shadow:0 20px 40px -14px rgba(0,0,0,.8)}
 
+
+/* ================= play (home) page ================= */
+.greet{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:-2px}
+.greet-t{font:900 26px/1.05 var(--display);letter-spacing:.04em;text-transform:uppercase}
+.greet-s{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.pillx{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px var(--line);font:800 13px/1 var(--display);letter-spacing:.06em;color:var(--text)}
+.pillx svg{width:13px;height:13px}
+.pillx.hot{color:#ffb35c;box-shadow:inset 0 0 0 1px rgba(255,150,60,.4);background:rgba(255,150,60,.1)}
+.icon-btn.help svg{width:20px;height:20px}
+
+.qp{position:relative;overflow:hidden;padding:20px;border-radius:26px;background:radial-gradient(120% 120% at 100% 0%,rgba(127,149,255,.35),transparent 55%),linear-gradient(160deg,#22308a,#0d1440 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(127,149,255,.35),0 26px 50px -24px rgba(0,0,0,.85)}
+.qp-art{position:absolute;right:-4px;top:4px;width:170px;height:170px;pointer-events:none}
+.qp-art .k1{position:absolute;right:16px;top:14px;width:112px;height:112px;filter:drop-shadow(0 22px 26px rgba(0,0,0,.55));animation:float 4.5s ease-in-out infinite}
+.qp-art .k2{position:absolute;right:120px;top:84px;width:62px;height:62px;opacity:.9;filter:drop-shadow(0 12px 14px rgba(0,0,0,.5));animation:float 4.5s ease-in-out -1.6s infinite}
+.qp-art .glow{position:absolute;right:30px;top:40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,204,46,.45),transparent);filter:blur(4px)}
+.qp-art .cn{position:absolute;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--gold-hi) 0 18%,var(--gold) 52%,var(--gold-lo));box-shadow:0 2px 0 rgba(0,0,0,.4);animation:float 3.5s ease-in-out infinite}
+.qp-k{font:700 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-hi)}
+.qp-t{font:900 40px/.92 var(--display);letter-spacing:.03em;text-transform:uppercase;margin:10px 0 8px;max-width:62%;text-wrap:balance}
+.qp-meta{display:flex;gap:6px;flex-wrap:wrap;max-width:64%}
+.qp .b3d.go{height:62px;font-size:26px;margin-top:20px;border-radius:18px}
+.qp .b3d.go svg{width:24px;height:24px}
+.qp-row{display:flex;gap:10px;margin-top:12px}
+.qp-row .ghost{flex:1;justify-content:center;height:42px}
+
+.acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.act{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:13px 12px;border-radius:18px;background:linear-gradient(180deg,#18225a,#0d1438);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1px rgba(43,56,120,.9),0 4px 0 #050a1c;transition:transform .14s var(--spring),box-shadow .14s}
+.act:active{transform:translateY(3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1px rgba(43,56,120,.9),0 1px 0 #050a1c}
+.act:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.act .tile-ic{width:36px;height:36px;border-radius:11px}
+.act .tile-ic svg{width:19px;height:19px}
+.act-t{font:900 16px/1.05 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.act-s{font:500 12px/1.25 var(--body);color:var(--muted);margin-top:-6px}
+
+.today{display:flex;flex-direction:column;gap:10px}
+.tcard{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px;border-radius:20px;background:linear-gradient(180deg,#18225a,#0d1438);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1px rgba(43,56,120,.9);transition:transform .14s var(--spring)}
+.tcard:active{transform:scale(.985)}
+.tcard:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.tcard .mini{width:76px;transform:none;box-shadow:0 0 0 2px #1d2766,0 8px 16px -8px rgba(0,0,0,.7);border-radius:9px}
+.tcard-k{font:700 10px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-hi)}
+.tcard-t{font:900 21px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;margin:6px 0 5px}
+.tcard-s{font:500 12.5px/1.3 var(--body);color:var(--muted)}
+.tcard .state{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#1f1600;box-shadow:0 3px 0 var(--gold-lo)}
+.tcard .state svg{width:20px;height:20px}
+.tcard .state.done{background:rgba(75,227,180,.15);color:var(--mint);box-shadow:inset 0 0 0 1.5px rgba(75,227,180,.5)}
+
+.goals .g-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid rgba(43,56,120,.6)}
+.goals .g-row:first-of-type{border-top:0}
+.g-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(3,6,20,.6);box-shadow:inset 0 0 0 1px var(--line)}
+.g-ic svg{width:26px;height:26px}
+.g-row.done .g-ic{background:rgba(75,227,180,.14);box-shadow:inset 0 0 0 1.5px rgba(75,227,180,.5)}
+.g-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.g-top small{font:800 12px/1 var(--display);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
+.g-row .bar{height:6px;margin-top:8px}
+.g-rw{display:inline-flex;align-items:center;gap:4px;font:800 15px/1 var(--display);color:var(--gold)}
+.g-rw .crest{width:16px;height:16px}
+.g-claim{all:unset;cursor:pointer;padding:9px 12px;border-radius:11px;font:900 14px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:#062a1f;background:linear-gradient(180deg,#a7f5dc,var(--mint));box-shadow:0 3px 0 #1b7a5c;animation:pulse 1.4s ease-in-out infinite}
+.g-claim:focus-visible{outline:2px solid var(--text)}
+.g-ok{font:800 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--mint)}
+.g-bonus{display:flex;align-items:center;gap:12px;margin-top:4px;padding:12px;border-radius:16px;background:linear-gradient(90deg,rgba(255,204,46,.14),rgba(255,204,46,.03));box-shadow:inset 0 0 0 1px rgba(255,204,46,.25)}
+.g-bonus .chest{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;background:linear-gradient(160deg,var(--gold-hi),var(--gold));box-shadow:0 3px 0 var(--gold-lo)}
+.g-bonus .chest svg{width:22px;height:22px;stroke:#2a1f00;fill:none;stroke-width:2.2;stroke-linejoin:round}
+.lvline{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.lvline .bar{flex:1;height:6px}
+.lvline b{font:900 15px/1 var(--display);color:var(--gold);letter-spacing:.06em}
+
+.tipc{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;align-items:start}
+.tipc .tile-ic{width:40px;height:40px}
+.tip-k{font:700 10px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.tip-t{font:600 14.5px/1.45 var(--body);margin-top:6px}
+.joinsheet{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.codebig{all:unset;box-sizing:border-box;width:100%;height:64px;border-radius:16px;background:var(--void);box-shadow:inset 0 0 0 1.5px var(--line);text-align:center;font:900 34px/1 var(--display);letter-spacing:.35em;text-transform:uppercase;color:var(--text);user-select:text;-webkit-user-select:text}
+.codebig:focus{box-shadow:inset 0 0 0 2px var(--gold)}
+.modeseg{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-flow:row}
+
+.tray.puz .pips,.tray.puz .breakdown,.tray.puz .shop,.tray.puz .bank{display:none}
+.opp.puz .next{display:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;animation-delay:0ms!important}
   .pc,.pc-in,.pip,.bar i{transition-duration:1ms!important}
@@ -1012,7 +1088,7 @@ function vibrate(ms){if(!P.set.haptics)return;try{if(navigator.vibrate){navigato
 /* ================= feedback UI ================= */
 function toast(msg,ms){const t=$('toast');t.className='toast';t.textContent=msg;t.hidden=false;void t.offsetWidth;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>{t.hidden=true},ms||3200)}
 function coach(id,msg){if(!P.tips)P.tips={};if(P.tips[id])return;P.tips[id]=1;saveP();setTimeout(()=>{const t=$('toast');t.className='toast coach';t.innerHTML='<b>Tip</b><span></span>';t.querySelector('span').textContent=msg;t.hidden=false;void t.offsetWidth;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>{t.hidden=true},5600)},500)}
-const pl=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+const pl=(n,w)=>`${n} ${n===1?w:/[^aeiou]y$/.test(w)?w.slice(0,-1)+'ies':w+'s'}`;
 function banner(title,sub){
   const h=$('bannerHost'),d=document.createElement('div');d.className='banner';d.setAttribute('role','status');
   d.innerHTML=`${crest()}<div class="bn"><div class="bn-t"></div><div class="bn-s"></div></div>`;d.querySelector('.bn-t').textContent=title;d.querySelector('.bn-s').textContent=sub;
@@ -1081,7 +1157,7 @@ const nameOf=w=>isOnline()?(w===S.online.me?'You':(S.online.oppName||'Opponent')
 let RP=null;
 const canAct=()=>!busy&&!RP&&HV==null&&S&&!S.over&&(fixedSide()==null||S.turn===fixedSide())&&!(isOnline()&&!S.online.ready);
 function buyBlock(t){const w=S.turn;if(S.lastBuy[w]===t)return 'Last buy';if(t==='P'&&pawnCount(S.b,w)>=8)return 'Max 8';return ''}
-function canBuyType(t){return !S.over&&!buyBlock(t)&&S.gold[S.turn]>=PRICE[t]&&placeSquares(S.b,S.turn,t).length>0}
+function canBuyType(t){return S.mode!=='puzzle'&&!S.over&&!buyBlock(t)&&S.gold[S.turn]>=PRICE[t]&&placeSquares(S.b,S.turn,t).length>0}
 const canBuyAny=()=>SHOP.some(canBuyType);
 function blockingBuy(){const w=S.turn;return SHOP.some(t=>canBuyType(t)&&placeSquares(S.b,w,t).some(sq=>{const nb=S.b.slice();nb[sq]={t,w};return !inCheck(nb,w)}))}
 function setupBoard(R){
@@ -1215,7 +1291,7 @@ function seatHTML(w,sub,live){
   return `<span class="avatar ${w?'tw':'tb'}">${svgPiece('K')}</span><div style="min-width:0"><div class="seat-name">${esc(nameOf(w))}${live!=null?`<span class="live${live?' on':''}" title="${live?'Connected':'Offline'}"></span>`:''}</div><div class="seat-sub">${esc(sub)}</div>${capsHTML(w)}</div>`;
 }
 function renderOpp(o={}){
-  const fs=fixedSide(),op=fs!=null?1-fs:1-S.turn,el=$('opp');
+  const fs=fixedSide(),op=fs!=null?1-fs:1-S.turn,el=$('opp');el.classList.toggle('puz',S.mode==='puzzle');
   const sub=S.over?(S.over.win===op?'Victorious':S.over.win==null?'Draw':'Defeated'):(isOnline()&&!S.online.ready)?'Not joined yet':(S.turn===op?(vsBot()?'Thinking…':'Their move'):'Waiting');
   const pend=S.pend[op],next=S.gold[op];
   const extra=isOnline()&&S.online.oppRating?` · ${S.online.oppRating}`:vsBot()?` · ${BOT_R[S.mode]}`:'';
@@ -1233,7 +1309,7 @@ function renderPips(n,cost,stagger){
 }
 function renderTray(o={}){
   const fs=fixedSide(),w=fs!=null?fs:S.turn,mine=S.turn===w,tray=$('tray'),me=$('me');
-  tray.classList.toggle('locked',!mine&&!S.over);tray.classList.toggle('over',!!S.over);
+  tray.classList.toggle('locked',!mine&&!S.over);tray.classList.toggle('puz',S.mode==='puzzle');tray.classList.toggle('over',!!S.over);
   me.innerHTML=seatHTML(w,S.over?(S.over.win===w?'Victorious':S.over.win==null?'Draw':'Defeated'):mine?`Turn ${S.tc[w]} · your move`:'Waiting');
   const gold=S.gold[w],cost=S.buy?PRICE[S.buy]:0,num=$('goldNum');
   if(o.swap){
@@ -1256,6 +1332,7 @@ function renderTray(o={}){
   }
   let a;
   if(S.over)a=S.resultHidden?`<button class="ghost" type="button" data-act="showresult">Result</button>${isOnline()?`<button class="cta" type="button" data-act="rematch" style="flex:1">Rematch</button>`:`<button class="cta" type="button" data-act="again" style="flex:1">${S.mode==='daily'?'Replay daily':'Play again'}</button>`}`:'';
+  else if(S.mode==='puzzle')a=`<p class="hint">White to move. Find checkmate in one.</p><button class="ghost" type="button" data-act="phint">Hint</button>${S.puz&&S.puz.tries>=2?'<button class="ghost" type="button" data-act="panswer">Answer</button>':''}`;
   else if(isOnline()&&!S.online.ready)a=`<p class="hint">Waiting for your opponent to join</p>`;
   else if(!mine&&S.pre)a=`<p class="hint">Premove set: ${NAME[(S.b[S.pre.from]||{t:'P'}).t]} ${sqName(S.pre.from)}–${sqName(S.pre.to)}</p><button class="ghost" type="button" data-act="cancelpre">Cancel</button>`;
   else if(!mine)a=`<p class="hint">${vsBot()?esc(nameOf(S.turn))+' is thinking…':'Waiting for your opponent…'}${fixedSide()!=null&&!(isOnline()&&!S.online.ready)?'<br><span style="font-size:12px">Tap your pieces to premove</span>':''}</p>`;
@@ -1273,12 +1350,14 @@ function renderTray(o={}){
 }
 function renderGameHead(){
   let k,n;const fs=fixedSide();
-  if(S.mode==='daily')k=`Daily #${S.dailyNo} · vs bot`;
+  if(S.mode==='puzzle')k=`Daily puzzle #${S.dailyNo}`;
+  else if(S.mode==='daily')k=`Daily #${S.dailyNo} · vs bot`;
   else if(vsBot())k=`${MODE_NAME[S.mode]} bot · ${BOT_R[S.mode]}${S.undone?' · unrated':''}`;
   else if(isOnline())k=`Online · ${S.online.code}`;
   else k='Pass & play';
   if(RP)n='Replay';
   else if(HV!=null)n=`Viewing move ${HV}`;
+  else if(S.mode==='puzzle'&&S.over)n='Solved';
   else if(S.over)n=S.over.win==null?'Draw':fs!=null?(S.over.win===fs?'You win':'You lose'):`${SIDE[S.over.win]} wins`;
   else if(isOnline()&&!S.online.ready)n='Waiting…';
   else if(fs==null)n=`${SIDE[S.turn]} to move`;
@@ -1701,16 +1780,209 @@ function renderArrows(){
   sv.innerHTML=h;
 }
 /* ================= game setup (time control) ================= */
+/* ================= play page: quick play, goals, puzzle, tips ================= */
+const IC2={
+  flame:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 3.5-1.6 5-1.6 7.6 0 1.4 1 2.4 2.2 2.4 1.6 0 2.4-1.4 2-3.4 2.2 1.6 3.4 4 3.4 6.4A6 6 0 0112 21a6 6 0 01-6-6c0-4.2 3.4-6.2 6-13z"/></svg>',
+  grid:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/></svg>',
+  key:'<svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l11 7-11 7z"/></svg>',
+  chest:'<svg viewBox="0 0 24 24"><path d="M4 10h16v9H4z"/><path d="M4 10a8 5 0 0116 0M12 10v4"/></svg>',
+  bulb:'<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg>',
+};
+
+/* ---------- quick play ---------- */
+const lastMode=()=>Object.assign({kind:'bot',level:botPick},P.set.last||{});
+function quickLabel(){
+  const m=lastMode(),tc=P.set.tc||'off',tcl=tc==='off'?'No clock':TCS[tc].label;
+  if(m.kind==='bot')return {t:`vs ${MODE_NAME[m.level]||'Medium'} bot`,meta:[tcl,`${BOT_R[m.level]||1000} rated`]};
+  if(m.kind==='invite')return {t:'Invite a friend',meta:[tcl,'Online · rated']};
+  return {t:'Pass & play',meta:[tcl,'Same phone']};
+}
+function startQuick(){
+  const m=lastMode(),tc=P.set.tc||'off';
+  if(m.kind==='bot'){botPick=m.level||botPick;startGame(botPick,tc)}
+  else if(m.kind==='invite')hostOnline(tc);
+  else startGame('friend',tc);
+}
+
+/* ---------- daily goals ---------- */
+const GOALS=[
+  {id:'cap5',t:'Capture 5 pieces',ev:'cap',goal:5,cr:30,pc:'P'},
+  {id:'cap12',t:'Capture 12 pieces',ev:'cap',goal:12,cr:45,pc:'P'},
+  {id:'win1',t:'Win a game',ev:'win',goal:1,cr:40,pc:'K'},
+  {id:'win2',t:'Win 2 games',ev:'win',goal:2,cr:60,pc:'K'},
+  {id:'mate1',t:'Win by checkmate',ev:'mate',goal:1,cr:50,pc:'Q'},
+  {id:'buyN',t:'Buy a knight',ev:'buy',goal:1,cr:20,pc:'N',f:m=>m&&m.t==='N'},
+  {id:'buyR',t:'Buy a rook',ev:'buy',goal:1,cr:30,pc:'R',f:m=>m&&m.t==='R'},
+  {id:'buyQ',t:'Buy a queen',ev:'buy',goal:1,cr:60,pc:'Q',f:m=>m&&m.t==='Q'},
+  {id:'spend15',t:'Spend 15 gold',ev:'spend',goal:15,cr:35,pc:'B'},
+  {id:'earn10',t:'Earn 10 gold from captures',ev:'earn',goal:10,cr:30,pc:'B'},
+  {id:'games3',t:'Finish 3 games',ev:'game',goal:3,cr:35,pc:'R'},
+  {id:'daily',t:'Play the daily challenge',ev:'daily',goal:1,cr:25,pc:'N'},
+  {id:'puzzle',t:'Solve the daily puzzle',ev:'puzzle',goal:1,cr:25,pc:'B'},
+  {id:'beatmed',t:'Beat the Medium or Hard bot',ev:'win',goal:1,cr:50,pc:'N',f:m=>m&&(m.mode==='medium'||m.mode==='hard')},
+];
+const GOAL_BONUS=50;
+function goalsToday(){
+  const n=dailyNo();
+  if(!P.q||P.q.day!==n)P.q={day:n,prog:{},claimed:[],bonus:false};
+  const R=seeded(n*13+5),pool=GOALS.slice();
+  for(let k=pool.length-1;k>0;k--){const j=Math.floor(R()*(k+1));[pool[k],pool[j]]=[pool[j],pool[k]]}
+  const out=[],evs=new Set();for(const g of pool){if(evs.has(g.ev))continue;out.push(g);evs.add(g.ev);if(out.length===3)break}
+  return out;
+}
+function questEvent(ev,amt,meta){
+  const gs=goalsToday();let changed=false;
+  for(const g of gs){if(g.ev!==ev||(g.f&&!g.f(meta)))continue;const before=P.q.prog[g.id]||0;if(before>=g.goal)continue;
+    const v=Math.min(g.goal,before+(amt||1));P.q.prog[g.id]=v;changed=true;if(v>=g.goal&&before<g.goal)setTimeout(()=>banner('Goal complete',`${g.t} · claim +${g.cr} on Play`),700)}
+  if(changed)saveP();
+}
+function claimGoal(id){
+  const g=goalsToday().find(x=>x.id===id);if(!g||(P.q.prog[id]||0)<g.goal||P.q.claimed.includes(id))return;
+  P.q.claimed.push(id);P.crowns+=g.cr;P.xp+=20;saveP();sfx('coin');setTimeout(()=>sfx('ach'),150);vibrate(15);renderHome();toast(`+${g.cr} crowns · +20 XP`);
+}
+function claimBonus(){
+  const gs=goalsToday();if(P.q.bonus||!gs.every(g=>P.q.claimed.includes(g.id)))return;
+  P.q.bonus=true;P.crowns+=GOAL_BONUS;saveP();confetti();sfx('ach');renderHome();banner(`+${GOAL_BONUS} crowns`,'All daily goals complete');
+}
+
+/* ---------- daily puzzle: checkmate in one ---------- */
+const isMateFor=(b,w)=>inCheck(b,w)&&!anyLegal(b,w);
+function genPuzzle(n){
+  const R=seeded(n*31+7),ri=k=>Math.floor(R()*k);
+  for(let tries=0;tries<9000;tries++){
+    const b=Array(64).fill(null),put=(t,w,lo,hi)=>{for(let g=0;g<40;g++){const i=(lo+ri(hi-lo+1))*8+ri(8);if(!b[i]){b[i]={t,w};return i}}return -1};
+    const bk=put('K',0,0,1),wk=put('K',1,4,7);if(bk<0||wk<0)continue;
+    if(Math.abs((bk>>3)-(wk>>3))<=1&&Math.abs((bk&7)-(wk&7))<=1)continue;
+    const wp=['Q','R','R','B','N','N','B','Q'],bp=['P','P','P','N','B','R'];
+    const nw=2+ri(2),nb=1+ri(3);let bad=false;
+    for(let k=0;k<nw;k++)if(put(wp[ri(wp.length)],1,1,6)<0)bad=true;
+    for(let k=0;k<nb;k++){const t=bp[ri(bp.length)];if(put(t,0,t==='P'?1:0,t==='P'?2:2)<0)bad=true}
+    if(bad||inCheck(b,0)||inCheck(b,1))continue;
+    if(b.some((p,i)=>p&&p.t==='P'&&((p.w&&i<8)||(!p.w&&i>=56))))continue;
+    const sols=[];
+    for(let i=0;i<64&&sols.length<2;i++){const p=b[i];if(!p||!p.w)continue;for(const t of pseudo(b,i)){const nb2=apply(b,i,t);if(inCheck(nb2,1))continue;if(isMateFor(nb2,0)){sols.push([i,t]);if(sols.length>1)break}}}
+    if(sols.length!==1)continue;
+    let id=1;b.forEach(p=>{if(p)p.id=id++});
+    return {b,sol:sols[0],nid:id};
+  }
+  return null;
+}
+function getPuzzle(){
+  const n=dailyNo(),k='cb-puz-'+n;let pz=null;
+  try{pz=JSON.parse(store.get(k)||'null')}catch(e){}
+  if(!pz){pz=genPuzzle(n);if(pz)store.set(k,JSON.stringify(pz))}
+  return pz;
+}
+const puzzleDone=()=>!!(P.puz&&P.puz.days&&P.puz.days[dailyNo()]);
+function startPuzzle(){
+  const pz=getPuzzle();if(!pz){toast('Today’s puzzle isn’t ready. Try again in a moment.');return}
+  if(isOnline())leaveOnline();
+  newGame('puzzle');S.b=pz.b.map(p=>p?{...p}:null);S.nid=pz.nid;S.gold=[0,0];S.chk=false;S.note='';S.last=[];
+  S.frames=[{b:S.b.slice(),last:[]}];S.puz={sol:pz.sol,tries:0,start:pz.b,hint:false};S.dailyNo=dailyNo();S.log=[`Daily puzzle #${dailyNo()}. White to move and checkmate.`];S.autoFlip=false;
+  HV=null;busy=false;resetDom();go('game');renderAll({stagger:true});sfx('start');
+}
+function puzzleTry(from,to,b0){
+  const ok=isMateFor(S.b,0)&&!inCheck(S.b,1);
+  if(ok){
+    pushMoveLabel();S.moves[S.moves.length-1]=S.moves[S.moves.length-1].replace(/\+?$/,'#');$('toast').hidden=true;S.frames.push({b:S.b.slice(),last:S.last.slice()});S.over={win:1,why:'Solved'};S.puz.tries++;busy=true;
+    renderAll();sfx('check');vibrate(30);
+    setTimeout(()=>{busy=false;showPuzzleWin()},650);return;
+  }
+  S.puz.tries++;busy=true;vibrate(40);renderBoard();
+  setTimeout(()=>{sfx('illegal');toast(S.puz.tries>=3?'Not checkmate. Tap Hint or Show answer.':'Not checkmate. Try again.');
+    S.b=S.puz.start.map(p=>p?{...p}:null);S.last=[];S.tm=[];busy=false;renderBoard();renderTray()},520);
+}
+function showPuzzleWin(){
+  const n=dailyNo(),first=!puzzleDone();
+  if(first){
+    if(!P.puz)P.puz={days:{},streak:0,best:0,last:0};if(!P.puz.days)P.puz.days={};
+    P.puz.days[n]=S.puz.tries;P.puz.streak=P.puz.last===n-1?P.puz.streak+1:1;P.puz.last=n;P.puz.best=Math.max(P.puz.best||0,P.puz.streak);
+    P.crowns+=25;P.xp+=40;saveP();questEvent('puzzle');
+  }
+  const r=$('result');
+  r.innerHTML=`<div class="result-card"><div class="result-k">Daily puzzle #${n}</div><div class="result-t">Solved</div><div class="result-s">${S.puz.tries===1?'First try. Clean.':`in ${pl(S.puz.tries,'try')}`}${P.puz&&P.puz.streak>1?` · ${P.puz.streak} day puzzle streak`:''}</div>${first?`<div class="rewards"><span class="rw g">${crest('sm')}+25</span><span class="rw">+40 XP</span></div>`:''}<div class="pair"><button class="cta sm shine" type="button" data-act="home">Done</button></div><div class="pair"><button class="ghost" type="button" data-act="sharepuz">Share</button><button class="ghost" type="button" data-act="viewboard">View board</button></div><div class="linkbox" id="shareBox" hidden></div></div>`;
+  r.hidden=false;if(first){confetti();sfx('win')}
+}
+function puzzleHint(){if(!S||!S.puz||S.over)return;S.sel=S.puz.sol[0];S.tgts=pseudo(S.b,S.sel);S.puz.hint=true;sfx('lift');renderBoard();toast('This piece delivers mate.')}
+function puzzleAnswer(){if(!S||!S.puz||S.over)return;const [f,t]=S.puz.sol;AR={arrows:[`${f}-${t}`],marks:[]};renderArrows();toast('Follow the arrow.')}
+
+/* ---------- strategy tips ---------- */
+const TIPS=[
+  'Pawns are cheap gold farms. Trade a pawn for a knight and you’re 2 gold ahead.',
+  'You can’t buy the same piece twice in a row. Plan your next purchase before you need it.',
+  'A knight dropped on your back rank can block a check that would otherwise be checkmate.',
+  'Gold never refills on its own. Every capture is your only income, so protect your pieces.',
+  'Saving 12 gold for a queen is strong, but a rook and a knight now often win faster.',
+  'Ending your turn with your king attacked loses instantly. Check the whole board before you tap End turn.',
+  'Premove captures while the bot is thinking. If the piece is still there, it’s yours instantly.',
+  'With 8 pawns maxed out, your pawn row is full. Buy pieces for the back rank instead.',
+  'Draws happen after 30 quiet turns each. If you’re ahead, keep capturing to stay out of a draw.',
+  'Early on, both sides have 3 gold. Whoever wins the first trade usually buys first.',
+];
+let tipOff=0;
+const tipNow=()=>TIPS[((dailyNo()+tipOff)%TIPS.length+TIPS.length)%TIPS.length];
+
+/* ---------- render ---------- */
+function greetText(){const h=new Date().getHours();return h<5?'Late night':h<12?'Good morning':h<17?'Good afternoon':'Good evening'}
+function renderHome(){
+  const n=dailyNo(),rec=dailyRec(n),{b}=setupBoard(seeded(n)),qp=quickLabel(),gs=goalsToday(),pz=getPuzzle(),pdone=puzzleDone();
+  const resumable=S&&S.mode!=='puzzle'&&!S.over&&S.frames&&S.frames.length>1&&!(isOnline()&&!S.online.ready);
+  const lvl=level(),inLvl=P.xp%XP_LVL,lpct=lvl>=MAX_LVL?100:inLvl/XP_LVL*100;
+  const allClaimed=gs.every(g=>P.q.claimed.includes(g.id));
+  const pzMini=pz?miniBoard(pz.b):'';
+  $('scr-home').innerHTML=`${topBar()}<div class="stagger" style="display:flex;flex-direction:column;gap:14px">
+  <div class="greet"><div><div class="greet-t">${greetText()}${P.name?`, ${esc(P.name)}`:''}</div><div class="greet-s">${P.daily.streak?`<span class="pillx hot">${IC2.flame}${pl(P.daily.streak,'day')}</span>`:''}<span class="pillx">${badge(P.rating)}${TIERS[tierOf(P.rating)][0]} ${divOf(P.rating)}</span><span class="pillx">LV ${lvl}</span></div></div><button class="icon-btn help" type="button" data-act="intro" aria-label="How to play">${ICON.help}</button></div>
+  ${showInstall()?`<div class="panel resume"><span class="tile-ic ic-gold" style="flex:none">${ICON.help.replace('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 3.8M12 17h.01"/>','<path d="M12 4v11M7 9l5-5 5 5M5 14v5h14v-5"/>')}</span><div class="grow"><div class="row-t">Install the app</div><div class="row-s">Tap Share, then Add to Home Screen. It opens full screen.</div></div><button class="ghost" type="button" data-act="noinstall" aria-label="Dismiss">Later</button></div>`:''}
+  ${resumable?`<div class="panel resume"><span class="avatar ${S.turn?'tw':'tb'}">${svgPiece('K')}</span><div class="grow"><div class="row-t">Resume your game</div><div class="row-s">${esc($('gk').textContent)} · turn ${Math.max(S.tc[0],S.tc[1])}</div></div><button class="b3d sm" type="button" data-act="resume">Resume</button></div>`:''}
+  <section class="qp" aria-label="Quick play">
+    <div class="qp-art" aria-hidden="true"><span class="glow"></span><svg class="k1 pcs tw" viewBox="0 0 100 100"><use href="#s-N" width="100" height="100"/></svg><svg class="k2 pcs tb" viewBox="0 0 100 100"><use href="#s-Q" width="100" height="100"/></svg><i class="cn" style="right:36px;top:130px"></i><i class="cn" style="right:18px;top:104px;width:12px;height:12px;animation-delay:-1s"></i></div>
+    <div class="qp-k">Quick play</div><div class="qp-t">${esc(qp.t)}</div>
+    <div class="qp-meta">${qp.meta.map(m=>`<span class="pillx">${esc(m)}</span>`).join('')}</div>
+    <button class="b3d block shine go" type="button" data-act="quick">${IC2.play}Play</button>
+    <div class="qp-row"><button class="ghost" type="button" data-act="pickmode">Change mode</button><button class="ghost" type="button" data-act="pickmode" data-tc="1">${(P.set.tc||'off')==='off'?'Add a clock':'Change clock'}</button></div>
+  </section>
+  <div class="acts">
+    <button class="act" type="button" data-act="invite"><span class="tile-ic ic-mint">${ICON.link}</span><span class="act-t">Invite</span><span class="act-s">Play a friend online</span></button>
+    <button class="act" type="button" data-act="pass"><span class="tile-ic ic-rose">${ICON.phone}</span><span class="act-t">Pass &amp; play</span><span class="act-s">Two players, one phone</span></button>
+    <button class="act" type="button" data-act="openjoin"><span class="tile-ic ic-lilac">${IC2.key.replace('<svg','<svg fill="none" stroke="#0d1336" stroke-width="2.4" stroke-linecap="round"')}</span><span class="act-t">Join</span><span class="act-s">Enter a game code</span></button>
+  </div>
+  <div class="sec-row"><span class="sec-t">Today</span><span class="cd" data-cdh="1">New in ${fmtLeft(msToMidnight())}</span></div>
+  <div class="today">
+    <button class="tcard" type="button" data-act="daily">${miniBoard(b)}<div style="min-width:0"><div class="tcard-k">Daily challenge #${n}</div><div class="tcard-t">${rec?(rec.won?`Won in ${pl(rec.turns,'turn')}`:'Lost · try again'):'Beat the bot'}</div><div class="tcard-s">${rec?'Replays don’t change your result.':'Same board for everyone. Fewest turns wins.'}</div></div><span class="state${rec&&rec.won?' done':''}">${rec&&rec.won?IC2.check:IC2.play}</span></button>
+    ${pz?`<button class="tcard" type="button" data-act="puzzle">${pzMini}<div style="min-width:0"><div class="tcard-k">Daily puzzle · mate in 1</div><div class="tcard-t">${pdone?`Solved${P.puz.days[n]===1?' first try':''}`:'White to move'}</div><div class="tcard-s">${pdone?(P.puz.streak>1?`${P.puz.streak} day puzzle streak`:'Come back tomorrow for a new one.'):'Find the one move that ends it. +25 crowns.'}</div></div><span class="state${pdone?' done':''}">${pdone?IC2.check:IC2.play}</span></button>`:''}
+  </div>
+  <div class="sec-row"><span class="sec-t">Daily goals</span><span class="cd">${gs.filter(g=>P.q.claimed.includes(g.id)).length} / 3 claimed</span></div>
+  <div class="panel goals">
+    <div class="lvline"><b>LV ${lvl}</b><div class="bar"><i id="homeBar"></i></div><span class="cd">${lvl>=MAX_LVL?'Max':`${XP_LVL-inLvl} XP`}</span></div>
+    ${gs.map(g=>{const v=P.q.prog[g.id]||0,done=v>=g.goal,cl=P.q.claimed.includes(g.id);return `<div class="g-row${done?' done':''}"><span class="g-ic"><svg class="pcs tw" style="opacity:${done?1:.55}" viewBox="0 0 100 100" aria-hidden="true"><use href="#s-${g.pc}" width="100" height="100"/></svg></span><div style="min-width:0"><div class="g-top"><span class="row-t" style="font-size:14px">${esc(g.t)}</span><small>${v} / ${g.goal}</small></div><div class="bar"><i data-w="${(v/g.goal*100).toFixed(0)}"></i></div></div>${cl?'<span class="g-ok">Done</span>':done?`<button class="g-claim" type="button" data-act="qclaim" data-id="${g.id}">+${g.cr}</button>`:`<span class="g-rw">${crest('sm')}${g.cr}</span>`}</div>`}).join('')}
+    <div class="g-bonus"><span class="chest">${IC2.chest}</span><div style="flex:1;min-width:0"><div class="row-t" style="font-size:14px">${P.q.bonus?'Bonus collected':'Complete all 3'}</div><div class="row-s">${P.q.bonus?'New goals at midnight.':`Bonus chest: +${GOAL_BONUS} crowns`}</div></div>${!P.q.bonus&&allClaimed?`<button class="g-claim" type="button" data-act="qbonus">Open</button>`:P.q.bonus?'<span class="g-ok">Done</span>':''}</div>
+  </div>
+  <div class="panel tipc"><span class="tile-ic ic-gold">${IC2.bulb.replace('<svg','<svg fill="none" stroke="#1b1232" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"')}</span><div style="min-width:0"><div class="sec-row" style="margin:0"><span class="tip-k">Strategy tip</span><button class="linkbtn" type="button" data-act="nexttip" style="padding:0">Next</button></div><div class="tip-t" id="tipT">${esc(tipNow())}</div></div></div>
+  </div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const bi=$('homeBar');if(bi)bi.style.width=lpct+'%';document.querySelectorAll('#scr-home [data-w]').forEach(el=>el.style.width=el.dataset.w+'%')}));
+}
+setInterval(()=>{if(route!=='home')return;const el=document.querySelector('[data-cdh]');if(el)el.textContent=`New in ${fmtLeft(msToMidnight())}`;if(P.q&&P.q.day!==dailyNo())renderHome()},1000);
+
+/* ---------- setup + join sheets ---------- */
+function openJoin(){
+  $('sheetTitle').textContent='Join a game';
+  $('sheetBody').innerHTML=`<div class="joinsheet"><p class="row-s">Ask your friend for the 6-character code on their invite screen, or just tap their invite link.</p><input class="codebig" id="joinCode" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="••••••" aria-label="Game code"><button class="b3d block shine" type="button" data-act="join">Join game</button></div>`;
+  $('sheetWrap').hidden=false;setTimeout(()=>{const el=$('joinCode');if(el)el.focus()},250);
+}
+
 let setupKind=null;
 function openSetup(kind){
-  setupKind=kind;const tc=P.set.tc||'off';
+  setupKind=kind||lastMode().kind;const tc=P.set.tc||'off';
   $('sheetTitle').textContent='New game';
-  const label={bot:`vs ${MODE_NAME[botPick]} bot`,pass:'Pass & play',invite:'Invite a friend'}[kind];
-  $('sheetBody').innerHTML=`<div class="row-t" style="padding:2px 0 4px">${esc(label)}</div>
+  $('sheetBody').innerHTML=`<div class="setup-k" style="margin-top:2px">Mode</div>
+    <div class="seg modeseg" role="group" aria-label="Mode">${[['bot','vs Bot'],['invite','Online'],['pass','Pass & play']].map(([k,l])=>`<button type="button" data-act="mkpick" data-k="${k}" aria-pressed="${setupKind===k}">${l}</button>`).join('')}</div>
+    ${setupKind==='bot'?`<div class="setup-k">Bot level</div><div class="seg modeseg" role="group" aria-label="Bot level">${['easy','medium','hard'].map(m=>`<button type="button" data-act="lvpick" data-m="${m}" aria-pressed="${botPick===m}">${MODE_NAME[m]} ${BOT_R[m]}</button>`).join('')}</div>`:''}
     <div class="setup-k">Time control</div>
     <div class="seg tcseg" role="group" aria-label="Time control">${TC_ORDER.map(k=>`<button type="button" data-act="tcpick" data-k="${k}" aria-pressed="${k===tc}">${k==='off'?'Off':TCS[k].label}</button>`).join('')}</div>
-    <p class="row-s" style="margin:10px 0 16px">${tc==='off'?'No clock. Take as long as you like.':`Each side gets ${TCS[tc].label.replace(' | ',' min + ')}${TCS[tc].inc?' sec per move':''}. Run out and you lose.`}</p>
-    <button class="b3d block shine" type="button" data-act="setupgo">${kind==='invite'?'Create invite':'Start game'}</button>`;
+    <p class="row-s" style="margin:10px 0 16px">${setupKind==='invite'?'You get a link to text your friend. It opens straight into the game. ':setupKind==='pass'?'Hand the phone over after each turn. ':''}${tc==='off'?'No clock.':`Each side gets ${TCS[tc].label.replace(' | ',' min + ')}${TCS[tc].inc?' sec per move':''}. Run out and you lose.`}</p>
+    <button class="b3d block shine" type="button" data-act="setupgo">${setupKind==='invite'?'Create invite':'Start game'}</button>`;
   $('sheetWrap').hidden=false;
 }
 
@@ -1764,7 +2036,7 @@ function clickSq(i){
 function placeBuy(t,i){
   const w=S.turn;S.b[i]={t,w,id:S.nid++};S.gold[w]-=PRICE[t];S.bought=true;S.prog=true;S.last=[i];S.lastBuy[w]=t;STAT(w).buys++;
   S.log.push(`${SIDE[w]} buys a ${NAME[t]} on ${sqName(i)}`);S.buy=null;vibrate(12);sfx('buy');if(!S.tm)S.tm=[];S.tm.push(`${t}@${sqName(i)}`);HV=null;clearArrows();
-  if(isLocalHuman(w)){P.stats.buys++;P.by.buy[t]=(P.by.buy[t]||0)+1;if(t==='Q')unlock('queen');if(pawnCount(S.b,w)>=8)unlock('pawns');saveP()}
+  if(isLocalHuman(w)){P.stats.buys++;P.by.buy[t]=(P.by.buy[t]||0)+1;questEvent('buy',1,{t});questEvent('spend',PRICE[t]);if(t==='Q')unlock('queen');if(pawnCount(S.b,w)>=8)unlock('pawns');saveP()}
 }
 function sanOf(b0,from,to,b1){
   const p=b0[from],cap=b0[to];let s='';
@@ -1781,11 +2053,12 @@ function sanOf(b0,from,to,b1){
 function doMove(from,i){
   const w=S.turn,mover=S.b[from],cap=S.b[i],b0=S.b;
   S.b=apply(S.b,from,i);if(!S.tm)S.tm=[];S.tm.push(sanOf(b0,from,i,S.b));HV=null;S.last=[from,i];S.sel=null;S.tgts=[];
+  if(S.mode==='puzzle'){sfx(cap?'cap':'move');puzzleTry(from,i,b0);return}
   if(cap||mover.t==='P')S.prog=true;
   if(cap){if(!S.capd)S.capd=[[],[]];S.capd[w].push(cap.t)}
   let txt=`${SIDE[w]} ${NAME[mover.t]} ${sqName(from)}–${sqName(i)}`;
   if(cap){S.pend[w]+=VAL[cap.t];S.gold[w]+=VAL[cap.t];STAT(w).caps++;STAT(w).earned+=VAL[cap.t];txt+=`, takes ${NAME[cap.t]} (+${VAL[cap.t]})`;floater(i,VAL[cap.t]);
-    if(isLocalHuman(w)){P.stats.caps++;P.stats.earned+=VAL[cap.t];P.by.cap[cap.t]=(P.by.cap[cap.t]||0)+1;unlock('first');saveP();coach('cap','Captures pay gold. On a later turn, tap a piece in the shop to buy it.')}}
+    if(isLocalHuman(w)){P.stats.caps++;P.stats.earned+=VAL[cap.t];P.by.cap[cap.t]=(P.by.cap[cap.t]||0)+1;questEvent('cap',1);questEvent('earn',VAL[cap.t]);unlock('first');saveP();coach('cap','Captures pay gold. On a later turn, tap a piece in the shop to buy it.')}}
   if(S.b[i].t!==mover.t)txt+=', promotes to queen';
   S.log.push(txt);sfx(S.b[i].t!==mover.t?'promote':inCheck(S.b,1-w)?'check':cap?'cap':'move');clearArrows();
   if(inCheck(S.b,w)){suicide(w);return}
@@ -1793,6 +2066,7 @@ function doMove(from,i){
 }
 function clickBuy(t){if(!canAct()||!canBuyType(t))return;S.buy=S.buy===t?null:t;S.sel=null;S.tgts=[];sfx('tap');renderBoard();renderTray()}
 function startGame(mode,tctl){
+  if(mode==='puzzle'){startPuzzle();return}
   if(isOnline())leaveOnline();
   const dn=dailyNo();newGame(mode,mode==='daily'?seeded(dn):null,mode==='daily'?'off':(tctl==null?(P.set.tc||'off'):tctl));HV=null;AR={arrows:[],marks:[]};
   if(mode==='daily'){S.dailyNo=dn;S.log=[`Daily #${dn}. Same starting board for everyone today.`]}
@@ -1802,6 +2076,7 @@ function startGame(mode,tctl){
 
 /* record & rewards */
 function recordGame(){
+  if(S.mode==='puzzle')return;
   if(S.recorded)return;S.recorded=true;
   const ov=S.over,fs=fixedSide(),mode=S.mode;let delta=0,crowns=0,xp=0,label,res;const tier0=tierOf(P.rating),now=Date.now();
   const lvl0=level();
@@ -1830,6 +2105,7 @@ function recordGame(){
   }
   P.crowns+=crowns;P.xp+=xp;
   const ratedG=fs!=null&&mode!=='daily'&&!S.undone;
+  questEvent('game');if(fs!=null&&ov.win===fs){questEvent('win',1,{mode});if(ov.why==='Checkmate')questEvent('mate')}if(mode==='daily')questEvent('daily');
   trackGame({t:now,rated:ratedG,me:fs!=null?fs:(ov.win!=null?ov.win:null),won:fs!=null&&ov.win===fs,turns:fs!=null?S.tc[fs]:0,opp:fs!=null&&ov.win===fs?(isOnline()?(S.online.oppRating||0):(BOT_R[mode]||0)):0});
   const tier1=tierOf(P.rating);S.promo=ratedG&&tier1!==tier0?{from:tier0,to:tier1}:null;
   P.hist.unshift({t:now,label,res,turns:Math.max(S.tc[0],S.tc[1]),delta});saveRep(now,label,res,S.frames);P.hist=P.hist.slice(0,30);
@@ -1839,6 +2115,7 @@ function recordGame(){
   pushPlayer();
 }
 function showResult(){
+  if(S&&S.mode==='puzzle'){if(S.over&&S.over.why==='Solved'&&!RP)showPuzzleWin();return}
   const r=$('result'),ov=S.over;
   if(!ov||S.resultHidden||RP){r.hidden=true;return}
   const firstShow=!S.recorded;recordGame();
@@ -1930,29 +2207,6 @@ function miniBoard(b){
 }
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
 const showInstall=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)&&!isStandalone()&&!store.get('cb-noinstall')&&P.stats.games>=1;
-function renderHome(){
-  const n=dailyNo(),rec=dailyRec(n),{b}=setupBoard(seeded(n));
-  const resumable=S&&!S.over&&S.frames&&S.frames.length>1&&!(isOnline()&&!S.online.ready);
-  const lvl=level(),inLvl=P.xp%XP_LVL,pct=lvl>=MAX_LVL?100:inLvl/XP_LVL*100;
-  const claimable=Object.keys(PASS).filter(l=>+l<=lvl&&!P.claimed.includes(+l)).length;
-  $('scr-home').innerHTML=`${topBar()}<div class="stagger" style="display:flex;flex-direction:column;gap:14px">
-  ${showInstall()?`<div class="panel resume"><span class="tile-ic ic-gold" style="flex:none">${ICON.help.replace('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 3.8M12 17h.01"/>','<path d="M12 4v11M7 9l5-5 5 5M5 14v5h14v-5"/>')}</span><div class="grow"><div class="row-t">Install the app</div><div class="row-s">Tap Share, then Add to Home Screen. It opens full screen.</div></div><button class="ghost" type="button" data-act="noinstall" aria-label="Dismiss">Later</button></div>`:''}
-  ${resumable?`<div class="panel resume"><span class="avatar ${S.turn?'tw':'tb'}">${svgPiece('K')}</span><div class="grow"><div class="row-t">Resume your game</div><div class="row-s">${esc($('gn').textContent)} · turn ${Math.max(S.tc[0],S.tc[1])}</div></div><button class="b3d sm" type="button" data-act="resume">Resume</button></div>`:''}
-  <div class="panel hero"><div class="hero-row"><div class="hero-txt"><span class="hero-k">Daily challenge #${n}</span><h2 class="hero-t">${rec?(rec.won?`Won in ${rec.turns}`:'Try again'):'Today’s board'}</h2><p class="hero-s">${rec?`${P.daily.streak} day streak. Same board for everyone, so compare with friends.`:'Same start for everyone. Beat the bot in the fewest turns.'}</p></div>${miniBoard(b)}</div>
-    <div style="margin-top:14px;display:flex;gap:10px"><button class="b3d block shine" type="button" data-act="daily">${ICON.play}${rec?'Replay':'Play daily'}</button>${rec?`<button class="b3d alt sm" type="button" data-act="lb-daily" style="height:52px">Board</button>`:''}</div></div>
-  <div class="tiles">
-    <button class="tile" type="button" data-act="invite"><span class="tile-ic ic-mint">${ICON.link}</span><span class="tile-t">Invite friend</span><span class="tile-s">Send a link, play head to head</span></button>
-    <div class="tile" style="cursor:default"><span class="tile-ic ic-lilac">${ICON.bot}</span><span class="tile-t">vs Bot</span><div class="seg" role="group" aria-label="Bot level">${['easy','medium','hard'].map(m=>`<button type="button" data-act="botpick" data-m="${m}" aria-pressed="${m===botPick}">${MODE_NAME[m].slice(0,m==='medium'?3:4)}</button>`).join('')}</div><button class="b3d sm" type="button" data-act="bot" style="width:100%">Play</button></div>
-    <button class="tile" type="button" data-act="pass"><span class="tile-ic ic-rose">${ICON.phone}</span><span class="tile-t">Pass &amp; play</span><span class="tile-s">Two players, one phone</span></button>
-    <button class="tile" type="button" data-act="intro"><span class="tile-ic ic-gold">${ICON.help}</span><span class="tile-t">How to play</span><span class="tile-s">The rules in 30 seconds</span></button>
-  </div>
-  <button class="panel season" type="button" data-tab="shop" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:22px;background:linear-gradient(180deg,#18225a,#0b1130);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1px rgba(43,56,120,.9)">
-    <div class="season-top"><div><div class="h-sub">Season 1 · Gilded</div><div class="row-t" style="margin-top:6px">${claimable?`${claimable} reward${claimable>1?'s':''} ready to claim`:'Earn XP every game'}</div></div><span class="lvl">LV ${lvl}</span></div>
-    <div class="bar"><i id="homeBar"></i></div></button>
-  <div class="pair" style="justify-content:space-between"><span class="h-sub">Have a code?</span><span class="pair" style="flex:1;justify-content:flex-end"><input id="joinCode" class="namein" style="font-size:20px;max-width:130px;letter-spacing:.2em;border-bottom-width:2px" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODE" aria-label="Game code"><button class="ghost" type="button" data-act="join">Join</button></span></div>
-  </div>`;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{const bi=$('homeBar');if(bi)bi.style.width=pct+'%'}));
-}
 let lbTab='global';
 function claim(L){
   const rw=PASS[L];if(!rw||L>level()||P.claimed.includes(L))return;
@@ -2461,12 +2715,24 @@ document.addEventListener('click',e=>{
     case 'quick':quickMatch();break;
     case 'invite':$('result').hidden=true;openSetup('invite');break;
     case 'tcpick':P.set.tc=a.dataset.k;saveP();sfx('tap');openSetup(setupKind);break;
-    case 'setupgo':{const k=setupKind;closeSheet();if(k==='bot')startGame(botPick,P.set.tc);else if(k==='pass')startGame('friend',P.set.tc);else hostOnline(P.set.tc);break}
+    case 'setupgo':{const k=setupKind;P.set.last={kind:k,level:botPick};saveP();closeSheet();if(k==='bot')startGame(botPick,P.set.tc);else if(k==='pass')startGame('friend',P.set.tc);else hostOnline(P.set.tc);break}
+    case 'mkpick':setupKind=a.dataset.k;sfx('tap');openSetup(setupKind);break;
+    case 'lvpick':botPick=a.dataset.m;store.set('cb-botpick',botPick);sfx('tap');openSetup(setupKind);break;
+    case 'quick':startQuick();break;
+    case 'pickmode':openSetup(lastMode().kind);break;
+    case 'openjoin':openJoin();break;
+    case 'puzzle':startPuzzle();break;
+    case 'phint':puzzleHint();break;
+    case 'panswer':puzzleAnswer();break;
+    case 'qclaim':claimGoal(a.dataset.id);break;
+    case 'qbonus':claimBonus();break;
+    case 'nexttip':tipOff++;{const el=$('tipT');if(el)el.textContent=tipNow()}sfx('tap');break;
+    case 'sharepuz':shareOut(`Chess Battle daily puzzle #${dailyNo()} ✅ ${S&&S.puz&&S.puz.tries===1?'first try':'solved in '+pl(S.puz.tries,'try')}. Can you find mate in 1?`,SITE_URL,'Copied. Paste it anywhere.','shareBox');break;
     case 'hist':setHV(+a.dataset.i);break;
     case 'hprev':setHV((HV==null?histMax():HV)-1);break;
     case 'hnext':if(HV!=null)setHV(HV+1);break;
     case 'hlive':setHV(null);break;
-    case 'join':{const v=$('joinCode').value;joinOnline(v,false)}break;
+    case 'join':{const v=$('joinCode').value;closeSheet();joinOnline(v,false)}break;
     case 'copyinvite':copyInvite();break;
     case 'cancelonline':if(gameRef&&!S.online.ready)gameRef.delete().catch(()=>{});leaveOnline();S=null;go('home');break;
     case 'quickbot':if(gameRef)gameRef.delete().catch(()=>{});leaveOnline();startGame(botPick);break;
