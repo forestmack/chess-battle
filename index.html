@@ -51,6 +51,14 @@ h1,h2,h3,p{margin:0}
 /* ---------- screens ---------- */
 .screen{max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:14px;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 .screen.game{padding-bottom:28px;gap:12px}
+.screen.game>.frame{width:min(100%,max(288px,calc(100vh - 474px)));width:min(100%,max(288px,calc(100dvh - 474px)));align-self:center;box-sizing:border-box}
+@media (max-height:800px) and (max-width:899px){.screen.game{gap:9px;padding-bottom:14px}.screen.game>.frame{width:min(100%,max(276px,calc(100dvh - 458px)))}}
+@media (min-width:900px) and (min-height:560px){
+  .screen.game{max-width:none;width:fit-content;display:grid;grid-template-columns:min(calc(100vh - 150px),calc(100vw - 460px),760px) 380px;grid-template-areas:"top top" "opp mv" "board side";grid-template-rows:auto auto auto;column-gap:28px;row-gap:12px;align-items:start;padding-bottom:24px}
+  .screen.game>.gtop{grid-area:top}.screen.game>.opp{grid-area:opp}.screen.game>.frame{grid-area:board;width:100%}
+  .screen.game>.mvbar{grid-area:mv;align-self:center}.screen.game>.tray,.screen.game>.replaybar{grid-area:side;align-self:end}
+  .seat-name{max-width:260px}
+}
 .screen.enter{animation:screenin .42s var(--ease) both}
 @keyframes screenin{from{opacity:0;transform:translateY(12px) scale(.985)}}
 .stagger>*{animation:rise-in .5s var(--ease) both}
@@ -961,7 +969,7 @@ function loadP(){
   return p;
 }
 let P=loadP();
-(()=>{for(const id of ['snd-wood','ti-rookie'])if(!P.owned.includes(id))P.owned.push(id);if(!P.since)P.since=Date.now();if(!P.rh.length)P.rh=[{t:Date.now(),r:P.rating}];P.peak=Math.max(P.peak||0,P.rating);if(!P.by.buy)P.by.buy={};if(!P.by.cap)P.by.cap={}})();
+function initP(){for(const id of ['snd-wood','ti-rookie'])if(!P.owned.includes(id))P.owned.push(id);if(!P.since)P.since=Date.now();if(!Array.isArray(P.rh)||!P.rh.length)P.rh=[{t:Date.now(),r:P.rating}];P.peak=Math.max(P.peak||0,P.rating);if(!P.by||typeof P.by!=='object')P.by={};if(!P.by.buy)P.by.buy={};if(!P.by.cap)P.by.cap={};if(!P.rec)P.rec={fast:0,gold:0,caps:0,bestOpp:0};if(!P.days)P.days={};if(!item(P.equip.board))P.equip.board='b-amethyst';if(!item(P.equip.trim))P.equip.trim='t-gold';if(!item(P.equip.fx))P.equip.fx='f-coins';if(!item(P.equip.snd))P.equip.snd='snd-wood';if(!item(P.equip.title))P.equip.title='ti-rookie'}
 const saveP=()=>store.set('cb-profile',JSON.stringify(P));
 const myName=()=>P.name||('Player '+PID.slice(-4).toUpperCase());
 const AVC={gold:'#ffcc2e',mint:'#4be3b4',rose:'#f08a9a',sky:'#6fb6ff',lilac:'#7f95ff',ivory:'#fcf8ef'};
@@ -1017,6 +1025,7 @@ const ITEMS=[
   {id:'ti-gm',kind:'title',name:'Grandmaster',tierReq:6,rarity:'legendary',desc:'Reserved for players who reach the Grandmaster tier.'},
 ];
 const item=id=>ITEMS.find(x=>x.id===id);
+initP();
 const PASS={2:{crowns:50},4:{crowns:75},6:{item:'t-emerald'},8:{crowns:100},10:{item:'b-gilded'},12:{crowns:125},14:{item:'f-shock'},16:{crowns:150},18:{item:'ti-gilded'},20:{crowns:300}};
 const PRO_PASS={1:'Pro badge',3:'Animated board',5:'Gilded pieces',7:'Neon trail',9:'Crown emote',11:'Velvet board',13:'Diamond trim',15:'Victory fanfare',17:'Royal frame',19:'Obsidian pieces'};
 const XP_LVL=200,MAX_LVL=20;
@@ -1087,7 +1096,7 @@ function vibrate(ms){if(!P.set.haptics)return;try{if(navigator.vibrate){navigato
 
 /* ================= feedback UI ================= */
 function toast(msg,ms){const t=$('toast');t.className='toast';t.textContent=msg;t.hidden=false;void t.offsetWidth;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>{t.hidden=true},ms||3200)}
-function coach(id,msg){if(!P.tips)P.tips={};if(P.tips[id])return;P.tips[id]=1;saveP();setTimeout(()=>{const t=$('toast');t.className='toast coach';t.innerHTML='<b>Tip</b><span></span>';t.querySelector('span').textContent=msg;t.hidden=false;void t.offsetWidth;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>{t.hidden=true},5600)},500)}
+function coach(id,msg){if(!P.tips)P.tips={};if(P.tips[id])return;P.tips[id]=1;saveP();setTimeout(()=>{if(route!=='game'||!S||S.over){delete P.tips[id];saveP();return}const t=$('toast');t.className='toast coach';t.innerHTML='<b>Tip</b><span></span>';t.querySelector('span').textContent=msg;t.hidden=false;void t.offsetWidth;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>{t.hidden=true},5600)},500)}
 const pl=(n,w)=>`${n} ${n===1?w:/[^aeiou]y$/.test(w)?w.slice(0,-1)+'ies':w+'s'}`;
 function banner(title,sub){
   const h=$('bannerHost'),d=document.createElement('div');d.className='banner';d.setAttribute('role','status');
@@ -1184,10 +1193,10 @@ function beginTurn(){
   S.bonus=S.pend[w];S.pend[w]=0;
   S.bought=false;S.sel=null;S.tgts=[];S.buy=null;S.note='';
   S.chk=inCheck(S.b,w);
-  const hasMove=S.b.some((p,i)=>p&&p.w===w&&pseudo(S.b,i).length>0);
-  if(S.chk&&!anyLegal(S.b,w)&&!blockingBuy())S.over={win:1-w,why:'Checkmate'};
-  else if(!hasMove&&!canBuyAny())S.over={win:null,why:'Stalemate'};
-  else if(!hasMove)S.note='No moves left. Buy reinforcements to continue.';
+  const safe=anyLegal(S.b,w);
+  if(S.chk&&!safe&&!blockingBuy())S.over={win:1-w,why:'Checkmate'};
+  else if(!S.chk&&!safe&&!canBuyAny())S.over={win:null,why:'Stalemate'};
+  else if(!S.chk&&!safe)S.note='No safe moves. Buy reinforcements, or any move will expose your king.';
   if(!S.over&&(S.quiet||0)>=QUIET_MAX)S.over={win:null,why:'No progress'};
   if(!S.over&&S.b.every(p=>!p||p.t==='K')&&S.gold[0]<1&&S.gold[1]<1)S.over={win:null,why:'Bare kings'};
   if(S.over)S.log.push(S.over.win==null?`Draw: ${S.over.why.toLowerCase()}.`:`Checkmate. ${SIDE[S.over.win]} wins.`);
@@ -1491,8 +1500,7 @@ function botTurn(){
 const CODE_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const SITE_URL=/^https?:$/.test(location.protocol)?location.origin+location.pathname:ARTIFACT_URL;
 const PEER_PREFIX='chessbattle-v1-';
-let peer=null,conn=null,quickTimer=null,retryTimer=null,gameRef=null;
-async function getDb(){return null}
+let peer=null,conn=null,quickTimer=null,retryTimer=null;
 const inviteLink=()=>SITE_URL+'#'+S.online.code;
 const PACK=['b','turn','tc','gold','pend','lastBuy','last','over','nid','chk','note','bonus','stats','capd','quiet','moves','clock','tctl'];
 function pack(){const o={};for(const k of PACK)o[k]=S[k]===undefined?null:S[k];o.log=S.log.slice(-80);return JSON.parse(JSON.stringify(o))}
@@ -1515,6 +1523,7 @@ function leaveOnline(){
   const c=conn,p=peer;conn=null;peer=null;
   try{c&&c.close()}catch(e){}try{p&&p.destroy()}catch(e){}
   store.set('cb-game',null);store.set('cb-online-state',null);
+  if(/^#[A-Za-z0-9]{6}$/.test(location.hash))try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
 }
 function peerReady(id){
   return new Promise((res,rej)=>{
@@ -1637,7 +1646,6 @@ function resumeOnline(){
   else{showConnecting(sv.code);peerReady().then(p=>{peer=p;peer.on('error',e=>{if(e&&e.type==='peer-unavailable')scheduleRetry()});connectTo(sv.code)}).catch(()=>toast(NET_ERR))}
   return true;
 }
-async function quickMatch(){toast('Quick match needs matchmaking servers, so it arrives with the app. Invite a friend for now.')}
 async function rematch(){
   if(!isOnline())return;
   if(!isHost()){
@@ -1656,15 +1664,6 @@ function showEmote(e,mine){
 }
 function sendEmote(e){closeSheet();showEmote(e,true);send({type:'emote',e})}
 
-/* ================= leaderboards ================= */
-async function pushPlayer(){
-  const db=await getDb();if(!db)return;
-  try{await db.doc('players/'+PID).set({name:myName(),av:P.av,avc:P.avc,rating:P.rating,wins:P.stats.wins,games:P.stats.games,updated:Date.now()})}catch(e){}
-}
-async function postDaily(n,won,turns){
-  const db=await getDb();if(!db)return;
-  try{await db.doc(`daily/${n}/entries/${PID}`).set({name:myName(),av:P.av,avc:P.avc,won,turns,t:Date.now()})}catch(e){}
-}
 
 
 /* ================= attention & sharing ================= */
@@ -1891,7 +1890,7 @@ function puzzleTry(from,to,b0){
     setTimeout(()=>{busy=false;showPuzzleWin()},650);return;
   }
   S.puz.tries++;busy=true;vibrate(40);renderBoard();
-  setTimeout(()=>{sfx('illegal');toast(S.puz.tries>=3?'Not checkmate. Tap Hint or Show answer.':'Not checkmate. Try again.');
+  setTimeout(()=>{sfx('illegal');toast(S.puz.tries>=2?'Not checkmate. Tap Hint or Answer if you’re stuck.':'Not checkmate. Try again.');
     S.b=S.puz.start.map(p=>p?{...p}:null);S.last=[];S.tm=[];busy=false;renderBoard();renderTray()},520);
 }
 function showPuzzleWin(){
@@ -1913,7 +1912,7 @@ const TIPS=[
   'Pawns are cheap gold farms. Trade a pawn for a knight and you’re 2 gold ahead.',
   'You can’t buy the same piece twice in a row. Plan your next purchase before you need it.',
   'A knight dropped on your back rank can block a check that would otherwise be checkmate.',
-  'Gold never refills on its own. Every capture is your only income, so protect your pieces.',
+  'Gold never refills on its own. Captures are your only income, so protect your pieces.',
   'Saving 12 gold for a queen is strong, but a rook and a knight now often win faster.',
   'Ending your turn with your king attacked loses instantly. Check the whole board before you tap End turn.',
   'Premove captures while the bot is thinking. If the piece is still there, it’s yours instantly.',
@@ -2097,7 +2096,7 @@ function recordGame(){
     if(mode==='daily'){
       crowns+=15+(won?15:0);
       const n=S.dailyNo;
-      if(!dailyRec(n)){store.set('cb-daily-'+n,JSON.stringify({won,turns:S.tc[fs]}));postDaily(n,won,S.tc[fs]);
+      if(!dailyRec(n)){store.set('cb-daily-'+n,JSON.stringify({won,turns:S.tc[fs]}));
         P.daily.streak=P.daily.last===n-1?P.daily.streak+1:1;P.daily.last=n;P.daily.best=Math.max(P.daily.best,P.daily.streak);if(P.daily.streak>=3)unlock('daily3')}
     }
     res=won?'w':draw?'d':'l';
@@ -2112,7 +2111,6 @@ function recordGame(){
   saveP();
   S.reward={delta,crowns,xp,lvlUp:level()>lvl0?level():0,rated:fs!=null&&mode!=='daily'&&!S.undone};
   store.set('cb-replay',JSON.stringify({label,frames:S.frames.slice(0,400)}));
-  pushPlayer();
 }
 function showResult(){
   if(S&&S.mode==='puzzle'){if(S.over&&S.over.why==='Solved'&&!RP)showPuzzleWin();return}
@@ -2121,7 +2119,7 @@ function showResult(){
   const firstShow=!S.recorded;recordGame();
   const fs=fixedSide(),won=fs!=null?ov.win===fs:ov.win!=null;
   const k=ov.win==null?ov.why:fs!=null?(ov.win===fs?'You win':`${nameOf(1-fs)} wins`):`${SIDE[ov.win]} wins`;
-  const DRAWS={'Stalemate':'No moves and nothing to buy','No progress':'30 turns each without a capture, buy or pawn move','Bare kings':'Only kings left and no gold to spend'};
+  const DRAWS={'Stalemate':'No safe move and nothing to buy','No progress':'30 turns each without a capture, buy or pawn move','Bare kings':'Only kings left and no gold to spend'};
   const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
   const rw=S.reward;
   const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span></div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
@@ -2207,7 +2205,6 @@ function miniBoard(b){
 }
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
 const showInstall=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)&&!isStandalone()&&!store.get('cb-noinstall')&&P.stats.games>=1;
-let lbTab='global';
 function claim(L){
   const rw=PASS[L];if(!rw||L>level()||P.claimed.includes(L))return;
   P.claimed.push(L);if(rw.crowns)P.crowns+=rw.crowns;if(rw.item&&!P.owned.includes(rw.item))P.owned.push(rw.item);
@@ -2340,7 +2337,7 @@ function weekDelta(){const cut=Date.now()-7*864e5,old=[...P.rh].reverse().find(x
 /* ---------- charts ---------- */
 function ratingChart(range){
   let pts=P.rh.slice();if(range==='20')pts=pts.slice(-20);
-  if(pts.length<2)return `<div class="emptychart">Play a rated game against a bot or a friend to start your rating chart.</div>`;
+  if(pts.length<2)return `<div class="emptychart">Play a rated game against a bot or an online friend to start your rating chart.</div>`;
   const W=340,H=178,L=8,Rr=8,T=12,B=22,rs=pts.map(p=>p.r);
   let lo=Math.min(...rs),hi=Math.max(...rs);lo=Math.floor((lo-40)/50)*50;hi=Math.ceil((hi+40)/50)*50;
   const X=i=>L+(W-L-Rr)*(pts.length===1?.5:i/(pts.length-1)),Y=r=>T+(H-T-B)*(1-(r-lo)/(hi-lo));
@@ -2496,7 +2493,7 @@ function renderMe(){
   const hm=heatmap(),reps=loadReps(),repT=new Set(reps.map(r=>r.t));
   const sw=(k,label,sub)=>`<div class="set-row"><div><div class="row-t">${label}</div>${sub?`<div class="row-s">${sub}</div>`:''}</div><button class="switch" type="button" role="switch" aria-checked="${!!P.set[k]}" aria-label="${label}" data-act="set" data-k="${k}"><span></span></button></div>`;
   const since=new Date(P.since||Date.now()).toLocaleDateString(undefined,{month:'short',year:'numeric'});
-  $('scr-me').innerHTML=`<header class="top"><h1 class="h-title">Profile</h1><button class="ghost" type="button" data-act="edit">Edit</button></header><div class="stagger" style="display:flex;flex-direction:column;gap:14px">
+  $('scr-me').innerHTML=`<header class="top"><h1 class="h-title">Profile</h1><button class="ghost" type="button" data-act="tosettings">Settings</button></header><div class="stagger" style="display:flex;flex-direction:column;gap:14px">
   <div class="pcard" id="pcard" style="--t1:${TIERS[t][2]};--t2:${TIERS[t][3]}"><div class="pcard-in">
     <div class="pc-top"><span class="h-sub">Season ${SEASON.n} player card</span>${crest('sm')}</div>
     <div class="pc-main">${avatar(P.av,P.avc,92)}<div style="min-width:0;flex:1"><div class="pc-name">${esc(myName())}</div><div class="pc-title rc-${title.rarity}">${esc(title.name)}</div><div class="pc-rate">${badge(P.rating)}<b>${P.rating}</b><span>${TIERS[t][0]} ${divOf(P.rating)}</span></div></div></div>
@@ -2516,7 +2513,7 @@ function renderMe(){
     return `<div class="mile"><span class="medal${tier?' m'+tier:''}"><svg class="pcs ${tier?'tw':'tb'}" viewBox="0 0 100 100" aria-hidden="true"><use href="#s-${pc}" width="100" height="100"/></svg></span><div style="min-width:0"><div class="mile-top"><span class="row-t">${n}<span class="pips3">${[0,1,2].map(k=>`<i class="${k<tier?'on':''}"></i>`).join('')}</span></span><small>${done?`${v} · maxed`:`${v} / ${goal}`}</small></div><div class="row-s">${d}</div><div class="bar"><i data-w="${pct.toFixed(0)}"></i></div></div></div>`}).join('')}</div>
   <div class="sec-t">Achievements</div><div class="panel"><div class="achs">${ACH.map(([id,n,d,tp])=>`<div class="ach${P.ach.includes(id)?' on':''}" title="${esc(d)}"><i>${svgPiece(tp).replace('class="pcs ','class="')}</i><span>${esc(n)}</span></div>`).join('')}</div></div>
   <div class="sec-t">Match history</div><div class="panel"><div class="hist">${P.hist.length?P.hist.slice(0,15).map(h=>`<div class="h-row"><span class="h-dot ${h.res==='w'?'w':h.res==='l'?'l':''}"></span><div style="min-width:0"><div class="row-t" style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(h.label)}</div><div class="row-s">${new Date(h.t).toLocaleDateString(undefined,{month:'short',day:'numeric'})} · ${pl(h.turns,'turn')}</div></div><span class="h-d ${h.delta>0?'up':h.delta<0?'down':''}">${h.delta?((h.delta>0?'+':'')+h.delta):'–'}</span>${repT.has(h.t)?`<button class="repbtn" type="button" data-act="rep" data-t="${h.t}" aria-label="Watch replay"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></button>`:'<span></span>'}</div>`).join(''):'<div class="empty">No games yet. Your results land here.</div>'}</div></div>
-  <div class="sec-t">Settings</div><div class="panel">${sw('sound','Sound','Moves, captures and coins')}${sw('haptics','Haptics','Taps and turn alerts where supported')}${sw('flip','Flip board in pass & play','Turn off when playing across a table')}
+  <div class="sec-t" id="settingsSec">Settings</div><div class="panel">${sw('sound','Sound','Moves, captures and coins')}${sw('haptics','Haptics','Taps and turn alerts where supported')}${sw('flip','Flip board in pass & play','Turn off when playing across a table')}
     <div class="set-row"><div><div class="row-t">How to play</div></div><button class="ghost" type="button" data-act="intro">Show</button></div>
     <div class="set-row"><div><div class="row-t">${resetArm?'Erase all progress?':'Reset progress'}</div><div class="row-s">${resetArm?'Rating, crowns, cosmetics and stats. This can’t be undone.':'Start over from scratch'}</div></div>${resetArm?'<div class="pair"><button class="ghost" type="button" data-act="noreset">Keep</button><button class="b3d danger sm" type="button" data-act="yesreset">Erase</button></div>':'<button class="ghost" type="button" data-act="reset">Reset</button>'}</div></div>
   <p class="row-s" style="text-align:center">Progress is saved on this device. Accounts and cross-device sync come with the app.</p></div>`;
@@ -2531,7 +2528,7 @@ function openEdit(){
     <div class="setup-k">Title</div><div class="titles">${titles.map(ti=>owns(ti)?`<button class="tchip rc-${ti.rarity}" type="button" data-act="settitle" data-id="${ti.id}" aria-pressed="${P.equip.title===ti.id}">${esc(ti.name)}</button>`:`<span class="tchip rc-${ti.rarity}" style="opacity:.35;cursor:default" title="${esc(lockText(ti)||'Shop')}">${esc(ti.name)}</span>`).join('')}</div>
     <p class="row-s" style="margin-top:12px">Unlock more titles in the Shop, with achievements and by climbing tiers.</p>`;
   $('sheetWrap').hidden=false;
-  const ni=$('nameIn');ni.addEventListener('change',()=>{P.name=ni.value.trim().slice(0,16);saveP();pushPlayer();renderMe();toast('Name saved')});
+  const ni=$('nameIn');ni.addEventListener('change',()=>{P.name=ni.value.trim().slice(0,16);saveP();renderMe();toast('Name saved')});
 }
 
 /* ---------- promotion ---------- */
@@ -2598,18 +2595,18 @@ function openSheet(kind){
   if(kind==='emotes'){$('sheetTitle').textContent='React';body.innerHTML=`<div class="emotes">${EMOTES.map(e=>`<button class="emote" type="button" data-act="emote" data-e="${e}">${e}</button>`).join('')}</div>`}
   else{
     $('sheetTitle').textContent='Game';
-    body.innerHTML=`${S&&!S.over?`<div class="row"><div><div class="row-t">${resignArm?'Resign this game?':'Resign'}</div><div class="row-s">${resignArm?'Counts as a loss.':'Give up the current game'}</div></div>${resignArm?'<div class="pair"><button class="ghost" type="button" data-act="noresign">Keep playing</button><button class="b3d danger sm" type="button" data-act="yesresign">Resign</button></div>':'<button class="ghost" type="button" data-act="resign">Resign</button>'}</div>`:''}
+    body.innerHTML=`${S&&!S.over&&S.mode!=='puzzle'?`<div class="row"><div><div class="row-t">${resignArm?'Resign this game?':'Resign'}</div><div class="row-s">${resignArm?'Counts as a loss.':'Give up the current game'}</div></div>${resignArm?'<div class="pair"><button class="ghost" type="button" data-act="noresign">Keep playing</button><button class="b3d danger sm" type="button" data-act="yesresign">Resign</button></div>':'<button class="ghost" type="button" data-act="resign">Resign</button>'}</div>`:''}
     ${isOnline()?`<div class="row"><div><div class="row-t">Online · ${S.online.code}</div><div class="row-s">You play ${SIDE[S.online.me]}</div></div><div class="pair"><button class="ghost" type="button" data-act="copyinvite">Copy link</button><button class="ghost" type="button" data-act="leaveonline">Leave</button></div></div>`:''}
     ${S&&fixedSide()==null?`<div class="row"><div><div class="row-t">Flip board each turn</div><div class="row-s">Turn off when playing across a table</div></div><button class="switch" type="button" role="switch" aria-checked="${!!S.autoFlip}" aria-label="Flip board each turn" data-act="flip"><span></span></button></div>`:''}
     <details class="fold"><summary>How to play</summary><ul class="rules">
       <li><b>Armies</b><span>King, 3 pawns and a knight each, randomly placed and mirrored.</span></li>
-      <li><b>Gold</b><span>Start with 3. No income. Captures pay: pawn 1, knight 3, bishop 3, rook 5, queen 9.</span></li>
+      <li><b>Gold</b><span>Start with 3. It carries over, and the only income is captures: pawn 1, knight 3, bishop 3, rook 5, queen 9.</span></li>
       <li><b>Turn</b><span>Move one piece, or buy as many pieces as you can afford, then end your turn.</span></li>
       <li><b>Shop</b><span>Pawn 1, knight 4, bishop 4, rook 6, queen 12. Pawns on your pawn row, others on your back row.</span></li>
       <li><b>Limits</b><span>No buying the same piece twice in a row. Max 8 pawns.</span></li>
       <li><b>Suicide</b><span>End your turn with your king attacked and you lose instantly.</span></li>
       <li><b>Premove</b><span>Against a bot or online, tap or drag your piece while your opponent thinks. It plays the moment your turn starts, if it’s still possible.</span></li>
-      <li><b>Victory</b><span>Checkmate, suicide or resignation. No moves and nothing to buy is a draw.</span></li></ul></details>
+      <li><b>Victory</b><span>Checkmate, suicide, resignation or time. No safe move and nothing to buy is a draw, as are 30 turns each without a capture, buy or pawn move, and bare kings with no gold left.</span></li></ul></details>
     <details class="fold"><summary>Move history</summary><ol class="histlist">${S?S.log.map(x=>`<li>${esc(x)}</li>`).join(''):''}</ol></details>`;
   }
   $('sheetWrap').hidden=false;
@@ -2693,7 +2690,6 @@ document.addEventListener('click',e=>{
     case 'share':shareOut(shareText(),'','Result copied. Paste it in a text or your story.','shareBox');break;
     case 'undo':undo();break;
     case 'replay':enterReplay(S.frames,$('gn').textContent);break;
-    case 'lastreplay':{let r=null;try{r=JSON.parse(store.get('cb-replay')||'null')}catch(_){}if(r)enterReplay(r.frames,r.label);break}
     case 'rp-prev':if(RP){if(RP.timer)rpPlay();rpShow(RP.i-1)}break;
     case 'rp-next':if(RP){if(RP.timer)rpPlay();rpShow(RP.i+1)}break;
     case 'rp-play':rpPlay();break;
@@ -2709,10 +2705,7 @@ document.addEventListener('click',e=>{
     case 'home':if(RP){const syn=RP.synthetic;exitReplay();if(syn)break}go('home');break;
     case 'resume':go('game');renderAll();if(S.over)showResult();break;
     case 'daily':startGame('daily');break;
-    case 'bot':store.set('cb-botpick',botPick);openSetup('bot');break;
-    case 'botpick':botPick=a.dataset.m;sfx('tap');a.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===a)));break;
     case 'pass':openSetup('pass');break;
-    case 'quick':quickMatch();break;
     case 'invite':$('result').hidden=true;openSetup('invite');break;
     case 'tcpick':P.set.tc=a.dataset.k;saveP();sfx('tap');openSetup(setupKind);break;
     case 'setupgo':{const k=setupKind;P.set.last={kind:k,level:botPick};saveP();closeSheet();if(k==='bot')startGame(botPick,P.set.tc);else if(k==='pass')startGame('friend',P.set.tc);else hostOnline(P.set.tc);break}
@@ -2734,12 +2727,9 @@ document.addEventListener('click',e=>{
     case 'hlive':setHV(null);break;
     case 'join':{const v=$('joinCode').value;closeSheet();joinOnline(v,false)}break;
     case 'copyinvite':copyInvite();break;
-    case 'cancelonline':if(gameRef&&!S.online.ready)gameRef.delete().catch(()=>{});leaveOnline();S=null;go('home');break;
-    case 'quickbot':if(gameRef)gameRef.delete().catch(()=>{});leaveOnline();startGame(botPick);break;
+    case 'cancelonline':leaveOnline();S=null;go('home');break;
     case 'leaveonline':closeSheet();leaveOnline();S=null;go('home');break;
-    case 'lbtab':lbTab=a.dataset.k;renderRanks();break;
     case 'botgo':botPick=a.dataset.m;store.set('cb-botpick',botPick);startGame(botPick);break;
-    case 'lb-daily':lbTab='daily';go('ranks');break;
     case 'item':openItem(a.dataset.id);break;
     case 'buyitem':buyItem(a.dataset.id);break;
     case 'equip':equipItem(a.dataset.id);break;
@@ -2749,23 +2739,24 @@ document.addEventListener('click',e=>{
     case 'crange':chartRange=a.dataset.k;renderRanks();break;
     case 'pbtab':pbarTab=a.dataset.k;renderMe();break;
     case 'edit':openEdit();break;
+    case 'tosettings':$('settingsSec').scrollIntoView({behavior:'smooth',block:'start'});break;
     case 'settitle':P.equip.title=a.dataset.id;saveP();sfx('tap');openEdit();renderMe();break;
     case 'sharecard':shareCard();break;
     case 'closemodal':$('modal').hidden=true;break;
-    case 'rep':{const r=loadReps().find(x=>x.t===+a.dataset.t);if(r)enterReplay(decFrames(r.f),r.label);break}
+    case 'rep':{if(S&&!S.over&&S.mode!=='puzzle'){toast('Finish your current game first. Tap Resume on Play.');break}if(S&&(S.over||S.mode==='puzzle'))S=null;const r=loadReps().find(x=>x.t===+a.dataset.t);if(r)enterReplay(decFrames(r.f),r.label);break}
     case 'claim':claim(+a.dataset.l);break;
-    case 'av':P.av=a.dataset.v;saveP();pushPlayer();renderMe();if(!$('sheetWrap').hidden)openEdit();break;
-    case 'avc':P.avc=a.dataset.v;saveP();pushPlayer();renderMe();if(!$('sheetWrap').hidden)openEdit();break;
+    case 'av':P.av=a.dataset.v;saveP();renderMe();if(!$('sheetWrap').hidden)openEdit();break;
+    case 'avc':P.avc=a.dataset.v;saveP();renderMe();if(!$('sheetWrap').hidden)openEdit();break;
     case 'set':P.set[a.dataset.k]=!P.set[a.dataset.k];saveP();a.setAttribute('aria-checked',String(P.set[a.dataset.k]));if(a.dataset.k==='flip'&&S)S.autoFlip=P.set.flip;if(P.set.sound)sfx('tap');break;
     case 'intro':showIntro(0);break;
     case 'intronext':sfx('tap');showIntro(+a.dataset.i);break;
     case 'introskip':endIntro();break;
     case 'introbot':endIntro();botPick='easy';startGame('easy');break;
-    case 'introinvite':endIntro();hostOnline(false);break;
+    case 'introinvite':endIntro();openSetup('invite');break;
     case 'introdaily':endIntro();startGame('daily');break;
     case 'reset':resetArm=true;renderMe();break;
     case 'noreset':resetArm=false;renderMe();break;
-    case 'yesreset':resetArm=false;P=DEF_P();P.seen=true;saveP();applyCosmetics();renderMe();toast('Progress reset');break;
+    case 'yesreset':{resetArm=false;try{Object.keys(localStorage).filter(k=>/^cb-(daily-|reps|replay|online-state|game)/.test(k)).forEach(k=>localStorage.removeItem(k))}catch(e){}P=DEF_P();initP();P.seen=true;saveP();applyCosmetics();renderMe();toast('Progress reset');break}
   }
 });
 document.addEventListener('keydown',e=>{
