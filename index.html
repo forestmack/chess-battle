@@ -1018,6 +1018,18 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
   .toast{left:calc(50% + 116px)!important}
 }
 @media (min-width:1500px){.screen:not(.game){max-width:1280px}}
+/* ---------- rematch prompt ---------- */
+.rm-ask{display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 16px;border-radius:18px;background:rgba(3,6,20,.55);box-shadow:inset 0 0 0 1px rgba(255,204,46,.35);animation:popin .45s var(--spring) both}
+.rm-q{font:800 17px/1.2 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--gold-hi)}
+.rm-btns{display:flex;gap:14px}
+.rm-btns button{all:unset;cursor:pointer;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;transition:transform .12s var(--spring)}
+.rm-btns button:active{transform:translateY(3px)}
+.rm-btns button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.rm-btns svg{width:28px;height:28px;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.rm-btns .rm-yes{background:linear-gradient(180deg,#a7f5dc,var(--mint));box-shadow:0 4px 0 #1b7a5c}.rm-btns .rm-yes svg{stroke:#062a1f}
+.rm-btns .rm-no{background:linear-gradient(180deg,#ff9aa8,var(--red));box-shadow:0 4px 0 #8a2234}.rm-btns .rm-no svg{stroke:#2a060c}
+.rm-note{color:var(--muted)}
+.spin.sm{display:inline-block;width:14px;height:14px;border-width:2px;margin:0 8px -2px 0;vertical-align:middle}
 /* ---------- legacy ---------- */
 .star{fill:var(--gold);stroke:var(--gold-lo);stroke-width:1.2;stroke-linejoin:round}
 .legacy{background:radial-gradient(110% 80% at 0% 0%,rgba(255,122,217,.2),transparent 55%),radial-gradient(110% 80% at 100% 0%,rgba(79,230,255,.17),transparent 55%),linear-gradient(180deg,#1a1f5e,#0b1130);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(160,140,255,.35),0 26px 50px -26px rgba(0,0,0,.85)}
@@ -2035,6 +2047,7 @@ async function push(){
   if(!send({type:'state',state:pack(),rev:S.online.rev,gameNo:S.online.gameNo,hostMe:hostColor()}))toast('Opponent is offline. Your move is saved and syncs when they reconnect.');
 }
 function leaveOnline(){
+  try{if(conn&&conn.open)conn.send({type:'bye'})}catch(e){}
   clearTimeout(quickTimer);clearTimeout(retryTimer);if(qmTimer||(S&&S.online&&S.online.quick))qmStop(true);
   const c=conn,p=peer;conn=null;peer=null;
   try{c&&c.close()}catch(e){}try{p&&p.destroy()}catch(e){}
@@ -2064,6 +2077,7 @@ function wire(c){
   c.on('data',d=>{if(conn===c)onData(d)});
   c.on('close',()=>{if(conn!==c)return;conn=null;if(!isOnline())return;
     if(!S.over)toast('Opponent disconnected. Your game is saved, so they can rejoin with the same link.');
+    else{S.online.gone=true;S.online.reqIn=false;S.online.reqOut=false;if(!$('result').hidden)setTimeout(showResult,0)}
     freezeClock();S.online.ready=false;renderAll();if(!isHost())scheduleRetry()});
   c.on('error',()=>{});
 }
@@ -2073,7 +2087,7 @@ function onData(d){
   if(d.type==='hello'){
     clearTimeout(retryTimer);
     S.online.oppName=String(d.name||'Opponent').slice(0,18);S.online.oppUid=typeof d.uid==='string'&&/^[0-9a-f-]{36}$/i.test(d.uid)?d.uid:null;if(S.online.quick){qmStop(true);S.online.quick=false}S.online.oppRating=+d.rating||null;S.online.oppNation=natOf(d.nation)?d.nation:null;{const ok=v=>typeof v==='string'&&v.length<90&&/^(#[0-9a-f]{3,8}|linear-gradient\([#0-9a-z,.% ()-]+\))$/i.test(v);S.online.oppHome=d.home&&ok(d.home.l)&&ok(d.home.d)?{l:d.home.l,d:d.home.d}:null}
-    const was=S.online.ready;S.online.ready=true;$('result').hidden=true;resumeClock();
+    const was=S.online.ready;S.online.ready=true;S.online.gone=false;$('result').hidden=true;resumeClock();
     if(!was){sfx('turn');vibrate(15);toast(`${S.online.oppName} is in. You play ${SIDE[S.online.me]}.`)}
     const theirs=+d.rev||0,sameGame=d.gameNo===S.online.gameNo;
     if(S.online.rev>=theirs||!sameGame&&isHost())send({type:'state',state:pack(),rev:S.online.rev,gameNo:S.online.gameNo,hostMe:hostColor()});
@@ -2083,7 +2097,14 @@ function onData(d){
     if(d.gameNo>S.online.gameNo||(d.gameNo===S.online.gameNo&&d.rev>S.online.rev))applyRemote(d);
     return;
   }
-  if(d.type==='rematch'){if(isHost()&&S.over){toast(`${S.online.oppName||'Your opponent'} wants a rematch`);rematch()}return}
+  if(d.type==='rematch'||d.type==='rematch-req'){
+    if(!S.over)return;
+    if(S.online.reqOut){S.online.reqOut=false;if(isHost())startRematch();else send({type:'rematch-yes'});return}
+    S.online.reqIn=true;sfx('turn');vibrate(15);alertTurn();showResult();return}
+  if(d.type==='rematch-yes'){if(S.over&&S.online.reqOut){S.online.reqOut=false;if(isHost())startRematch()}return}
+  if(d.type==='rematch-no'){if(S.online.reqOut){S.online.reqOut=false;toast(`${S.online.oppName||'Your opponent'} declined the rematch.`);showResult()}return}
+  if(d.type==='rematch-cancel'){if(S.online.reqIn){S.online.reqIn=false;showResult()}return}
+  if(d.type==='bye'){S.online.gone=true;S.online.reqIn=false;S.online.reqOut=false;S.online.ready=false;freezeClock();renderAll();if(S.over)showResult();else toast(`${S.online.oppName||'Your opponent'} left the game.`);return}
   if(d.type==='emote')showEmote(String(d.e||''),false);
 }
 function applyRemote(d){
@@ -2162,13 +2183,19 @@ function resumeOnline(){
   else{showConnecting(sv.code);peerReady().then(p=>{peer=p;peer.on('error',e=>{if(e&&e.type==='peer-unavailable')scheduleRetry()});connectTo(sv.code)}).catch(()=>toast(NET_ERR))}
   return true;
 }
-async function rematch(){
-  if(!isOnline())return;
-  if(!isHost()){
-    if(!send({type:'rematch'})){toast('Your opponent is offline. Rematch once they reconnect.');return}
-    S.online.wantRematch=true;toast('Rematch requested. The game starts when your opponent’s phone answers.');return;
-  }
-  const keep={online:S.online,tctl:S.tctl};newGame('online',null,keep.tctl);S.online=keep.online;S.online.me=1-S.online.me;HV=null;resumeClock();S.view=S.online.me;S.online.wantRematch=false;
+function rematch(){
+  if(!isOnline()||!S.over)return;
+  if(S.online.gone||!conn||!conn.open){S.online.gone=true;toast(`${S.online.oppName||'Your opponent'} left, so there’s no rematch. Invite them again or find a new rival.`);showResult();return}
+  if(S.online.reqIn){acceptRematch();return}
+  if(S.online.reqOut)return;
+  S.online.reqOut=true;send({type:'rematch-req'});sfx('tap');showResult();
+}
+function acceptRematch(){if(!isOnline()||!S.online.reqIn)return;S.online.reqIn=false;if(isHost())startRematch();else{send({type:'rematch-yes'});toast('Rematch accepted. Starting…');showResult()}}
+function declineRematch(){if(!isOnline())return;S.online.reqIn=false;send({type:'rematch-no'});showResult()}
+function cancelRematch(){if(!isOnline())return;S.online.reqOut=false;send({type:'rematch-cancel'});showResult()}
+async function startRematch(){
+  if(!isOnline()||!isHost())return;
+  const keep={online:S.online,tctl:S.tctl};newGame('online',null,keep.tctl);S.online=keep.online;S.online.me=1-S.online.me;HV=null;resumeClock();S.view=S.online.me;S.online.reqIn=false;S.online.reqOut=false;
   S.online.gameNo++;resetDom();renderAll({stagger:true});await push();
   toast(`Colors swapped. You play ${SIDE[S.online.me]} this game.`);
 }
@@ -2657,6 +2684,13 @@ function legacyAward(res,online){
   let unlocked=null;for(const s of LEGACY)if(s.need&&L.pts>=s.need&&!L.un.includes(s.id)){L.un.push(s.id);unlocked=s.id}
   return {d:L.pts-before,unlocked,capped:!online&&LG_PTS[res]>0&&add<LG_PTS[res]};
 }
+function rematchUI(){
+  const o=S.online,nm=esc(o.oppName||'Your opponent');
+  if(o.gone)return `<div class="result-s rm-note">${nm} left the game.</div><div class="pair"><button class="cta sm shine" type="button" data-act="${netCfg()?'quickmatch':'invite'}">${netCfg()?'Find a new rival':'Invite again'}</button></div>`;
+  if(o.reqIn)return `<div class="rm-ask"><div class="rm-q">${nm} wants a rematch</div><div class="rm-btns"><button class="rm-yes" type="button" data-act="rmyes" aria-label="Accept rematch"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button class="rm-no" type="button" data-act="rmno" aria-label="Decline rematch"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>`;
+  if(o.reqOut)return `<div class="pair"><button class="cta sm" type="button" disabled><span class="spin sm"></span>Waiting for ${nm}…</button></div><button class="linkbtn" type="button" data-act="rmcancel">Cancel request</button>`;
+  return `<div class="pair"><button class="cta sm shine" type="button" data-act="rematch">Rematch</button></div>`;
+}
 function showResult(){
   if(S&&S.mode==='puzzle'){if(S.over&&S.over.why==='Solved'&&!RP)showPuzzleWin();return}
   const r=$('result'),ov=S.over;
@@ -2668,7 +2702,7 @@ function showResult(){
   const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
   const rw=S.reward;
   const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy${rw.lgCap?' · daily bot cap':''}</span>`:''}${rw.nat?`<span class="rw nat" style="--nc:${natOf(rw.nat.id).c}">${crestN(natOf(rw.nat.id))}${rw.nat.d>0?'+':''}${rw.nat.d} ${esc(natOf(rw.nat.id).short)}</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
-  r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}<div class="pair"><button class="cta sm shine" type="button" data-act="${isOnline()?'rematch':'again'}">${isOnline()?'Rematch':S.mode==='daily'?'Replay daily':'Play again'}</button></div><div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="replay">Replay</button>${isOnline()?'':'<button class="ghost" type="button" data-act="invite">Challenge</button>'}</div><button class="linkbtn" type="button" data-act="viewboard">View board</button><div class="linkbox" id="shareBox" hidden></div></div>`;
+  r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}${isOnline()?rematchUI():`<div class="pair"><button class="cta sm shine" type="button" data-act="again">${S.mode==='daily'?'Replay daily':'Play again'}</button></div>`}<div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="replay">Replay</button>${isOnline()?'':'<button class="ghost" type="button" data-act="invite">Challenge</button>'}</div><button class="linkbtn" type="button" data-act="viewboard">View board</button><div class="linkbox" id="shareBox" hidden></div></div>`;
   r.hidden=false;
   if(firstShow){if(won&&(fs!=null||ov.win!=null)){sfx('win');if(fs!=null||true)confetti()}else if(fs!=null&&ov.win!==fs)sfx('lose');if(rw&&rw.lvlUp)setTimeout(()=>banner(`Level ${rw.lvlUp}`,'Season reward ready in the Shop'),900);if(S.promo){const pr=S.promo;setTimeout(()=>{if(route==='game')showPromo(pr)},1500)}if(rw&&rw.lgNew){const id=rw.lgNew;setTimeout(()=>showLegacyUnlock(id),S.promo?3200:1600)}}
 }
@@ -3432,6 +3466,9 @@ document.addEventListener('click',e=>{
     case 'end':if(canAct()&&S.bought){S.buy=null;if(inCheck(S.b,S.turn))suicide(S.turn);else passTurn(false)}break;
     case 'again':startGame(S.mode==='online'?'friend':S.mode,S.tctl);break;
     case 'rematch':rematch();break;
+    case 'rmyes':acceptRematch();break;
+    case 'rmno':declineRematch();break;
+    case 'rmcancel':cancelRematch();break;
     case 'viewboard':S.resultHidden=true;$('result').hidden=true;renderTray();break;
     case 'noinstall':store.set('cb-noinstall','1');renderHome();break;
     case 'showresult':S.resultHidden=false;showResult();renderTray();break;
@@ -3536,7 +3573,7 @@ for(const [fn,id] of [['renderHome','scr-home'],['renderRanks','scr-ranks'],['re
   const f=window[fn];window[fn]=function(...a){const r=f.apply(this,a);deskify($(id));return r};
 }
 renderHome=window.renderHome;renderRanks=window.renderRanks;renderNat=window.renderNat;renderShop=window.renderShop;renderMe=window.renderMe;
-DESK.addEventListener('change',()=>{if(route!=='game')netRerender()});
+try{const f=()=>{if(route!=='game')netRerender()};if(DESK.addEventListener)DESK.addEventListener('change',f);else if(DESK.addListener)DESK.addListener(f)}catch(e){}
 function start(){
   applyCosmetics();
   {const sb2=document.querySelector('.side-brand svg');if(sb2)sb2.outerHTML=crest();}
