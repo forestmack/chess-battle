@@ -1848,9 +1848,9 @@ function botTurn(){
 /* ================= server (Supabase) =================
    Fill in SB_URL and SB_KEY (the public anon key) to switch the game online.
    With them empty the game runs exactly as before, fully on the device. */
-const SB_URL=window.CB_SB_URL||'';
-const SB_KEY=window.CB_SB_KEY||'';
-const SB_LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
+const SB_URL=window.CB_SB_URL||'https://lrmrnjctrzhisrfymwfz.supabase.co';
+const SB_KEY=window.CB_SB_KEY||'sb_publishable_Grpk_ugmZeSTcjZJ0gTE_g_U2_m8L_7';
+const SB_LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0/dist/umd/supabase.js';
 let sb=null;const NET={on:false,uid:null,me:null,email:null,anon:true,stand:null,standAt:0,top:null,heroes:{},init:null};
 const netCfg=()=>!!(SB_URL&&SB_KEY);
 function loadScript(src){return new Promise((res,rej)=>{const el=document.createElement('script');el.src=src;el.async=true;el.onload=res;el.onerror=rej;document.head.appendChild(el)})}
