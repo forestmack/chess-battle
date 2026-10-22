@@ -26,6 +26,17 @@ Play: https://forestmack.github.io/chess-battle/
 - **Chess Nations:** new players spin to join one of four nations: Ember Dominion, Tide Republic, Grove Order or Dusk Throne. Online wins earn your nation 5 stars, losses cost 3, and a draw gives both nations 1. Your nation's home board shows whenever you play White online, and both armies wear their nation's colors.
 - **Legacy:** stars also build your personal legacy, which unlocks five earn-only piece sets: Marble, Neon, Forged, Prism and Celestial. Online games pay the same stars to your legacy. Bot and daily games award legacy too (win +2, draw +1, loss −1, up to 10 a day), but only online games count for your nation.
 
+## Online
+
+- **Quick match** pairs you with whoever else is searching. Live games run over Supabase Realtime and are saved on the server, so anyone can watch them from **Live now**.
+- **One-move-a-day games** with friends: 3 days per move, several games at once, listed under **Your games**.
+- **Friends** with 8-character friend codes, plus live and daily challenges.
+- If an opponent leaves a live game on their turn for 2 minutes, you can claim the win.
+- **Nation war:** a 16-region territory map where your wins fight for the front you pick, double nation stars on war weekends, an end-of-month ceremony, each capital's council and recruit links.
+- **Training:** Puzzle Rush (3 minutes, 3 strikes, daily leaderboard), game review and shareable video clips.
+
+See `docs/NEXT_STEPS.md` for push notifications, app stores, payments and the retention report.
+
 ## Under the hood
 
 - Single-file app (`index.html`), with no build step and no backend
