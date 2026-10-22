@@ -11,7 +11,9 @@ import {JSDOM} from 'jsdom';
 import fs from 'fs';
 
 const dry = process.argv.includes('--dry');
-const {SB_URL, SB_KEY, WAR_KEY} = process.env;
+const {SB_URL, SB_KEY} = process.env;
+// tolerate a secret pasted with spaces, a line break or quotes around it
+const WAR_KEY = (process.env.WAR_KEY || '').trim().replace(/^["'`]+|["'`]+$/g, '').trim();
 if (!dry && (!SB_URL || !SB_KEY || !WAR_KEY)) {
   console.error('Missing SB_URL, SB_KEY or WAR_KEY.');
   process.exit(1);
@@ -36,7 +38,9 @@ async function rpc(fn, args) {
 
 const pair = dry
   ? {white: {id: 'ember-k1', nation: 'ember', rank: 'K', name: 'Pyrrhus', rating: 1600}, black: {id: 'tide-p1', nation: 'tide', rank: 'P', name: 'Reef', rating: 1090}}
-  : await rpc('next_war_pairing', {p_key: WAR_KEY});
+  : await rpc('next_war_pairing', {p_key: WAR_KEY}).catch(e => {
+      if (/bad key/.test(e.message)) console.error(`The WAR_KEY secret (${WAR_KEY.length} characters, starts "${WAR_KEY.slice(0, 4)}") doesn't match the server. Run  select v from cb_config where k = 'war_key';  and paste that exact value into the secret.`);
+      throw e; });
 const label = g => `${g.nation} ${g.rank} ${g.name} (${g.rating})`;
 console.log(`Battle: ${label(pair.white)} vs ${label(pair.black)}`);
 const t0 = Date.now();
