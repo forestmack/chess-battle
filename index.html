@@ -858,6 +858,98 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 .pc-nat .ncrest{width:18px;height:20px}
 .rw.nat{color:var(--nc)}
 .rw .ncrest{width:14px;height:15px;filter:none}
+/* ---------- capital (nation home base) ---------- */
+.tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.tab-ind{width:20%!important}
+.tab.cap{color:var(--nc,var(--muted))}
+.tab.cap .capico{position:relative;width:34px;height:34px;margin:-12px 0 -2px;border-radius:12px;display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--nc,#7f95ff) 45%,#1a2468),#0b1130);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--nc,#7f95ff) 70%,transparent),0 6px 14px -4px color-mix(in srgb,var(--nc,#7f95ff) 60%,transparent);transition:transform .3s var(--spring)}
+.tab.cap .capico .ncrest{width:20px;height:22px;filter:none}
+.tab.cap .capico svg.gen{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2}
+.tab.cap[aria-current="page"] .capico{transform:translateY(-3px) scale(1.06)}
+#scr-nat{--nc:#7f95ff}
+.cap-hero{position:relative;overflow:hidden;border-radius:28px;padding:26px 18px 18px;text-align:center;background:radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--nc) 45%,transparent),transparent 62%),linear-gradient(180deg,color-mix(in srgb,var(--nc) 18%,#141c52),#0a0f2e);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px color-mix(in srgb,var(--nc) 45%,transparent),0 30px 60px -28px color-mix(in srgb,var(--nc) 60%,#000)}
+.cap-hero::after{content:"";position:absolute;inset:auto 0 0;height:40%;background:linear-gradient(0deg,rgba(6,10,32,.6),transparent);pointer-events:none}
+.cap-sky{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.cap-sky i{position:absolute;bottom:-10px;width:5px;height:5px;border-radius:50%;background:var(--nc);box-shadow:0 0 8px var(--nc);opacity:0;animation:capfloat linear infinite}
+@keyframes capfloat{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.9}100%{transform:translateY(-320px) translateX(var(--dx,0)) scale(1.1);opacity:0}}
+.cap-crest{position:relative;width:118px;height:118px;margin:0 auto 10px;display:grid;place-items:center;z-index:1}
+.cap-crest::before{content:"";position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,transparent,var(--nc),transparent 35%,var(--nc) 55%,transparent 75%);opacity:.45;filter:blur(10px);animation:spinray 8s linear infinite}
+.cap-crest .ncrest{width:96px;height:106px;filter:drop-shadow(0 0 22px var(--nc)) drop-shadow(0 10px 18px rgba(0,0,0,.6));animation:float 5s ease-in-out infinite}
+.cap-k{position:relative;font:700 11px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--nc);z-index:1}
+.cap-t{position:relative;font:900 52px/.9 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:8px 0 6px;z-index:1;background:linear-gradient(180deg,#fff,color-mix(in srgb,var(--nc) 55%,#fff));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35))}
+.cap-motto{position:relative;font:600 15px/1.35 var(--body);font-style:italic;color:color-mix(in srgb,var(--nc) 35%,#c9d0f5);z-index:1}
+.cap-rank{position:relative;z-index:1;margin:16px auto 0;max-width:340px;text-align:left}
+.cap-rank-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+.cap-rank-top b{font:900 20px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--text)}
+.cap-rank-top span{font:700 12px/1 var(--body);color:var(--muted);letter-spacing:.06em}
+.cap-bar{height:8px;border-radius:4px;background:rgba(3,6,20,.7);overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.8)}
+.cap-bar i{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,color-mix(in srgb,var(--nc) 55%,#000),var(--nc));box-shadow:0 0 12px var(--nc);transition:width 1s var(--ease)}
+.cap-stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.cap-stats div{padding:12px 6px;border-radius:14px;background:rgba(3,6,20,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.cap-stats b{display:flex;align-items:center;justify-content:center;gap:4px;font:900 24px/1 var(--display);color:var(--text)}
+.cap-stats b .star{width:16px;height:16px}
+.cap-stats span{display:block;margin-top:6px;font:700 10px/1.2 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.cap-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:6px 2px -4px}
+.cap-sec .sec-t{color:var(--nc)}
+.oath{display:flex;align-items:center;gap:14px;background:linear-gradient(110deg,color-mix(in srgb,var(--nc) 20%,#18225a),#0d1438 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px color-mix(in srgb,var(--nc) 40%,transparent)}
+.oath-ic{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(160deg,var(--nc),color-mix(in srgb,var(--nc) 50%,#000));box-shadow:0 4px 0 color-mix(in srgb,var(--nc) 40%,#000),0 0 20px color-mix(in srgb,var(--nc) 45%,transparent)}
+.oath-ic svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.oath.done .oath-ic{background:rgba(75,227,180,.15);box-shadow:inset 0 0 0 1.5px rgba(75,227,180,.5)}
+.oath.done .oath-ic svg{stroke:var(--mint)}
+.oath-btn{all:unset;cursor:pointer;flex:none;padding:12px 14px;border-radius:13px;font:900 15px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:#120a00;background:linear-gradient(180deg,color-mix(in srgb,var(--nc) 30%,#fff),var(--nc));box-shadow:0 4px 0 color-mix(in srgb,var(--nc) 45%,#000);animation:pulse 1.6s ease-in-out infinite}
+.oath-btn:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--nc) 45%,#000)}
+.oath-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.orders .ord{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid rgba(43,56,120,.6)}
+.orders .ord:first-of-type{border-top:0;padding-top:2px}
+.ord-n{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:900 16px/1 var(--display);color:var(--nc);background:rgba(3,6,20,.6);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--nc) 40%,transparent)}
+.ord.done .ord-n{color:#062a1f;background:var(--mint);box-shadow:none}
+.ord .bar{height:6px;margin-top:8px}
+.ord .bar i{background:linear-gradient(90deg,color-mix(in srgb,var(--nc) 55%,#000),var(--nc))}
+.ord-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ord-top small{font:800 12px/1 var(--display);color:var(--muted);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.camp-medal{display:flex;align-items:center;gap:12px;margin-top:6px;padding:12px;border-radius:16px;background:linear-gradient(90deg,color-mix(in srgb,var(--nc) 18%,transparent),transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--nc) 35%,transparent)}
+.camp-medal .ncrest{width:34px;height:38px}
+.drill{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:center}
+.drill .mini{width:96px;transform:none;border-radius:10px;box-shadow:0 0 0 2px color-mix(in srgb,var(--nc) 50%,transparent),0 10px 18px -8px rgba(0,0,0,.7)}
+.drill-k{font:700 10px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--nc)}
+.drill-t{font:900 22px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;margin:6px 0 4px}
+.drill-st{display:flex;gap:12px;margin:8px 0 10px;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.drill-st b{font:900 15px/1 var(--display);color:var(--text);margin-right:3px}
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.skill{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:8px;padding:12px 10px;border-radius:16px;position:relative;background:linear-gradient(180deg,#18225a,#0d1438);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1px rgba(43,56,120,.9),0 4px 0 #050a1c;transition:transform .14s var(--spring)}
+.skill:active{transform:translateY(3px)}
+.skill:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.skill.done{box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1.5px color-mix(in srgb,var(--nc) 70%,transparent),0 4px 0 #050a1c}
+.skill-n{font:900 22px/1 var(--display);color:var(--nc)}
+.skill-t{font:800 14px/1.1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.skill-s{font:500 11.5px/1.3 var(--body);color:var(--muted)}
+.skill .ok{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--mint);color:#062a1f;font:900 11px/1 var(--display)}
+.lesson-d{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:min(230px,70%);margin:6px auto 0;border-radius:12px;overflow:hidden;box-shadow:0 0 0 3px rgba(0,0,0,.3),0 16px 28px -12px rgba(0,0,0,.7)}
+.lesson-d i{aspect-ratio:1;display:grid;place-items:center;position:relative}
+.lesson-d i.hl::after{content:"";position:absolute;inset:8%;border-radius:50%;box-shadow:inset 0 0 0 3px var(--nc);background:color-mix(in srgb,var(--nc) 25%,transparent)}
+.lesson-d svg{width:86%;height:86%;position:relative;z-index:1}
+.lesson-body{font:500 15px/1.5 var(--body);color:var(--text);margin:14px 0}
+.lesson-body p{margin:0 0 10px}
+.ranks-l{display:flex;flex-direction:column}
+.rk-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid rgba(43,56,120,.5)}
+.rk-row:first-child{border-top:0}
+.rk-ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:900 14px/1 var(--display);color:var(--muted);background:rgba(3,6,20,.6);box-shadow:inset 0 0 0 1.5px var(--line)}
+.rk-row.got .rk-ic{color:#120a00;background:var(--nc);box-shadow:0 0 12px color-mix(in srgb,var(--nc) 60%,transparent)}
+.rk-row.cur{background:color-mix(in srgb,var(--nc) 10%,transparent);margin:0 -10px;padding:10px;border-radius:12px;border-top-color:transparent}
+.rk-row .row-t{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:16px}
+.rk-row.lock .row-t{color:var(--muted)}
+.rk-req{display:flex;align-items:center;gap:4px;font:800 14px/1 var(--display);color:var(--gold)}
+.rk-req .star{width:13px;height:13px}
+.cd .star{width:13px;height:13px;vertical-align:-1px}
+.creed{text-align:center;padding:22px 18px;background:radial-gradient(100% 80% at 50% 0%,color-mix(in srgb,var(--nc) 18%,transparent),transparent 70%),linear-gradient(180deg,#141c52,#0b1130)}
+.creed q{display:block;font:900 26px/1.05 var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--nc);quotes:"“" "”"}
+.creed p{font:500 14.5px/1.55 var(--body);color:var(--muted);margin:12px 0 0}
+.join-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.join-card{padding:14px 12px;border-radius:18px;background:linear-gradient(180deg,color-mix(in srgb,var(--nc) 16%,#18225a),#0d1438);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 0 0 1px color-mix(in srgb,var(--nc) 40%,transparent)}
+.join-card .ncrest{width:34px;height:38px}
+.join-card b{display:block;font:900 17px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--nc);margin:10px 0 4px}
+.join-card span{font:500 12px/1.35 var(--body);color:var(--muted)}
+@media (min-width:700px){.skills{grid-template-columns:repeat(3,minmax(0,1fr))}}
 /* ---------- legacy ---------- */
 .star{fill:var(--gold);stroke:var(--gold-lo);stroke-width:1.2;stroke-linejoin:round}
 .legacy{background:radial-gradient(110% 80% at 0% 0%,rgba(255,122,217,.2),transparent 55%),radial-gradient(110% 80% at 100% 0%,rgba(79,230,255,.17),transparent 55%),linear-gradient(180deg,#1a1f5e,#0b1130);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(160,140,255,.35),0 26px 50px -26px rgba(0,0,0,.85)}
@@ -998,6 +1090,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 <main id="app">
   <section class="screen" id="scr-home" hidden></section>
   <section class="screen" id="scr-ranks" hidden></section>
+  <section class="screen" id="scr-nat" hidden></section>
   <section class="screen" id="scr-shop" hidden></section>
   <section class="screen" id="scr-me" hidden></section>
 
@@ -1056,6 +1149,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
     <span class="tab-ind" id="tabInd"></span>
     <button class="tab" type="button" data-tab="home"><svg viewBox="0 0 24 24"><path d="M5 20h14M7 20l1-6h8l1 6M9 14l-1-6 4 3 4-3-1 6"/><circle cx="12" cy="5" r="1.4"/></svg>Play</button>
     <button class="tab" type="button" data-tab="ranks"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M8.5 12.5l3.5 2 3.5-2M8.5 9.5l3.5 2 3.5-2"/></svg>Ranks</button>
+    <button class="tab cap" type="button" data-tab="nat" id="capTab"><span class="capico" id="capIco"></span><span id="capLbl">Nations</span></button>
     <button class="tab" type="button" data-tab="shop"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>Shop</button>
     <button class="tab" type="button" data-tab="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Profile</button>
   </div>
@@ -1096,7 +1190,7 @@ const reduced=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').mat
 
 /* ================= profile ================= */
 const DEF_P=()=>({name:'',av:'Q',avc:'gold',rating:700,crowns:150,xp:0,claimed:[],owned:['b-amethyst','t-gold','f-coins','snd-wood','ti-rookie'],
-  equip:{board:'b-amethyst',trim:'t-gold',fx:'f-coins',snd:'snd-wood',title:'ti-rookie',set:'classic'},legacy:{pts:0,peak:0,un:['classic'],games:0},nation:null,natGiven:0,war:{month:'',tally:{},mine:0,w:0,l:0,d:0},rh:[],days:{},by:{buy:{},cap:{}},rec:{fast:0,gold:0,caps:0,bestOpp:0},peak:0,since:0,
+  equip:{board:'b-amethyst',trim:'t-gold',fx:'f-coins',snd:'snd-wood',title:'ti-rookie',set:'classic'},legacy:{pts:0,peak:0,un:['classic'],games:0},nation:null,natGiven:0,oath:{last:0,streak:0,best:0,total:0},train:{n:0,solved:0,streak:0,best:0,day:0,today:0},learned:[],camp:null,war:{month:'',tally:{},mine:0,w:0,l:0,d:0},rh:[],days:{},by:{buy:{},cap:{}},rec:{fast:0,gold:0,caps:0,bestOpp:0},peak:0,since:0,
   stats:{games:0,wins:0,losses:0,draws:0,streak:0,best:0,caps:0,buys:0,earned:0,mates:0},
   ach:[],hist:[],set:{sound:true,haptics:true,flip:true},daily:{last:0,streak:0,best:0},seen:false,tips:{},vs:{easy:{w:0,l:0,d:0},medium:{w:0,l:0,d:0},hard:{w:0,l:0,d:0}},bestDaily:0});
 function loadP(){
@@ -1106,7 +1200,7 @@ function loadP(){
   return p;
 }
 let P=loadP();
-function initP(){for(const id of ['snd-wood','ti-rookie'])if(!P.owned.includes(id))P.owned.push(id);if(!P.since)P.since=Date.now();if(!Array.isArray(P.rh)||!P.rh.length)P.rh=[{t:Date.now(),r:P.rating}];P.peak=Math.max(P.peak||0,P.rating);if(!P.by||typeof P.by!=='object')P.by={};if(!P.by.buy)P.by.buy={};if(!P.by.cap)P.by.cap={};if(!P.rec)P.rec={fast:0,gold:0,caps:0,bestOpp:0};if(!P.days)P.days={};if(!item(P.equip.board))P.equip.board='b-amethyst';if(!item(P.equip.trim))P.equip.trim='t-gold';if(!item(P.equip.fx))P.equip.fx='f-coins';if(!item(P.equip.snd))P.equip.snd='snd-wood';if(!item(P.equip.title))P.equip.title='ti-rookie';if(!P.legacy||typeof P.legacy!=='object')P.legacy={pts:0,peak:0,un:['classic'],games:0};if(!Array.isArray(P.legacy.un))P.legacy.un=['classic'];if(!P.legacy.un.includes('classic'))P.legacy.un.unshift('classic');P.legacy.pts=Math.max(0,+P.legacy.pts||0);if(!lgSet(P.equip.set)||!P.legacy.un.includes(P.equip.set))P.equip.set='classic';if(P.nation&&!natOf(P.nation))P.nation=null;if(!P.war||typeof P.war!=='object')P.war={month:'',tally:{},mine:0,w:0,l:0,d:0};if(!P.war.tally)P.war.tally={};P.natGiven=+P.natGiven||0}
+function initP(){for(const id of ['snd-wood','ti-rookie'])if(!P.owned.includes(id))P.owned.push(id);if(!P.since)P.since=Date.now();if(!Array.isArray(P.rh)||!P.rh.length)P.rh=[{t:Date.now(),r:P.rating}];P.peak=Math.max(P.peak||0,P.rating);if(!P.by||typeof P.by!=='object')P.by={};if(!P.by.buy)P.by.buy={};if(!P.by.cap)P.by.cap={};if(!P.rec)P.rec={fast:0,gold:0,caps:0,bestOpp:0};if(!P.days)P.days={};if(!item(P.equip.board))P.equip.board='b-amethyst';if(!item(P.equip.trim))P.equip.trim='t-gold';if(!item(P.equip.fx))P.equip.fx='f-coins';if(!item(P.equip.snd))P.equip.snd='snd-wood';if(!item(P.equip.title))P.equip.title='ti-rookie';if(!P.legacy||typeof P.legacy!=='object')P.legacy={pts:0,peak:0,un:['classic'],games:0};if(!Array.isArray(P.legacy.un))P.legacy.un=['classic'];if(!P.legacy.un.includes('classic'))P.legacy.un.unshift('classic');P.legacy.pts=Math.max(0,+P.legacy.pts||0);if(!lgSet(P.equip.set)||!P.legacy.un.includes(P.equip.set))P.equip.set='classic';if(P.nation&&!natOf(P.nation))P.nation=null;if(!P.war||typeof P.war!=='object')P.war={month:'',tally:{},mine:0,w:0,l:0,d:0};if(!P.war.tally)P.war.tally={};P.natGiven=+P.natGiven||0;if(!P.oath||typeof P.oath!=='object')P.oath={last:0,streak:0,best:0,total:0};if(!P.train||typeof P.train!=='object')P.train={n:0,solved:0,streak:0,best:0,day:0,today:0};if(!Array.isArray(P.learned))P.learned=[];const hh=item(P.equip.home);if(!hh||hh.nation!==P.nation)P.equip.home=P.nation?`h-${P.nation}`:null;const bb=item(P.equip.board);if(bb&&bb.nation&&bb.nation!==P.nation)P.equip.board='b-amethyst';const tt=item(P.equip.trim);if(tt&&tt.nation&&tt.nation!==P.nation)P.equip.trim='t-gold';const ti=item(P.equip.title);if(ti&&ti.nation&&(ti.nation!==P.nation||natRank()<(ti.rankReq||0))&&!P.owned.includes(ti.id))P.equip.title='ti-rookie'}
 const saveP=()=>store.set('cb-profile',JSON.stringify(P));
 const myName=()=>P.name||('Player '+PID.slice(-4).toUpperCase());
 const AVC={gold:'#ffcc2e',mint:'#4be3b4',rose:'#f08a9a',sky:'#6fb6ff',lilac:'#7f95ff',ivory:'#fcf8ef'};
@@ -1183,12 +1277,60 @@ const NATIONS=[
   {id:'dusk',name:'Dusk Throne',short:'Dusk',c:'#a77bff',l:'#e9e1fb',d:'#6a4fc4',w:'#8a5cf0',b:'#d2bfff',motto:'Rule from the shadows.',g:'M16.6 4A9.2 9.2 0 1 0 14.4 20.9A8.4 8.4 0 0 1 16.6 4zM19.5 8.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z'},
 ];
 const natOf=id=>NATIONS.find(n=>n.id===id)||null;
+const CAPITAL={
+  ember:{city:'Emberhold',doc:'Fire and Fury',lore:'Forged in the volcanic north, the Ember Dominion believes the best defense is a burning offense. Its players open fast, trade hard and hunt kings before the smoke clears.',
+    skills:[
+      {t:'Check is tempo',s:'Checks force replies',d:['..k..','.....','.....','.Q...','....K'],hl:[7,12],body:['A check has to be answered right away. That makes it the strongest tempo move in the game: your opponent can’t buy, can’t attack, can’t plan.','Chain checks to drive the enemy king into the open while your other pieces close in. Remember the suicide rule: if they leave their king in check, they lose on the spot.']},
+      {t:'Trade up',s:'Take what’s worth more',d:['.....','..n..','.P...','.....','K...k'],hl:[7],body:['Captures pay gold equal to the piece you take. A pawn (1 gold) that takes a knight wins you 3 gold and leaves their army weaker.','Before every capture, ask what you risk. Trading a pawn for a knight is +2 in material and +3 in gold. Trading a knight for a pawn is the opposite.']},
+      {t:'The fork',s:'One piece, two targets',d:['.k...','.....','..N..','.....','r...K'],hl:[1,20],body:['A fork attacks two pieces at once. Knights are the best forkers because nothing can block their jump.','Aim forks at the king plus something valuable. They must save the king, and you collect the other piece and its gold.']},
+    ]},
+  tide:{city:'Tidehaven',doc:'The Long Tide',lore:'A republic of harbor cities where patience is a weapon. Tide players hold their ground, bank their gold and strike only when the moment turns their way.',
+    skills:[
+      {t:'Hold the line',s:'Protect every piece',d:['..k..','.....','.P.P.','..P..','..K..'],hl:[11,13,17],body:['A loose piece is free gold for your opponent. Before you move, check that every piece you own is defended at least once.','Pawns protecting each other diagonally make a line that’s expensive to break. Let the enemy attack it and pay for every capture.']},
+      {t:'Bank, then strike',s:'Save for the big buy',d:['k....','.....','.....','.....','R...K'],hl:[20],body:['Gold carries over between turns. Instead of buying a pawn every time you can, save up for a rook or queen at the moment it matters.','A queen dropped on your back row when the enemy king is exposed often ends the game on the spot.']},
+      {t:'Block with a buy',s:'Reinforcements save kings',d:['....r','.....','.....','.....','K....'],hl:[21,22,23],body:['When a rook or queen checks you along your back row, you can buy a piece and drop it in between. That’s often the only way out of checkmate.','Keep a little gold banked for emergencies. A 1-gold pawn won’t help on the back row, but a knight or bishop can block there.']},
+    ]},
+  grove:{city:'Greenspire',doc:'Deep Roots',lore:'An ancient order of the forest. Grove players grow their armies from the ground up, building pawn walls and marching them all the way home as queens.',
+    skills:[
+      {t:'Pawn chains',s:'Pawns guard pawns',d:['..k..','.....','...P.','..P..','.P..K'],hl:[13,17,21],body:['Pawns capture diagonally, so a diagonal chain protects itself. The only weak link is the pawn at the base.','Pawns cost 1 gold each, so they’re the cheapest way to build a wall your opponent has to pay to break.']},
+      {t:'March to promote',s:'Pawns become queens',d:['.*..k','.P...','.....','.....','....K'],hl:[1],body:['A pawn that reaches the far row becomes a queen. In the shop a queen costs 12 gold, so promotion is a free 11-gold upgrade.','Push passed pawns, ones with no enemy pawn in front, and escort them with your king or rooks.']},
+      {t:'Cheap guards',s:'Pawns shield the king',d:['..k..','.....','.....','.PPP.','..K..'],hl:[16,17,18],body:['Three pawns in front of your king block checks from rooks and queens for just 3 gold.','You can hold up to 8 pawns, so you can rebuild the shield after trades. Just don’t buy the same piece twice in a row.']},
+    ]},
+  dusk:{city:'Duskmere',doc:'Shadow Play',lore:'The Dusk Throne rules from candlelit halls. Its players set traps, pin pieces and win games their opponents never saw coming.',
+    skills:[
+      {t:'The pin',s:'Freeze a defender',d:['....k','...n.','.....','.B...','K....'],hl:[8],body:['A pin attacks a piece that can’t move without exposing something more valuable behind it, usually the king.','A pinned piece is as good as gone. Attack it again with a pawn and it falls.']},
+      {t:'Back-rank snare',s:'Trapped by its own pawns',d:['...k.','..ppp','.....','.....','R...K'],hl:[0,1,2],body:['A king behind its own pawns has no escape squares. A rook or queen on the back row is checkmate.','In Chess Battle, watch for blocking buys. Mate on the back rank only works when they can’t afford or place a blocker.']},
+      {t:'Bait the suicide',s:'Win with the rules',d:['..k..','.....','..b..','.....','..K.R'],hl:[12],body:['Leaving your own king in check at the end of your turn loses instantly. Players who grab material often forget to look at their king.','Set up discovered checks: move one piece to reveal an attack from another. Greedy opponents walk straight into it.']},
+    ]},
+};
+const NRANKS=[['Recruit',0],['Soldier',10],['Knight',40],['Captain',100],['Warlord',250],['Legend',600]];
+const natRank=()=>{const v=(P.legacy&&P.legacy.peak)||0;let r=0;NRANKS.forEach((x,i)=>{if(v>=x[1])r=i});return r};
+const ORDERS={
+  ember:[['wins','Win 5 games',5,60],['caps','Capture 40 pieces',40,50],['mates','Win 2 games by checkmate',2,60],['online','Win an online game',1,80]],
+  tide:[['wins','Win 5 games',5,60],['earned','Earn 60 gold in games',60,50],['buys','Buy 15 pieces',15,60],['online','Win an online game',1,80]],
+  grove:[['wins','Win 5 games',5,60],['buyP','Buy 10 pawns',10,50],['games','Play 15 games',15,60],['online','Win an online game',1,80]],
+  dusk:[['wins','Win 5 games',5,60],['mates','Win 3 games by checkmate',3,60],['drills','Solve 10 training drills',10,50],['online','Win an online game',1,80]],
+};
+const statNow=k=>k==='buyP'?((P.by&&P.by.buy&&P.by.buy.P)||0):k==='drills'?((P.train&&P.train.solved)||0):k==='online'?0:(P.stats[k]||0);
+function campRoll(){const m=monthKey();if(!P.camp||P.camp.month!==m){const base={};for(const k of ['wins','caps','mates','earned','buys','games','buyP','drills'])base[k]=statNow(k);P.camp={month:m,base,claimed:[],medal:false};saveP()}return P.camp}
+const campProg=k=>k==='online'?(warRoll().w||0):Math.max(0,statNow(k)-((campRoll().base[k])||0));
 const myNat=()=>natOf(P.nation);
 function crestN(n,cls=''){if(!n)return '';return `<svg class="ncrest ${cls}" width="20" height="22" viewBox="0 0 40 44" aria-label="${esc(n.name)}" role="img"><path d="M20 2 L37 8 V22 C37 33 29 39 20 42 C11 39 3 33 3 22 V8 Z" fill="${n.c}" stroke="rgba(255,255,255,.75)" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 6 L33 10.5 V22 C33 30.5 27 35.5 20 38" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><g transform="translate(8.5 9.5) scale(.96)" fill="#fff"><path d="${n.g}"/></g></svg>`}
 const monthKey=(d=new Date())=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 const monthName=()=>new Date().toLocaleDateString(undefined,{month:'long'});
 const msToMonthEnd=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth()+1,1)-d};
 function warRoll(){const k=monthKey();if(!P.war||P.war.month!==k){P.war={month:k,tally:{},mine:0,w:0,l:0,d:0}}return P.war}
+(()=>{const V={ember:[['Ashfall','#e9e2dc','#5a4a46'],['Magma','#ffe0b8','linear-gradient(135deg,#ff6a3d,#b3172e)']],tide:[['Deepwater','#d6ecf5','#1f5f8a'],['Coral Reef','#fff1e6','linear-gradient(135deg,#ff8a7a,#2fb8c8)']],grove:[['Mossstone','#e4e8d8','#6b7b4a'],['Ancient Oak','#f1e3c8','linear-gradient(135deg,#4f8a3c,#2b4a22)']],dusk:[['Twilight','#efe3f5','#8a4f9e'],['Eclipse','#d9d4e8','linear-gradient(135deg,#2a1f4f,#7a3fd0)']]};
+  for(const n of NATIONS){const c=CAPITAL[n.id];
+    ITEMS.push({id:`h-${n.id}`,kind:'home',nation:n.id,name:`${n.short} Standard`,price:0,rarity:'common',l:n.l,d:n.d,desc:`The classic ${n.short} home board, shown when you play White online.`});
+    ITEMS.push({id:`h-${n.id}-2`,kind:'home',nation:n.id,name:V[n.id][0][0],price:300,rarity:'rare',l:V[n.id][0][1],d:V[n.id][0][2],desc:`A ${n.short} home board for players who want a darker home field.`});
+    ITEMS.push({id:`h-${n.id}-3`,kind:'home',nation:n.id,name:V[n.id][1][0],price:600,rankReq:3,rarity:'legendary',l:V[n.id][1][1],d:V[n.id][1][2],desc:`The ${n.short} high command board. Captains and above only.`});
+    ITEMS.push({id:`b-${n.id}`,kind:'board',nation:n.id,name:c.city,price:400,rarity:'epic',l:n.l,d:n.d,desc:`Bring the colors of ${c.city} to every game, not just online ones.`});
+    ITEMS.push({id:`t-${n.id}`,kind:'trim',nation:n.id,name:`${n.short} bands`,price:250,rarity:'rare',w:n.w,b:n.b,desc:`${n.short} colors on the bands of the Classic set.`});
+    ITEMS.push({id:`ti-${n.id}-1`,kind:'title',nation:n.id,name:`${n.short} Vanguard`,rankReq:1,rarity:'rare',desc:`Earned by reaching Soldier in the ${n.name}.`});
+    ITEMS.push({id:`ti-${n.id}-2`,kind:'title',nation:n.id,name:`Champion of ${c.city}`,rankReq:3,rarity:'epic',desc:`Earned by reaching Captain in the ${n.name}.`});
+    ITEMS.push({id:`ti-${n.id}-3`,kind:'title',nation:n.id,name:`Legend of ${n.short}`,rankReq:5,rarity:'legendary',desc:`Earned by reaching Legend, the highest honor in the ${n.name}.`});
+  }})();
 initP();
 const PASS={2:{crowns:50},4:{crowns:75},6:{item:'t-emerald'},8:{crowns:100},10:{item:'b-gilded'},12:{crowns:125},14:{item:'f-shock'},16:{crowns:150},18:{item:'ti-gilded'},20:{crowns:300}};
 const PRO_PASS={1:'Pro badge',3:'Animated board',5:'Gilded pieces',7:'Neon trail',9:'Crown emote',11:'Velvet board',13:'Diamond trim',15:'Victory fanfare',17:'Royal frame',19:'Obsidian pieces'};
@@ -1199,7 +1341,11 @@ function applyCosmetics(){
   const r=document.documentElement.style;
   r.setProperty('--sq-l',b.l);r.setProperty('--sq-d',b.d);r.setProperty('--trim-w',t.w);r.setProperty('--trim-b',t.b);
   document.documentElement.dataset.pset=lgSet(P.equip.set)?P.equip.set:'classic';
+  capTab();
 }
+function capTab(){const n=myNat(),ico=$('capIco'),lbl=$('capLbl'),t=$('capTab');if(!ico)return;
+  if(n){t.style.setProperty('--nc',n.c);ico.innerHTML=crestN(n);lbl.textContent=n.short;t.setAttribute('aria-label',`${CAPITAL[n.id].city}, ${n.name} capital`)}
+  else{t.style.removeProperty('--nc');ico.innerHTML='<svg class="gen" viewBox="0 0 24 24"><path d="M12 2.5 L20 5.5 V12 C20 17 16.5 20 12 21.5 C7.5 20 4 17 4 12 V5.5 Z"/></svg>';lbl.textContent='Nations';t.setAttribute('aria-label','Chess Nations')}}
 
 /* achievements */
 const ACH=[['first','First Blood','Capture a piece','P'],['mate','Kingslayer','Win by checkmate','K'],['queen','Treasury','Buy a queen','Q'],['pawns','Pawn Storm','Own 8 pawns at once','P'],
@@ -1525,7 +1671,7 @@ function renderTray(o={}){
 }
 function renderGameHead(){
   let k,n;const fs=fixedSide();
-  if(S.mode==='puzzle')k=`Daily puzzle #${S.dailyNo}`;
+  if(S.mode==='puzzle')k=S.puz&&S.puz.train?`Training drill #${S.drillNo}`:`Daily puzzle #${S.dailyNo}`;
   else if(S.mode==='daily')k=`Daily #${S.dailyNo} · vs bot`;
   else if(vsBot())k=`${MODE_NAME[S.mode]} bot · ${BOT_R[S.mode]}${S.undone?' · unrated':''}`;
   else if(isOnline())k=`Online · ${S.online.code}`;
@@ -1544,7 +1690,8 @@ function renderGameHead(){
 function gameSkin(){
   const g=$('scr-game'),bd=boardEl;if(!g||!bd)return;
   const on=isOnline(),me=on?S.online.me:null,wn=on?natOf(me===1?P.nation:S.online.oppNation):null,bn=on?natOf(me===0?P.nation:S.online.oppNation):null;
-  if(wn){bd.style.setProperty('--sq-l',wn.l);bd.style.setProperty('--sq-d',wn.d)}else{bd.style.removeProperty('--sq-l');bd.style.removeProperty('--sq-d')}
+  const hb=on?(me===1?item(P.equip.home):S.online.oppHome):null,hl=hb?hb.l:wn&&wn.l,hd=hb?hb.d:wn&&wn.d;
+  if(wn){bd.style.setProperty('--sq-l',hl);bd.style.setProperty('--sq-d',hd)}else{bd.style.removeProperty('--sq-l');bd.style.removeProperty('--sq-d')}
   if(wn)g.style.setProperty('--wa',wn.w);else g.style.removeProperty('--wa');
   if(bn)g.style.setProperty('--ba',bn.b);else g.style.removeProperty('--ba');
 }
@@ -1716,7 +1863,7 @@ function peerReady(id){
 function wire(c){
   conn=c;
   c.on('open',()=>{if(isOnline())renderOpp()});
-  const hello=()=>send({type:'hello',name:myName(),rating:P.rating,nation:P.nation,rev:S.online.rev,gameNo:S.online.gameNo});
+  const hello=()=>{const hb=item(P.equip.home);send({type:'hello',name:myName(),rating:P.rating,nation:P.nation,home:hb?{l:hb.l,d:hb.d}:null,rev:S.online.rev,gameNo:S.online.gameNo})};
   if(c.open)hello();else c.on('open',hello);
   c.on('data',d=>{if(conn===c)onData(d)});
   c.on('close',()=>{if(conn!==c)return;conn=null;if(!isOnline())return;
@@ -1729,7 +1876,7 @@ function onData(d){
   if(d.type==='full'){toast('That game already has two players.');leaveOnline();S=null;go('home');return}
   if(d.type==='hello'){
     clearTimeout(retryTimer);
-    S.online.oppName=String(d.name||'Opponent').slice(0,18);S.online.oppRating=+d.rating||null;S.online.oppNation=natOf(d.nation)?d.nation:null;
+    S.online.oppName=String(d.name||'Opponent').slice(0,18);S.online.oppRating=+d.rating||null;S.online.oppNation=natOf(d.nation)?d.nation:null;{const ok=v=>typeof v==='string'&&v.length<90&&/^(#[0-9a-f]{3,8}|linear-gradient\([#0-9a-z,.% ()-]+\))$/i.test(v);S.online.oppHome=d.home&&ok(d.home.l)&&ok(d.home.d)?{l:d.home.l,d:d.home.d}:null}
     const was=S.online.ready;S.online.ready=true;$('result').hidden=true;resumeClock();
     if(!was){sfx('turn');vibrate(15);toast(`${S.online.oppName} is in. You play ${SIDE[S.online.me]}.`)}
     const theirs=+d.rev||0,sameGame=d.gameNo===S.online.gameNo;
@@ -2066,7 +2213,16 @@ function puzzleTry(from,to,b0){
   setTimeout(()=>{sfx('illegal');toast(S.puz.tries>=2?'Not checkmate. Tap Hint or Answer if you’re stuck.':'Not checkmate. Try again.');
     S.b=S.puz.start.map(p=>p?{...p}:null);S.last=[];S.tm=[];busy=false;renderBoard();renderTray()},520);
 }
+function showDrillWin(){
+  const T=P.train,first=!S.puz.counted;
+  if(first){S.puz.counted=true;T.solved++;T.n=Math.max(T.n,S.drillNo);const clean=S.puz.tries===1&&!S.puz.ans;T.streak=clean?T.streak+1:0;T.best=Math.max(T.best,T.streak);
+    const d=dayNo();if(T.day!==d){T.day=d;T.today=0}T.today++;S.puz.paid=T.today<=10?5:0;P.crowns+=S.puz.paid;P.xp+=10;saveP()}
+  const r=$('result');
+  r.innerHTML=`<div class="result-card"><div class="result-k">Training drill #${S.drillNo}</div><div class="result-t">Solved</div><div class="result-s">${S.puz.tries===1&&!S.puz.ans?`First try · ${pl(T.streak,'drill')} in a row`:`in ${pl(S.puz.tries,'try')}`}</div><div class="rewards">${S.puz.paid?`<span class="rw g">${crest('sm')}+${S.puz.paid}</span>`:''}<span class="rw">+10 XP</span></div><div class="pair"><button class="cta sm shine" type="button" data-act="drill">Next drill</button></div><div class="pair"><button class="ghost" type="button" data-act="capback">Back to ${esc(myNat()?CAPITAL[myNat().id].city:'capital')}</button></div></div>`;
+  r.hidden=false;sfx('win');vibrate(20);
+}
 function showPuzzleWin(){
+  if(S.puz&&S.puz.train){showDrillWin();return}
   const n=dailyNo(),first=!puzzleDone();
   if(first){
     if(!P.puz)P.puz={days:{},streak:0,best:0,last:0};if(!P.puz.days)P.puz.days={};
@@ -2078,7 +2234,7 @@ function showPuzzleWin(){
   r.hidden=false;if(first){confetti();sfx('win')}
 }
 function puzzleHint(){if(!S||!S.puz||S.over)return;S.sel=S.puz.sol[0];S.tgts=pseudo(S.b,S.sel);S.puz.hint=true;sfx('lift');renderBoard();toast('This piece delivers mate.')}
-function puzzleAnswer(){if(!S||!S.puz||S.over)return;const [f,t]=S.puz.sol;AR={arrows:[`${f}-${t}`],marks:[]};renderArrows();toast('Follow the arrow.')}
+function puzzleAnswer(){if(!S||!S.puz||S.over)return;S.puz.ans=true;const [f,t]=S.puz.sol;AR={arrows:[`${f}-${t}`],marks:[]};renderArrows();toast('Follow the arrow.')}
 
 /* ---------- strategy tips ---------- */
 const TIPS=[
@@ -2363,16 +2519,16 @@ function exitReplay(){
 
 /* ================= screens ================= */
 let route='home';
-const TABS=['home','ranks','shop','me'];
+const TABS=['home','ranks','nat','shop','me'];
 function go(r,noAnim){
   if(r!=='game'&&RP)exitReplay();
   route=r;
-  for(const id of ['home','ranks','shop','me','game']){const el=$('scr-'+id);const on=id===r;el.hidden=!on;if(on&&!noAnim){el.classList.remove('enter');void el.offsetWidth;el.classList.add('enter')}}
+  for(const id of ['home','ranks','nat','shop','me','game']){const el=$('scr-'+id);const on=id===r;el.hidden=!on;if(on&&!noAnim){el.classList.remove('enter');void el.offsetWidth;el.classList.add('enter')}}
   $('tabbar').classList.toggle('away',r==='game');document.body.classList.toggle('in-game',r==='game');
   const ti=TABS.indexOf(r);
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-current',t.dataset.tab===r?'page':'false'));
   if(ti>=0)$('tabInd').style.transform=`translateX(${ti*100}%)`;
-  if(r==='home')renderHome();else if(r==='ranks')renderRanks();else if(r==='shop')renderShop();else if(r==='me')renderMe();
+  if(r==='home')renderHome();else if(r==='ranks')renderRanks();else if(r==='nat')renderNat();else if(r==='shop')renderShop();else if(r==='me')renderMe();
   window.scrollTo(0,0);
 }
 const ICON={
@@ -2403,8 +2559,10 @@ let resetArm=false;
 /* ================= meta: items, ranks, shop, profile ================= */
 const RAR={common:'Common',rare:'Rare',epic:'Epic',legendary:'Legendary'};
 const RAR_C={common:'#9ea8db',rare:'#6fb6ff',epic:'#c08cff',legendary:'#ffcc2e'};
-const owns=it=>!!it&&(P.owned.includes(it.id)||(it.ach&&P.ach.includes(it.ach))||(it.tierReq!=null&&tierOf(Math.max(P.peak||0,P.rating))>=it.tierReq));
+const owns=it=>!!it&&(!it.nation||it.nation===P.nation)&&((it.nation&&!it.price&&natRank()>=(it.rankReq||0))||P.owned.includes(it.id)||(it.ach&&P.ach.includes(it.ach))||(it.tierReq!=null&&tierOf(Math.max(P.peak||0,P.rating))>=it.tierReq));
 function lockText(it){
+  if(it.nation&&it.nation!==P.nation)return `${(natOf(it.nation)||{}).short||''} only`;
+  if(it.rankReq!=null&&natRank()<it.rankReq)return `Reach ${NRANKS[it.rankReq][0]}`;
   if(it.pass)return `Season level ${it.pass}`;
   if(it.ach){const a=ACH.find(x=>x[0]===it.ach);return `Achievement: ${a?a[1]:it.ach}`}
   if(it.tierReq!=null)return `Reach ${TIERS[it.tierReq][0]}`;
@@ -2418,14 +2576,14 @@ const msToWeek=()=>msToMidnight()+((6-((dailyNo()-1)%7+7)%7)*864e5);
 function fmtLeft(ms){const s=Math.max(0,Math.floor(ms/1000)),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=s%60;
   return d?`${d}d ${h}h`:`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}
 function dealIds(){
-  const R=seeded(dailyNo()*7+3),pool=ITEMS.filter(i=>i.price>0&&!i.featuredOnly&&i.rarity!=='legendary');
+  const R=seeded(dailyNo()*7+3),pool=ITEMS.filter(i=>i.price>0&&!i.featuredOnly&&!i.nation&&i.rarity!=='legendary');
   for(let k=pool.length-1;k>0;k--){const j=Math.floor(R()*(k+1));[pool[k],pool[j]]=[pool[j],pool[k]]}
   return pool.slice(0,3).map(i=>i.id);
 }
-function featuredItem(){const pool=ITEMS.filter(i=>i.rarity==='legendary'&&i.price>0);return pool[weekNo()%pool.length]}
+function featuredItem(){const pool=ITEMS.filter(i=>i.rarity==='legendary'&&i.price>0&&!i.nation);return pool[weekNo()%pool.length]}
 const DEAL_OFF=.3;
 const priceOf=it=>dealIds().includes(it.id)?Math.round(it.price*(1-DEAL_OFF)/5)*5:it.price;
-const kindOf=k=>({board:'Board',trim:'Piece trim',fx:'Capture effect',snd:'Sound pack',title:'Title'}[k]);
+const kindOf=k=>({home:'Home board',board:'Board',trim:'Piece trim',fx:'Capture effect',snd:'Sound pack',title:'Title'}[k]);
 
 /* item artwork, shared by grid, featured card, sheet and reveal */
 function boardMini(it,n,trim){
@@ -2435,7 +2593,7 @@ function boardMini(it,n,trim){
 }
 function itemArt(it){
   const cls=`art rc-${it.rarity}`;
-  if(it.kind==='board')return `<div class="${cls}"><div class="mb">${boardMini(it,4)}</div></div>`;
+  if(it.kind==='board'||it.kind==='home')return `<div class="${cls}"><div class="mb">${boardMini(it,4)}</div></div>`;
   if(it.kind==='trim')return `<div class="${cls}"><div class="pp"><svg class="pcs tw" viewBox="0 0 100 100" style="--acc:${it.w}"><use href="#s-K" width="100" height="100"/></svg><svg class="pcs tb" viewBox="0 0 100 100" style="--acc:${it.b}"><use href="#s-Q" width="100" height="100"/></svg></div></div>`;
   if(it.kind==='fx')return `<div class="${cls}"><span class="glyph">${it.glyph}</span></div>`;
   if(it.kind==='snd')return `<div class="${cls}"><div class="eqz"><i></i><i></i><i></i><i></i></div></div>`;
@@ -2575,6 +2733,100 @@ function warPanel(){
     <div class="war-me"><div><b>${W.mine>0?'+':''}${W.mine}</b><span>Your stars this month</span></div><div><b>${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}</b><span>Online record</span></div><div><b>${P.natGiven>0?'+':''}${P.natGiven}</b><span>All-time for ${esc(n.short)}</span></div></div>
     <p class="row-s" style="margin-top:12px">Online wins earn your nation 3 stars and losses cost 3. A draw gives both nations 1. For now this board counts the online games played on this device. Worldwide standings go live with accounts.</p></div>`;
 }
+const dayNo=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
+function capSky(){let h='';for(let k=0;k<18;k++){const l=(k*53)%100,d=(5+((k*7)%6)).toFixed(1),dl=(-(k*0.9)%9).toFixed(1),dx=((k%5)-2)*14,sz=3+(k%3)*1.5;h+=`<i style="left:${l}%;width:${sz}px;height:${sz}px;animation-duration:${d}s;animation-delay:${dl}s;--dx:${dx}px"></i>`}return `<div class="cap-sky" aria-hidden="true">${h}</div>`}
+function warRowsHTML(n){const W=warRoll(),rows=NATIONS.map(x=>({x,v:W.tally[x.id]||0})).sort((a,b)=>b.v-a.v||(a.x.id===(n&&n.id)?-1:1)),max=Math.max(1,...rows.map(r=>Math.abs(r.v)));
+  return `<div class="war-rows">${rows.map((r,i)=>`<div class="war-row${n&&r.x.id===n.id?' mine':''}" style="--nc:${r.x.c}"><span class="pos">${i+1}</span>${crestN(r.x)}<div style="min-width:0"><div class="nm">${esc(r.x.short)}</div><div class="trk"><i data-w="${(Math.max(0,r.v)/max*100).toFixed(0)}"></i></div></div><span class="pts">${STAR}${r.v}</span></div>`).join('')}</div>`}
+function oathCard(n){
+  const O=P.oath,today=dayNo(),done=O.last===today,streak=done||O.last===today-1?O.streak:0;
+  return `<div class="panel oath${done?' done':''}"><span class="oath-ic">${done?'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':'<svg viewBox="0 0 24 24"><path d="M14.5 3.5h6v6L9.5 20.5l-6-6z"/><path d="M5.5 12.5l6 6M3 21l3.5-3.5"/></svg>'}</span>
+    <div style="flex:1;min-width:0"><div class="row-t">${done?'Oath sworn':'Daily oath'}</div><div class="row-s">${done?`${pl(streak,'day')} in a row. Return tomorrow to keep it going.`:`Pledge loyalty to ${esc(n.short)} · +${10+(streak+1>=7?5:0)} crowns${streak?` · ${pl(streak,'day')} streak`:''}`}</div></div>
+    ${done?`<span class="cd">${fmtLeft(msToMidnight())}</span>`:`<button class="oath-btn" type="button" data-act="oath">Swear</button>`}</div>`;
+}
+function swearOath(){
+  const n=myNat(),O=P.oath,today=dayNo();if(!n||O.last===today)return;
+  O.streak=O.last===today-1?O.streak+1:1;O.last=today;O.best=Math.max(O.best||0,O.streak);O.total=(O.total||0)+1;
+  let c=10+(O.streak>=7?5:0);const bonus=O.streak===7?50:O.streak===30?200:O.streak%30===0?100:0;c+=bonus;P.crowns+=c;saveP();
+  sfx('ach');vibrate(25);renderNat();
+  toast(bonus?`Oath sworn · ${O.streak} day streak · +${c} crowns`:`For ${n.short}! +${c} crowns`);
+  if(bonus)confetti();
+}
+function ordersCard(n){
+  const C=campRoll(),list=ORDERS[n.id],all=list.every(o=>C.claimed.includes(o[0]));
+  const rows=list.map(([k,label,goal,rw],i)=>{const v=Math.min(goal,campProg(k)),done=v>=goal,cl=C.claimed.includes(k);
+    return `<div class="ord${cl?' done':''}"><span class="ord-n">${cl?'✓':i+1}</span><div style="min-width:0"><div class="ord-top"><span class="row-t">${esc(label)}</span><small>${v} / ${goal}</small></div><div class="bar"><i data-w="${(v/goal*100).toFixed(0)}"></i></div></div>${cl?'<span class="g-ok">Done</span>':done?`<button class="g-claim" type="button" data-act="ordclaim" data-k="${k}">+${rw}</button>`:`<span class="g-rw">${crest('sm')}${rw}</span>`}</div>`}).join('');
+  return `<div class="panel orders">${rows}<div class="camp-medal">${crestN(n)}<div style="flex:1"><div class="row-t">${C.medal?'Campaign medal earned':'Complete every order'}</div><div class="row-s">${C.medal?`You served ${esc(n.short)} well this month.`:'Campaign medal plus 150 bonus crowns'}</div></div>${!C.medal&&all?'<button class="g-claim" type="button" data-act="medal">Claim</button>':''}</div></div>`;
+}
+function claimOrder(k){
+  const n=myNat();if(!n)return;const C=campRoll(),o=ORDERS[n.id].find(x=>x[0]===k);if(!o||C.claimed.includes(k)||campProg(k)<o[2])return;
+  C.claimed.push(k);P.crowns+=o[3];saveP();sfx('coin');vibrate(15);toast(`Order complete · +${o[3]} crowns`);renderNat();
+}
+function claimMedal(){const n=myNat();if(!n)return;const C=campRoll();if(C.medal||!ORDERS[n.id].every(o=>C.claimed.includes(o[0])))return;C.medal=true;P.crowns+=150;P.medals=(P.medals||0)+1;saveP();sfx('ach');confetti();banner('Campaign medal',`+150 crowns · for ${n.short}`);renderNat()}
+function nextDrill(){let k=P.train.n,pz=null;for(let t=0;t<6&&!pz;t++){pz=genPuzzle(700000+k);if(!pz)k++}return {pz,k}}
+function trainingCard(n){
+  const T=P.train,{pz}=nextDrill(),c=CAPITAL[n.id];
+  return `<div class="panel drill">${pz?miniBoard(pz.b):''}<div style="min-width:0"><div class="drill-k">Training grounds</div><div class="drill-t">Drill #${T.n+1}</div><div class="row-s">Mate in one. Sharpen your eye for checkmate.</div>
+    <div class="drill-st"><span><b>${T.solved}</b>solved</span><span><b>${T.streak}</b>streak</span><span><b>${T.best}</b>best</span></div><button class="b3d sm" type="button" data-act="drill">Train</button></div></div>
+  <div class="sec-row" style="margin:4px 2px -4px"><span class="sec-t" style="color:var(--nc)">Doctrine · ${esc(c.doc)}</span><span class="cd">${c.skills.filter((_,i)=>P.learned.includes(`${n.id}-${i}`)).length} / ${c.skills.length} learned</span></div>
+  <div class="skills">${c.skills.map((sk,i)=>{const done=P.learned.includes(`${n.id}-${i}`);return `<button class="skill${done?' done':''}" type="button" data-act="skill" data-i="${i}">${done?'<span class="ok">✓</span>':''}<span class="skill-n">${['I','II','III'][i]}</span><span class="skill-t">${esc(sk.t)}</span><span class="skill-s">${esc(sk.s)}</span></button>`}).join('')}</div>`;
+}
+function lessonDiagram(sk,n){
+  const hb=item(P.equip.home)||{l:n.l,d:n.d};let h='';
+  for(let k=0;k<25;k++){const r=Math.floor(k/5),c=k%5,ch=sk.d[r][c],dark=(r+c)%2===1;let pc='';
+    if(ch!=='.'&&ch!=='*'){const w=ch===ch.toUpperCase();pc=svgPiece(ch.toUpperCase(),w?'tw':'tb')}
+    h+=`<i class="${sk.hl.includes(k)?'hl':''}" style="background:${dark?hb.d:hb.l}">${pc}</i>`}
+  return `<div class="lesson-d" style="--nc:${n.c}">${h}</div>`;
+}
+function openSkill(i){
+  const n=myNat();if(!n)return;const sk=CAPITAL[n.id].skills[i];if(!sk)return;const key=`${n.id}-${i}`,done=P.learned.includes(key);
+  $('sheetTitle').innerHTML=`<span class="rar" style="--rc:${n.c}">${esc(CAPITAL[n.id].doc)} · Skill ${['I','II','III'][i]}</span>`;
+  $('sheetBody').innerHTML=`${lessonDiagram(sk,n)}<div class="pv-row"><span class="pv-name">${esc(sk.t)}</span></div><div class="lesson-body">${sk.body.map(t=>`<p>${esc(t)}</p>`).join('')}</div>${done?'<button class="b3d block alt" type="button" disabled>Learned</button>':`<button class="b3d block shine" type="button" data-act="learn" data-i="${i}">Mark as learned · +15 crowns</button>`}`;
+  $('sheetWrap').hidden=false;sfx('tap');
+}
+function learnSkill(i){const n=myNat();if(!n)return;const key=`${n.id}-${i}`;if(P.learned.includes(key))return;P.learned.push(key);P.crowns+=15;saveP();closeSheet();sfx('ach');vibrate(15);
+  const all=CAPITAL[n.id].skills.every((_,j)=>P.learned.includes(`${n.id}-${j}`));toast(all?`Doctrine mastered · ${CAPITAL[n.id].doc}`:'Skill learned · +15 crowns');if(all)confetti();renderNat()}
+function startDrill(){
+  const {pz,k}=nextDrill();if(!pz){toast('No drill ready. Try again in a moment.');return}
+  if(isOnline())leaveOnline();P.train.n=k;
+  newGame('puzzle');S.b=pz.b.map(p=>p?{...p}:null);S.nid=pz.nid;S.gold=[0,0];S.chk=false;S.note='';S.last=[];
+  S.frames=[{b:S.b.slice(),last:[]}];S.puz={sol:pz.sol,tries:0,start:pz.b,hint:false,train:true};S.drillNo=k+1;S.log=[`Training drill #${k+1}. White to move and checkmate.`];S.autoFlip=false;
+  HV=null;busy=false;resetDom();go('game');renderAll({stagger:true});sfx('start');
+}
+function ranksCard(n){const r=natRank(),v=(P.legacy&&P.legacy.peak)||0;
+  return `<div class="panel ranks-l">${NRANKS.map(([nm,need],i)=>`<div class="rk-row${i<=r?' got':' lock'}${i===r?' cur':''}" style="--nc:${n.c}"><span class="rk-ic">${['I','II','III','IV','V','VI'][i]}</span><div style="min-width:0"><div class="row-t">${nm}${i===r?' · you':''}</div><div class="row-s">${i===0?'Every member starts here':i===1?`Unlocks the ${esc(n.short)} Vanguard title`:i===3?'Unlocks Champion title and the high command board':i===5?`Unlocks Legend of ${esc(n.short)}`:'A mark of honor in the capital'}</div></div><span class="rk-req">${i<=r?'<span class="g-ok">Earned</span>':`${STAR}${need}`}</span></div>`).reverse().join('')}</div>`}
+function renderNat(){
+  const el=$('scr-nat'),n=myNat();
+  if(!n){el.style.removeProperty('--nc');
+    el.innerHTML=`<header class="top"><h1 class="h-title">Nations</h1></header><div class="stagger" style="display:flex;flex-direction:column;gap:14px">
+    <div class="cap-hero" style="--nc:#9c8cff">${capSky()}<div class="cap-k">Four nations · one crown</div><div class="cap-t">Choose your side</div><div class="cap-motto">Every month the nations battle for the top of the standings. Spin to learn which one you fight for.</div><div style="position:relative;z-index:1;margin-top:18px"><button class="b3d block shine go" type="button" data-act="npick">Spin for your nation</button></div></div>
+    <div class="join-cards">${NATIONS.map(x=>`<div class="join-card" style="--nc:${x.c}">${crestN(x)}<b>${esc(x.short)}</b><span>${esc(CAPITAL[x.id].doc)} · capital ${esc(CAPITAL[x.id].city)}</span></div>`).join('')}</div></div>`;
+    return;
+  }
+  const c=CAPITAL[n.id],r=natRank(),v=(P.legacy&&P.legacy.peak)||0,next=NRANKS[r+1],pct=next?Math.min(100,(v-NRANKS[r][1])/(next[1]-NRANKS[r][1])*100):100,W=warRoll();
+  const days=Math.max(1,Math.ceil((Date.now()-(P.natSince||Date.now()))/864e5));
+  const armory=ITEMS.filter(i=>i.nation===n.id);
+  el.style.setProperty('--nc',n.c);
+  el.innerHTML=`<header class="top"><h1 class="h-title" style="color:${n.c}">${esc(n.short)}</h1><span class="h-sub">${esc(n.name)}</span></header><div class="stagger" style="display:flex;flex-direction:column;gap:14px">
+  <div class="cap-hero">${capSky()}<div class="cap-crest">${crestN(n)}</div><div class="cap-k">Capital of the ${esc(n.name)}</div><div class="cap-t">${esc(c.city)}</div><div class="cap-motto">“${esc(n.motto)}”</div>
+    <div class="cap-rank"><div class="cap-rank-top"><b>${NRANKS[r][0]}</b><span>${next?`${next[1]-v} stars to ${next[0]}`:'Highest honor reached'}</span></div><div class="cap-bar"><i data-w="${pct.toFixed(0)}"></i></div></div>
+    <div class="cap-stats"><div><b>${STAR}${P.natGiven}</b><span>Stars for ${esc(n.short)}</span></div><div><b>${days}</b><span>Days loyal</span></div><div><b>${(P.oath.last===dayNo()||P.oath.last===dayNo()-1)?P.oath.streak:0}</b><span>Oath streak</span></div></div></div>
+  ${oathCard(n)}
+  <div class="cap-sec"><span class="sec-t">War room · ${esc(monthName())}</span><span class="cd">${fmtLeft(msToMonthEnd())}</span></div>
+  <div class="panel war" style="--nc:${n.c}">${warRowsHTML(n)}<div class="war-me"><div><b>${W.mine>0?'+':''}${W.mine}</b><span>Your stars this month</span></div><div><b>${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}</b><span>Online record</span></div><div><b>${P.medals||0}</b><span>Campaign medals</span></div></div><p class="row-s" style="margin-top:12px">Online wins earn ${esc(n.short)} 3 stars and losses cost 3. For now these standings count the online games played on this device. Worldwide standings go live with accounts.</p><button class="b3d block shine" type="button" data-act="invite" style="margin-top:12px">Challenge a rival</button></div>
+  <div class="cap-sec"><span class="sec-t">War plans</span><span class="cd">${esc(monthName())} campaign</span></div>
+  ${ordersCard(n)}
+  <div class="cap-sec"><span class="sec-t">Training</span></div>
+  ${trainingCard(n)}
+  <div class="cap-sec"><span class="sec-t">${esc(c.city)} armory</span><span class="cd">${armory.filter(owns).length} / ${armory.length} owned</span></div>
+  <div class="shop-grid">${armory.map(it=>itemCard(it)).join('')}</div>
+  <p class="row-s" style="margin-top:-4px">Only ${esc(n.short)} members can wear these. Home boards show whenever you play White online.</p>
+  <div class="cap-sec"><span class="sec-t">Ranks of honor</span><span class="cd">${STAR}${v} earned</span></div>
+  ${ranksCard(n)}
+  <div class="panel creed"><q>${esc(n.motto)}</q><p>${esc(c.lore)}</p></div>
+  </div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('#scr-nat [data-w]').forEach(e=>e.style.width=e.dataset.w+'%')));
+}
+setInterval(()=>{if(route!=='nat')return;const cd=document.querySelector('#scr-nat .oath .cd');if(cd)cd.textContent=fmtLeft(msToMidnight())},1000);
 function renderRanks(){
   const r=P.rating,t=tierOf(r),next=TIERS[t+1],prog=tierProgress(r),dv=divOf(r),wd=weekDelta();
   const C=2*Math.PI*80,sp=Math.min(1,(Date.now()-SEASON.start)/(SEASON.end-SEASON.start));
@@ -2648,7 +2900,7 @@ function showLegacyUnlock(id){
 }
 function renderShop(){
   const lvl=level(),inLvl=P.xp%XP_LVL,feat=featuredItem(),deals=dealIds().map(item);
-  const total=ITEMS.length,have=ITEMS.filter(owns).length;
+  const gen=ITEMS.filter(i=>!i.nation),total=gen.length,have=gen.filter(owns).length;
   const track=Array.from({length:MAX_LVL},(_,k)=>{const L=k+1,rw=PASS[L],pro=PRO_PASS[L],reached=L<=lvl,claimed=P.claimed.includes(L);
     const free=rw?`<div class="reward ${claimed?'done':reached?'ready':'lock'}">${rw.crowns?`${crest('sm')}<span>${rw.crowns}</span>`:`<span>${esc(item(rw.item).name)}</span>`}${claimed?'<span class="ok">Claimed</span>':reached?`<button class="claim" type="button" data-act="claim" data-l="${L}">Claim</button>`:''}</div>`:`<div class="reward ${reached?'done':'lock'}"><span>+XP</span></div>`;
     return `<div class="node${reached?' reached':''}${L===lvl?' now':''}"><span class="lvdot">${L}</span>${free}<div class="reward pro lock"><span>${pro?esc(pro):'Pro'}</span><span class="tagapp">App</span></div></div>`}).join('');
@@ -2665,7 +2917,7 @@ function renderShop(){
   <div class="sec-row"><span class="sec-t">Collection</span><span class="cd">${have} / ${total} owned</span></div>
   <div class="coll"><div class="bar"><i style="width:${(have/total*100).toFixed(0)}%"></i></div></div>
   <div class="seg" role="tablist" aria-label="Item type">${tabs.map(([k,l])=>`<button type="button" role="tab" data-act="stab" data-k="${k}" aria-pressed="${shopTab===k}">${l}</button>`).join('')}</div>
-  <div class="shop-grid">${ITEMS.filter(i=>i.kind===shopTab).map(it=>itemCard(it)).join('')}</div>${shopTab==='trim'&&P.equip.set!=='classic'?'<p class="row-s" style="margin-top:-4px">Trims color the bands on the Classic piece set. Your legacy set uses its own.</p>':''}
+  <div class="shop-grid">${ITEMS.filter(i=>i.kind===shopTab&&!i.nation).map(it=>itemCard(it)).join('')}</div>${shopTab==='trim'&&P.equip.set!=='classic'?'<p class="row-s" style="margin-top:-4px">Trims color the bands on the Classic piece set. Your legacy set uses its own.</p>':''}
   <div class="panel pro-card" style="display:flex;flex-direction:column;gap:14px"><div class="season-top"><div><div class="hero-k">Chess Battle Pro</div><div class="hero-t" style="font-size:30px;margin-top:6px">$4.99 / month</div></div><span class="tagapp">App</span></div>
     <ul class="pro-list"><li>Unlimited rated games and the Pro season pass</li><li>Game review with the Hard bot’s best moves</li><li>Exclusive boards, trims and emotes</li><li>No ads, ever</li></ul>
     <button class="b3d block" type="button" disabled>Available in the app</button></div>
@@ -2677,7 +2929,7 @@ setInterval(()=>{if(route!=='shop')return;document.querySelectorAll('[data-cd]')
 
 let openItemId=null;
 function itemPreview(it){
-  if(it.kind==='board')return `<div class="pv"><div class="pvb">${boardMini(it,6)}</div></div>`;
+  if(it.kind==='board'||it.kind==='home')return `<div class="pv"><div class="pvb">${boardMini(it,6)}</div></div>`;
   if(it.kind==='trim'){const b=item(P.equip.board)||ITEMS[0];return `<div class="pv" style="background:linear-gradient(180deg,${b.d.startsWith('linear')?'#3b4aa0':b.d},#070c24)"><div class="pvp">${['K','Q','N'].map(t=>`<svg class="pcs tw" viewBox="0 0 100 100" style="--acc:${it.w}"><use href="#s-${t}" width="100" height="100"/></svg>`).join('')}${['K','Q','N'].map(t=>`<svg class="pcs tb" viewBox="0 0 100 100" style="--acc:${it.b}"><use href="#s-${t}" width="100" height="100"/></svg>`).join('')}</div></div>`}
   if(it.kind==='fx'){const b=item(P.equip.board)||ITEMS[0];return `<div class="pv"><div class="fxstage" id="fxStage">${Array.from({length:9},(_,k)=>`<i style="background:${(Math.floor(k/3)+k%3)%2?b.d:b.l}"></i>`).join('')}<div class="pc0"><svg class="pcs tw" viewBox="0 0 100 100"><use href="#s-N" width="100" height="100"/></svg></div></div></div>`}
   if(it.kind==='snd')return `<div class="pv rc-${it.rarity}"><div class="art rc-${it.rarity}" style="width:40%;background:none;box-shadow:none"><div class="eqz"><i></i><i></i><i></i><i></i></div></div></div>`;
@@ -2689,7 +2941,7 @@ function openItem(id){
   let btn;
   if(eq)btn=`<button class="b3d block alt" type="button" disabled>Equipped</button>`;
   else if(own)btn=`<button class="b3d block shine" type="button" data-act="equip" data-id="${id}">Equip</button>`;
-  else if(!it.price)btn=`<button class="b3d block alt" type="button" disabled>Unlocks with ${esc(lockText(it))}</button>`;
+  else if(!it.price||(it.rankReq!=null&&natRank()<it.rankReq)||(it.nation&&it.nation!==P.nation))btn=`<button class="b3d block alt" type="button" disabled>Unlocks with ${esc(lockText(it))}</button>`;
   else btn=`<button class="b3d block${can?' shine':''}" type="button" data-act="buyitem" data-id="${id}" ${can?'':'disabled'}>${can?`Buy for ${p} crowns`:`Need ${p-P.crowns} more crowns`}</button>${can?'':'<p class="row-s" style="text-align:center;margin-top:10px">Win games, play dailies and claim season rewards to earn crowns.</p>'}`;
   $('sheetTitle').innerHTML=`<span class="rar rc-${it.rarity}">${RAR[it.rarity]} · ${kindOf(it.kind)}</span>`;
   const replay=it.kind==='fx'?'<div class="pair" style="margin-top:10px"><button class="ghost" type="button" data-act="pvfx">▶ Play effect</button></div>':it.kind==='snd'?'<div class="pair" style="margin-top:10px"><button class="ghost" type="button" data-act="pvsnd">▶ Play sample</button></div>':'';
@@ -2699,11 +2951,11 @@ function openItem(id){
   if(it.kind==='snd')previewSound(id);
 }
 function pvFx(){const st=$('fxStage'),it=item(openItemId);if(st&&it)playFx(st,33.33,33.33,33.33,3,it.id)}
-function equipItem(id){const it=item(id);if(!it||!owns(it))return;P.equip[it.kind]=id;saveP();applyCosmetics();sfx('tap');vibrate(8);closeSheet();renderShop();toast(`${it.name} equipped`)}
+function equipItem(id){const it=item(id);if(!it||!owns(it))return;P.equip[it.kind]=id;saveP();applyCosmetics();sfx('tap');vibrate(8);closeSheet();if(route==='nat')renderNat();else if(route==='shop')renderShop();else if(route==='me')renderMe();toast(`${it.name} equipped`)}
 function buyItem(id){
-  const it=item(id);if(!it||owns(it)||!it.price)return;const p=priceOf(it);
+  const it=item(id);if(!it||owns(it)||!it.price)return;if((it.nation&&it.nation!==P.nation)||(it.rankReq!=null&&natRank()<it.rankReq))return;const p=priceOf(it);
   if(P.crowns<p){toast(`You need ${p-P.crowns} more crowns.`);return}
-  P.crowns-=p;P.owned.push(id);P.equip[it.kind]=id;saveP();applyCosmetics();closeSheet();renderShop();
+  P.crowns-=p;P.owned.push(id);P.equip[it.kind]=id;saveP();applyCosmetics();closeSheet();if(route==='nat')renderNat();else renderShop();
   sfx('coin');vibrate(20);setTimeout(()=>sfx('ach'),180);
   $('modalCard').innerHTML=`<div class="reveal rc-${it.rarity}">${itemArt(it)}</div><div class="rar rc-${it.rarity}">${RAR[it.rarity]} ${kindOf(it.kind)}</div><div class="result-t">${esc(it.name)}</div><div class="result-s">Unlocked and equipped.</div><button class="b3d block shine" type="button" data-act="closemodal">Nice</button>`;
   $('modal').hidden=false;if(it.rarity==='epic'||it.rarity==='legendary')confetti();
@@ -2860,7 +3112,7 @@ function showNationCard(id,fresh){
     <div class="nhome">${home}</div><div class="result-s">Your home board appears whenever you play White online. Your pieces carry ${esc(n.short)} colors, and every online win earns your nation 3 stars.</div>
     <button class="b3d block shine" type="button" data-act="closemodal">${fresh?`For ${esc(n.short)}!`:'Close'}</button></div>`;
   $('modal').hidden=false;
-  if(fresh){sfx('ach');vibrate(30);confetti();if(route==='home')renderHome()}
+  if(fresh){sfx('ach');vibrate(30);confetti();if(!item(P.equip.home)||item(P.equip.home).nation!==n.id)P.equip.home=`h-${n.id}`;saveP();capTab();if(route==='home')renderHome();else if(route==='nat')renderNat()}
 }
 function openSheet(kind){
   const body=$('sheetBody');
@@ -3011,6 +3263,13 @@ document.addEventListener('click',e=>{
     case 'stab':shopTab=a.dataset.k;sfx('tap');renderShop();break;
     case 'lgitem':openLegacy(a.dataset.id);break;
     case 'npick':showNationPick();break;
+    case 'oath':swearOath();break;
+    case 'ordclaim':claimOrder(a.dataset.k);break;
+    case 'medal':claimMedal();break;
+    case 'drill':startDrill();break;
+    case 'capback':S=null;go('nat');break;
+    case 'skill':openSkill(+a.dataset.i);break;
+    case 'learn':learnSkill(+a.dataset.i);break;
     case 'nspin':spinNation();break;
     case 'ncard':showNationCard(P.nation);break;
     case 'lgequip':equipLegacy(a.dataset.id);break;
