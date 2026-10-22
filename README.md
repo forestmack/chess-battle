@@ -29,6 +29,7 @@ Play: https://forestmack.github.io/chess-battle/
 ## Under the hood
 
 - Single-file app (`index.html`), with no build step and no backend
-- Online play is peer-to-peer through PeerJS, so there are no accounts or game server
+- Games are played peer-to-peer through PeerJS. A Supabase backend (`server/schema.sql`) handles guest accounts, nation assignment, star results, worldwide standings, leaderboards and quick-match pairing. Online results only score when both players' apps report the same outcome.
+- Without server keys in `index.html` the game runs fully on the device, as before
 - Progress, cosmetics and replays are saved on the device
 - Installable as a home-screen app, and works offline for bot and pass & play games
