@@ -1268,7 +1268,7 @@ const LEGACY=[
 const lgSet=id=>LEGACY.find(x=>x.id===id);
 const ROMAN=['','I','II','III','IV','V'];
 const STAR='<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
-const LG_PTS={w:5,d:1,l:-2},LG_ONLINE={w:3,d:1,l:-3};
+const LG_PTS={w:2,d:1,l:-1},LG_ONLINE={w:5,d:1,l:-3},LG_BOT_CAP=10;
 /* chess nations */
 const NATIONS=[
   {id:'ember',name:'Ember Dominion',short:'Ember',c:'#ff6a3d',l:'#f9e4d6',d:'#c9532f',w:'#ff6a3d',b:'#ffb08a',motto:'Burn bright. Strike first.',g:'M12 2c1 4 5.5 6.2 5.5 11.2a5.5 5.5 0 01-11 0c0-3 2-4.4 2.2-7.2 1.2 1 2 2.4 2 4.3C12 8 12.6 5.2 12 2z'},
@@ -2407,7 +2407,7 @@ function recordGame(){
   if(S.mode==='puzzle')return;
   if(S.recorded)return;S.recorded=true;
   const ov=S.over,fs=fixedSide(),mode=S.mode;let delta=0,crowns=0,xp=0,label,res;const tier0=tierOf(P.rating),now=Date.now();
-  const lvl0=level();let lgD=null,lgNew=null,natD=null;
+  const lvl0=level();let lgD=null,lgNew=null,natD=null,lgCap=false;
   if(fs==null){P.stats.games++;xp=30;crowns=5;res=ov.win==null?'d':'p';label=ov.win==null?'Pass & play · draw':`Pass & play · ${SIDE[ov.win]} won`}
   else{
     const won=ov.win===fs,draw=ov.win==null;
@@ -2430,7 +2430,7 @@ function recordGame(){
         P.daily.streak=P.daily.last===n-1?P.daily.streak+1:1;P.daily.last=n;P.daily.best=Math.max(P.daily.best,P.daily.streak);if(P.daily.streak>=3)unlock('daily3')}
     }
     res=won?'w':draw?'d':'l';
-    if(lgOk){const r0=legacyAward(res,isOnline());lgD=r0.d;lgNew=r0.unlocked}
+    if(lgOk){const r0=legacyAward(res,isOnline());lgD=r0.d;lgNew=r0.unlocked;lgCap=r0.capped}
     if(isOnline())natD=nationAward(res);
     label=`${mode==='daily'?`Daily #${S.dailyNo}`:isOnline()?`vs ${S.online.oppName||'Opponent'}`:`${MODE_NAME[mode]} bot`} · ${won?'won':draw?'draw':'lost'} ${ov.why==='Time'?'on time':'by '+ov.why.toLowerCase()}`;
   }
@@ -2441,20 +2441,22 @@ function recordGame(){
   const tier1=tierOf(P.rating);S.promo=ratedG&&tier1!==tier0?{from:tier0,to:tier1}:null;
   P.hist.unshift({t:now,label,res,turns:Math.max(S.tc[0],S.tc[1]),delta});saveRep(now,label,res,S.frames);P.hist=P.hist.slice(0,30);
   saveP();
-  S.reward={delta,crowns,xp,lvlUp:level()>lvl0?level():0,rated:fs!=null&&mode!=='daily'&&!S.undone,lg:lgD,lgNew,nat:natD};
+  S.reward={delta,crowns,xp,lvlUp:level()>lvl0?level():0,rated:fs!=null&&mode!=='daily'&&!S.undone,lg:lgD,lgNew,nat:natD,lgCap};
   store.set('cb-replay',JSON.stringify({label,frames:S.frames.slice(0,400)}));
 }
 function nationAward(res){
   const mine=myNat(),theirs=natOf(S.online&&S.online.oppNation),W=warRoll();if(!mine)return null;
-  const d=LG_ONLINE[res],od=res==='d'?1:-d;
+  const d=LG_ONLINE[res],od=LG_ONLINE[res==='w'?'l':res==='l'?'w':'d'];
   W.tally[mine.id]=(W.tally[mine.id]||0)+d;if(theirs)W.tally[theirs.id]=(W.tally[theirs.id]||0)+od;
   W.mine+=d;W[res]=(W[res]||0)+1;P.natGiven+=d;
   return {d,id:mine.id};
 }
 function legacyAward(res,online){
-  const L=P.legacy,before=L.pts;L.pts=Math.max(0,before+(online?LG_ONLINE:LG_PTS)[res]);L.peak=Math.max(L.peak||0,L.pts);L.games=(L.games||0)+1;
+  const L=P.legacy,before=L.pts;let add=(online?LG_ONLINE:LG_PTS)[res];
+  if(!online&&add>0){const dn=dayNo();if(L.botDay!==dn){L.botDay=dn;L.botToday=0}add=Math.min(add,Math.max(0,LG_BOT_CAP-(L.botToday||0)));L.botToday=(L.botToday||0)+add}
+  L.pts=Math.max(0,before+add);L.peak=Math.max(L.peak||0,L.pts);L.games=(L.games||0)+1;
   let unlocked=null;for(const s of LEGACY)if(s.need&&L.pts>=s.need&&!L.un.includes(s.id)){L.un.push(s.id);unlocked=s.id}
-  return {d:L.pts-before,unlocked};
+  return {d:L.pts-before,unlocked,capped:!online&&LG_PTS[res]>0&&add<LG_PTS[res]};
 }
 function showResult(){
   if(S&&S.mode==='puzzle'){if(S.over&&S.over.why==='Solved'&&!RP)showPuzzleWin();return}
@@ -2466,7 +2468,7 @@ function showResult(){
   const DRAWS={'Stalemate':'No safe move and nothing to buy','No progress':'30 turns each without a capture, buy or pawn move','Bare kings':'Only kings left and no gold to spend'};
   const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
   const rw=S.reward;
-  const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy</span>`:''}${rw.nat?`<span class="rw nat" style="--nc:${natOf(rw.nat.id).c}">${crestN(natOf(rw.nat.id))}${rw.nat.d>0?'+':''}${rw.nat.d} ${esc(natOf(rw.nat.id).short)}</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
+  const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy${rw.lgCap?' · daily bot cap':''}</span>`:''}${rw.nat?`<span class="rw nat" style="--nc:${natOf(rw.nat.id).c}">${crestN(natOf(rw.nat.id))}${rw.nat.d>0?'+':''}${rw.nat.d} ${esc(natOf(rw.nat.id).short)}</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
   r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}<div class="pair"><button class="cta sm shine" type="button" data-act="${isOnline()?'rematch':'again'}">${isOnline()?'Rematch':S.mode==='daily'?'Replay daily':'Play again'}</button></div><div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="replay">Replay</button>${isOnline()?'':'<button class="ghost" type="button" data-act="invite">Challenge</button>'}</div><button class="linkbtn" type="button" data-act="viewboard">View board</button><div class="linkbox" id="shareBox" hidden></div></div>`;
   r.hidden=false;
   if(firstShow){if(won&&(fs!=null||ov.win!=null)){sfx('win');if(fs!=null||true)confetti()}else if(fs!=null&&ov.win!==fs)sfx('lose');if(rw&&rw.lvlUp)setTimeout(()=>banner(`Level ${rw.lvlUp}`,'Season reward ready in the Shop'),900);if(S.promo){const pr=S.promo;setTimeout(()=>{if(route==='game')showPromo(pr)},1500)}if(rw&&rw.lgNew){const id=rw.lgNew;setTimeout(()=>showLegacyUnlock(id),S.promo?3200:1600)}}
@@ -2731,7 +2733,7 @@ function warPanel(){
   return `<div class="panel war" style="--nc:${n.c}"><div class="war-top">${crestN(n)}<div style="min-width:0;flex:1"><div class="hero-k">Nation war · ${esc(monthName())}</div><div class="war-t" style="color:${n.c}">${esc(n.name)}</div></div><span class="cd">${fmtLeft(msToMonthEnd())}</span></div>
     <div class="war-rows">${rows.map((r,i)=>`<div class="war-row${r.x.id===n.id?' mine':''}" style="--nc:${r.x.c}"><span class="pos">${i+1}</span>${crestN(r.x)}<div style="min-width:0"><div class="nm">${esc(r.x.short)}</div><div class="trk"><i data-w="${(Math.max(0,r.v)/max*100).toFixed(0)}"></i></div></div><span class="pts">${STAR}${r.v}</span></div>`).join('')}</div>
     <div class="war-me"><div><b>${W.mine>0?'+':''}${W.mine}</b><span>Your stars this month</span></div><div><b>${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}</b><span>Online record</span></div><div><b>${P.natGiven>0?'+':''}${P.natGiven}</b><span>All-time for ${esc(n.short)}</span></div></div>
-    <p class="row-s" style="margin-top:12px">Online wins earn your nation 3 stars and losses cost 3. A draw gives both nations 1. For now this board counts the online games played on this device. Worldwide standings go live with accounts.</p></div>`;
+    <p class="row-s" style="margin-top:12px">Online wins earn your nation 5 stars and losses cost 3. A draw gives both nations 1. For now this board counts the online games played on this device. Worldwide standings go live with accounts.</p></div>`;
 }
 const dayNo=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
 function capSky(){let h='';for(let k=0;k<18;k++){const l=(k*53)%100,d=(5+((k*7)%6)).toFixed(1),dl=(-(k*0.9)%9).toFixed(1),dx=((k%5)-2)*14,sz=3+(k%3)*1.5;h+=`<i style="left:${l}%;width:${sz}px;height:${sz}px;animation-duration:${d}s;animation-delay:${dl}s;--dx:${dx}px"></i>`}return `<div class="cap-sky" aria-hidden="true">${h}</div>`}
@@ -2812,7 +2814,7 @@ function renderNat(){
     <div class="cap-stats"><div><b>${STAR}${P.natGiven}</b><span>Stars for ${esc(n.short)}</span></div><div><b>${days}</b><span>Days loyal</span></div><div><b>${(P.oath.last===dayNo()||P.oath.last===dayNo()-1)?P.oath.streak:0}</b><span>Oath streak</span></div></div></div>
   ${oathCard(n)}
   <div class="cap-sec"><span class="sec-t">War room · ${esc(monthName())}</span><span class="cd">${fmtLeft(msToMonthEnd())}</span></div>
-  <div class="panel war" style="--nc:${n.c}">${warRowsHTML(n)}<div class="war-me"><div><b>${W.mine>0?'+':''}${W.mine}</b><span>Your stars this month</span></div><div><b>${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}</b><span>Online record</span></div><div><b>${P.medals||0}</b><span>Campaign medals</span></div></div><p class="row-s" style="margin-top:12px">Online wins earn ${esc(n.short)} 3 stars and losses cost 3. For now these standings count the online games played on this device. Worldwide standings go live with accounts.</p><button class="b3d block shine" type="button" data-act="invite" style="margin-top:12px">Challenge a rival</button></div>
+  <div class="panel war" style="--nc:${n.c}">${warRowsHTML(n)}<div class="war-me"><div><b>${W.mine>0?'+':''}${W.mine}</b><span>Your stars this month</span></div><div><b>${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}</b><span>Online record</span></div><div><b>${P.medals||0}</b><span>Campaign medals</span></div></div><p class="row-s" style="margin-top:12px">Online wins earn ${esc(n.short)} 5 stars and losses cost 3. For now these standings count the online games played on this device. Worldwide standings go live with accounts.</p><button class="b3d block shine" type="button" data-act="invite" style="margin-top:12px">Challenge a rival</button></div>
   <div class="cap-sec"><span class="sec-t">War plans</span><span class="cd">${esc(monthName())} campaign</span></div>
   ${ordersCard(n)}
   <div class="cap-sec"><span class="sec-t">Training</span></div>
@@ -2867,7 +2869,7 @@ function lgCard(s){
 function legacyPanel(){
   const L=P.legacy,next=LEGACY.find(s=>s.need&&!L.un.includes(s.id));
   return `<div class="panel legacy" id="legacyPanel"><div class="lg-top"><div><div class="hero-k">Legacy</div><div class="lg-pts">${STAR}<b>${L.pts}</b></div></div>
-    <div class="lg-rule"><span class="w">Win <b>+5</b></span><span>Draw <b>+1</b></span><span class="l">Loss <b>−2</b></span></div></div><div class="row-s" style="margin-top:10px">Online: win <b style="color:var(--mint)">+3</b>, draw <b>+1</b>, loss <b style="color:var(--red)">−3</b>, and the same stars count for your nation.</div>
+    <div class="lg-rule"><span class="w">Online win <b>+5</b></span><span>Draw <b>+1</b></span><span class="l">Loss <b>−3</b></span></div></div><div class="row-s" style="margin-top:10px">Online stars also count for your nation. Bot and daily games: win <b style="color:var(--mint)">+2</b>, draw <b>+1</b>, loss <b style="color:var(--red)">−1</b>, up to 10 stars a day.</div>
     <div class="lg-next">${next?`<span><b>${next.need-L.pts}</b> to unlock <b>${esc(next.name)}</b></span><span>${L.pts} / ${next.need}</span>`:'<span><b>Every set unlocked.</b> You are a legend.</span>'}</div>
     <div class="bar"><i id="lgBar" data-w="${next?Math.min(100,L.pts/next.need*100).toFixed(1):100}"></i></div>
     <div class="lg-row" id="lgRow">${LEGACY.map(lgCard).join('')}</div>
@@ -2882,8 +2884,8 @@ function openLegacy(id){
   let btn;
   if(eq)btn='<button class="b3d block alt" type="button" disabled>Equipped</button>';
   else if(own)btn=`<button class="b3d block shine" type="button" data-act="lgequip" data-id="${id}">Equip</button>`;
-  else{const left=s.need-L.pts,w=Math.ceil(left/LG_PTS.w);
-    btn=`<div class="lg-prog" style="--rc:${s.c}"><div class="lg-next" style="margin:0"><span><b>${left}</b> more legacy</span><span>${L.pts} / ${s.need}</span></div><div class="bar"><i style="width:${Math.min(100,L.pts/s.need*100).toFixed(1)}%"></i></div></div><button class="b3d block alt" type="button" disabled>About ${pl(w,'more win')}</button>`}
+  else{const left=s.need-L.pts,w=Math.ceil(left/LG_ONLINE.w);
+    btn=`<div class="lg-prog" style="--rc:${s.c}"><div class="lg-next" style="margin:0"><span><b>${left}</b> more legacy</span><span>${L.pts} / ${s.need}</span></div><div class="bar"><i style="width:${Math.min(100,L.pts/s.need*100).toFixed(1)}%"></i></div></div><button class="b3d block alt" type="button" disabled>About ${pl(w,'more online win')}</button>`}
   $('sheetTitle').innerHTML=`<span class="rar" style="--rc:${s.c}">${s.tier?`Legacy · Tier ${ROMAN[s.tier]}`:'Base set'}</span>`;
   $('sheetBody').innerHTML=`${lgPreview(s)}<div class="pv-row"><span class="pv-name">${esc(s.name)}</span>${s.need?`<span class="lg-need" style="font-size:18px">${STAR}${s.need}</span>`:''}</div><p class="pv-desc">${esc(s.desc)}</p>${btn}`;
   $('sheetWrap').hidden=false;sfx('tap');
@@ -3109,7 +3111,7 @@ function showNationCard(id,fresh){
   const n=natOf(id);if(!n)return;
   const home=Array.from({length:8},(_,k)=>`<i style="background:${(Math.floor(k/4)+k%4)%2?n.d:n.l}"></i>`).join('');
   $('modalCard').innerHTML=`<div class="nreveal" style="--nc:${n.c}">${crestN(n,'big')}<div class="result-k" style="color:${n.c}">${fresh?'You fight for':'Your nation'}</div><div class="result-t" style="color:${n.c};text-shadow:0 4px 0 rgba(0,0,0,.35)">${esc(n.name)}</div><div class="nmotto">“${esc(n.motto)}”</div>
-    <div class="nhome">${home}</div><div class="result-s">Your home board appears whenever you play White online. Your pieces carry ${esc(n.short)} colors, and every online win earns your nation 3 stars.</div>
+    <div class="nhome">${home}</div><div class="result-s">Your home board appears whenever you play White online. Your pieces carry ${esc(n.short)} colors, and every online win earns your nation 5 stars.</div>
     <button class="b3d block shine" type="button" data-act="closemodal">${fresh?`For ${esc(n.short)}!`:'Close'}</button></div>`;
   $('modal').hidden=false;
   if(fresh){sfx('ach');vibrate(30);confetti();if(!item(P.equip.home)||item(P.equip.home).nation!==n.id)P.equip.home=`h-${n.id}`;saveP();capTab();if(route==='home')renderHome();else if(route==='nat')renderNat()}
@@ -3129,7 +3131,7 @@ function openSheet(kind){
       <li><b>Shop</b><span>Pawn 1, knight 4, bishop 4, rook 6, queen 12. Pawns on your pawn row, others on your back row.</span></li>
       <li><b>Limits</b><span>No buying the same piece twice in a row. Max 8 pawns.</span></li>
       <li><b>Suicide</b><span>End your turn with your king attacked and you lose instantly.</span></li>
-      <li><b>Nations</b><span>Everyone fights for one of four nations. Online wins earn your nation 3 stars, losses cost 3, and draws give both sides 1. The top nation each month wins.</span></li>
+      <li><b>Nations</b><span>Everyone fights for one of four nations. Online wins earn your nation 5 stars, losses cost 3, and draws give both sides 1. The top nation each month wins.</span></li>
       <li><b>Premove</b><span>Against a bot or online, tap or drag your piece while your opponent thinks. It plays the moment your turn starts, if it’s still possible.</span></li>
       <li><b>Victory</b><span>Checkmate, suicide, resignation or time. No safe move and nothing to buy is a draw, as are 30 turns each without a capture, buy or pawn move, and bare kings with no gold left.</span></li></ul></details>
     <details class="fold"><summary>Move history</summary><ol class="histlist">${S?S.log.map(x=>`<li>${esc(x)}</li>`).join(''):''}</ol></details>`;
