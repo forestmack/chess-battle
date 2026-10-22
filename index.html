@@ -1041,6 +1041,38 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
   .opp .seat-sub,.tray-head .seat-sub{display:none}
   .breakdown{display:none}
 }
+/* ---------- territory map, war weekends, council, recruiting ---------- */
+.map-wrap{position:relative;margin:2px 0 4px}
+.map-svg{width:100%;height:auto;display:block;overflow:visible}
+.hexg{cursor:pointer}
+.hexg .hx{stroke:#0a1030;stroke-width:3;transition:filter .2s}
+.hexg:hover .hx{filter:brightness(1.15)}
+.hexg:focus-visible{outline:none}.hexg:focus-visible .hx{stroke:#fff}
+.hexg .front{fill:none;stroke:var(--gold-hi);stroke-width:4;stroke-dasharray:7 5;animation:dash 1.4s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-24}}
+.hexg text{font:800 9.5px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;fill:#fff;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:rgba(5,8,26,.55);stroke-width:2.4px}
+.hexg .hs{font-size:8.5px;fill:rgba(255,255,255,.85)}
+.map-leg{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;font:700 11px/1 var(--body);letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-top:6px}
+.map-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.wk{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:linear-gradient(90deg,rgba(255,94,120,.22),rgba(255,204,46,.12));box-shadow:inset 0 0 0 1px rgba(255,140,90,.45)}
+.wk.off{background:rgba(3,6,20,.45);box-shadow:inset 0 0 0 1px var(--line)}
+.wk-ic{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(160deg,#ffb35c,#ff5e78);box-shadow:0 3px 0 #8a2234}
+.wk.off .wk-ic{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px var(--line)}
+.wk-ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.wk b{font:900 17px/1 var(--display);letter-spacing:.06em;text-transform:uppercase}
+.wk span{display:block;font:600 12px/1.3 var(--body);color:var(--muted);margin-top:4px}
+.council{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cseat{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:16px;text-align:center;background:linear-gradient(180deg,color-mix(in srgb,var(--nc) 14%,#18225a),#0d1438);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--nc) 35%,transparent)}
+.cseat.first{box-shadow:inset 0 0 0 1.5px var(--gold),0 0 18px -6px var(--gold)}
+.cseat .ct{font:800 10px/1 var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--nc)}
+.cseat .cn{font:800 14px/1.1 var(--display);letter-spacing:.05em;text-transform:uppercase;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cseat .cs{display:flex;align-items:center;gap:3px;font:800 13px/1 var(--display);color:var(--gold)}.cseat .cs .star{width:12px;height:12px}
+.recruit{display:flex;align-items:center;gap:14px}
+.recruit .big{font:900 34px/1 var(--display);color:var(--nc);min-width:44px;text-align:center}
+.cere{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.cere>.ncrest{width:96px;height:106px;filter:drop-shadow(0 0 24px var(--nc));animation:popin .7s var(--spring) both}
+.cere-rows{width:100%;display:flex;flex-direction:column;gap:8px;margin:6px 0}
+.cere-rows .ncrest{width:24px;height:27px}
 /* ---------- your games, live now, friends ---------- */
 .yg{display:flex;flex-direction:column}
 .yg-row{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-top:1px solid rgba(43,56,120,.5);width:100%}
@@ -1388,6 +1420,7 @@ const ITEMS=[
   {id:'ti-devoted',kind:'title',name:'Devoted',ach:'daily3',rarity:'epic',desc:'Earned by playing 3 daily challenges in a row.'},
   {id:'ti-gilded',kind:'title',name:'Gilded',pass:18,rarity:'legendary',desc:'Season 1 pass exclusive.'},
   {id:'ti-gm',kind:'title',name:'Grandmaster',tierReq:6,rarity:'legendary',desc:'Reserved for players who reach the Grandmaster tier.'},
+  {id:'ti-victor',kind:'title',name:'War Victor',victor:true,rarity:'legendary',desc:'Earned when your nation wins a monthly nation war.'},
 ];
 const item=id=>ITEMS.find(x=>x.id===id);
 /* legacy piece sets: earned only by playing, never bought */
@@ -1437,6 +1470,84 @@ const CAPITAL={
       {t:'Bait the suicide',s:'Win with the rules',d:['..k..','.....','..b..','.....','..K.R'],hl:[12],body:['Leaving your own king in check at the end of your turn loses instantly. Players who grab material often forget to look at their king.','Set up discovered checks: move one piece to reveal an attack from another. Greedy opponents walk straight into it.']},
     ]},
 };
+const REGIONS=[['r01','Emberhold',0,0,'ember'],['r02','Ashen Steppe',1,0],['r03','Saltmarsh',2,0],['r04','Tidehaven',3,0,'tide'],
+  ['r05','Cinder Pass',0,1],['r06','Crownfall',1,1],['r07','The Shoals',2,1],['r08','Coral Coast',3,1],
+  ['r09','Ironwood',0,2],['r10','Kings’ Crossing',1,2],['r11','Mistvale',2,2],['r12','Starfall Bay',3,2],
+  ['r13','Greenspire',0,3,'grove'],['r14','Mossmere',1,3],['r15','Nightglen',2,3],['r16','Duskmere',3,3,'dusk']];
+const regionOf=id=>REGIONS.find(r=>r[0]===id);
+const prevMonthKey=()=>{const d=new Date();return monthKey(new Date(d.getFullYear(),d.getMonth()-1,1))};
+const prevMonthName=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth()-1,1).toLocaleDateString(undefined,{month:'long'})};
+function regionControl(id){
+  const r=regionOf(id),rows=(NET.map||[]).filter(x=>x.region===id).map(x=>({n:x.nation,v:Number(x.stars)||0})).sort((a,b)=>b.v-a.v);
+  const top=rows[0],second=rows[1];
+  if(top&&top.v>0)return {owner:top.n,stars:top.v,margin:top.v-(second&&second.v>0?second.v:0),rows,contested:!!(second&&second.v>0&&top.v-second.v<=5)};
+  return {owner:r&&r[4]||null,stars:0,margin:0,rows,contested:false,home:!!(r&&r[4])};
+}
+function mapSVG(){
+  const R0=46,W=Math.sqrt(3)*R0,H=1.5*R0;let g='';
+  const pts=(cx,cy,r)=>Array.from({length:6},(_,k)=>{const a=Math.PI/180*(60*k-30);return `${(cx+r*Math.cos(a)).toFixed(1)},${(cy+r*Math.sin(a)).toFixed(1)}`}).join(' ');
+  const front=NET.me&&NET.me.front;
+  for(const [id,name,c,rw] of REGIONS){
+    const cx=W/2+4+c*W+(rw%2?W/2:0),cy=R0+4+rw*H,ctl=regionControl(id),n=natOf(ctl.owner);
+    const fill=n?n.c:'#232c66',op=n?(ctl.stars?Math.min(1,.55+ctl.margin/40):.42):1;
+    const words=name.split(' ');const l1=words.length>1?words.slice(0,Math.ceil(words.length/2)).join(' '):name,l2=words.length>1?words.slice(Math.ceil(words.length/2)).join(' '):'';
+    g+=`<g class="hexg" data-act="region" data-id="${id}" tabindex="0" role="button" aria-label="${esc(name)}${n?`, held by ${n.short}`:', unclaimed'}"><polygon class="hx" points="${pts(cx,cy,R0-1)}" fill="${fill}" fill-opacity="${op}"/>${front===id?`<polygon class="front" points="${pts(cx,cy,R0-6)}"/>`:''}<text x="${cx}" y="${cy-(l2?4:0)}">${esc(l1)}</text>${l2?`<text x="${cx}" y="${cy+8}">${esc(l2)}</text>`:''}${ctl.stars?`<text class="hs" x="${cx}" y="${cy+(l2?21:15)}">★ ${ctl.stars}${ctl.contested?' · contested':''}</text>`:''}</g>`;
+  }
+  const vw=W*4.5+8,vh=R0*2+H*3+8;
+  return `<svg class="map-svg" viewBox="0 0 ${vw.toFixed(0)} ${vh.toFixed(0)}" role="group" aria-label="Territory map">${g}</svg>`;
+}
+function openRegion(id){
+  const r=regionOf(id);if(!r)return;const ctl=regionControl(id),n=natOf(ctl.owner),mine=NET.me&&NET.me.front===id;
+  const rows=NATIONS.map(x=>({x,v:(ctl.rows.find(y=>y.n===x.id)||{v:0}).v})).sort((a,b)=>b.v-a.v),max=Math.max(1,...rows.map(z=>Math.abs(z.v)));
+  $('sheetTitle').innerHTML=`<span class="rar" style="--rc:${n?n.c:'#9ea8db'}">${n?`Held by ${esc(n.name)}`:'Unclaimed'}${r[4]?' · capital region':''}</span>`;
+  $('sheetBody').innerHTML=`<div class="pv-row" style="margin-top:0"><span class="pv-name">${esc(r[1])}</span></div><p class="row-s" style="margin:0 0 12px">Online wins fought on this front count here this month. The nation with the most stars holds it${ctl.contested?'. It’s contested right now, so every game matters':''}.</p>
+    <div class="war-rows" style="margin:6px 0 16px">${rows.map((z,i)=>`<div class="war-row" style="--nc:${z.x.c}"><span class="pos">${i+1}</span>${crestN(z.x)}<div style="min-width:0"><div class="nm">${esc(z.x.short)}</div><div class="trk"><i style="width:${(Math.max(0,z.v)/max*100).toFixed(0)}%"></i></div></div><span class="pts">${STAR}${z.v}</span></div>`).join('')}</div>
+    ${NET.on&&P.nation?(mine?'<button class="b3d block alt" type="button" disabled>Your current front</button>':`<button class="b3d block shine" type="button" data-act="setfront" data-id="${id}">Fight on this front</button>`):''}`;
+  $('sheetWrap').hidden=false;sfx('tap');
+}
+async function setFront(id){try{applyServerMe(await rpc('set_front',{p_region:id}));closeSheet();toast(`Your wins now fight for ${regionOf(id)[1]}`);sfx('ach')}catch(e){toast('Couldn’t change your front. Try again.')}}
+function msToWeekend(){const d=new Date(),dow=d.getUTCDay(),days=(6-dow+7)%7,t=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+days);return t-Date.now()}
+function msWeekendLeft(){const d=new Date(),dow=d.getUTCDay(),days=dow===6?2:1;return Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+days)-Date.now()}
+const isWeekend=()=>NET.me&&NET.me.weekend!=null?!!NET.me.weekend:[0,6].includes(new Date().getUTCDay());
+function weekendBar(compact){
+  if(!netCfg())return '';
+  const on=isWeekend();
+  if(compact&&!on)return '';
+  return `<div class="wk${on?'':' off'}"><span class="wk-ic"><svg viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 01-10 0c0-2.6 1.6-3.9 2-6.4 1.2 1 2.1 2.2 2.1 4 .9-1.6 1.2-4.3.9-7.6z"/></svg></span><div style="flex:1;min-width:0"><b>${on?'War weekend':'Next war weekend'}</b><span>${on?`Nation stars count double · ends in ${fmtLeft(msWeekendLeft())}`:`Nation stars count double every Saturday and Sunday · starts in ${fmtLeft(msToWeekend())}`}</span></div>${on&&compact?'<button class="b3d sm" type="button" data-act="quickmatch">Fight</button>':''}</div>`;
+}
+const COUNCIL_T=['High Marshal','Warden','Herald'];
+function councilCard(n){
+  const list=(NET.council||{})[n.id];
+  if(!NET.on)return '';
+  if(!list||!list.length)return `<div class="panel"><p class="row-s" style="margin:0">The first council of ${esc(CAPITAL[n.id].city)} is crowned when ${esc(monthName())} ends: the three players who win the most stars for ${esc(n.short)} this month.</p></div>`;
+  return `<div class="council" style="--nc:${n.c}">${list.slice(0,3).map((r,i)=>`<div class="cseat${i===0?' first':''}">${avatar(r.av||'Q',r.avc||'gold',44)}<span class="ct">${COUNCIL_T[i]}</span><span class="cn">${esc(r.name||'Player')}</span><span class="cs">${STAR}${fmtN(Number(r.stars)||0)}</span></div>`).join('')}</div>`;
+}
+const RECRUIT_T=[[0,'No recruits yet'],[1,'Recruiter'],[5,'Banner Bearer'],[15,'Warlord of the Gate'],[50,'Founder']];
+function recruitCard(n){
+  if(!NET.on||!NET.uid)return '';
+  const k=(NET.me&&NET.me.recruits)||0;let t=RECRUIT_T[0][1];RECRUIT_T.forEach(([need,nm])=>{if(k>=need)t=nm});
+  return `<div class="panel recruit" style="--nc:${n.c}"><span class="big">${k}</span><div style="flex:1;min-width:0"><div class="row-t">${esc(t)}</div><div class="row-s">Friends who join with your link fight for ${esc(n.short)}, whatever the spin would have said.</div></div><button class="b3d sm" type="button" data-act="recruit">Recruit</button></div>`;
+}
+const recruitLink=()=>`${SITE_URL}?r=${NET.uid}`;
+function shareRecruit(){const n=myNat();if(!n||!NET.uid)return;shareOut(`Join me in the ${n.name} on Chess Battle. Chess where you capture to earn gold and buy reinforcements:`,recruitLink(),'Recruit link copied')}
+async function checkCeremony(){
+  if(!NET.on||!P.nation||route!=='home'||!$('modal').hidden)return;
+  const pm=prevMonthKey();if(P.cere===pm)return;
+  if(P.natSince&&P.natSince>new Date(new Date().getFullYear(),new Date().getMonth(),1).getTime()){P.cere=pm;saveP();return}
+  let st=[];try{st=await rpc('get_standings',{p_month:pm})}catch(e){return}
+  P.cere=pm;saveP();
+  if(!st.length||st.every(x=>!Number(x.stars)))return;
+  const win=natOf(st[0].nation),mine=myNat(),won=win&&mine&&win.id===mine.id;
+  let council=[];try{council=await rpc('nation_heroes',{p_nation:mine.id,p_limit:3,p_month:pm})}catch(e){}
+  if(won){P.victor=(P.victor||0)+1;saveP()}
+  const max=Math.max(1,...st.map(x=>Math.abs(Number(x.stars)||0)));
+  $('modalCard').innerHTML=`<div class="cere" style="--nc:${win.c}">${crestN(win)}<div class="result-k" style="color:${win.c}">${esc(prevMonthName())} nation war</div><div class="result-t" style="color:${win.c};font-size:clamp(30px,9vw,44px)">${esc(win.name)} wins</div>
+    <div class="cere-rows">${st.map((x,i)=>{const n2=natOf(x.nation);return `<div class="war-row${mine&&n2.id===mine.id?' mine':''}" style="--nc:${n2.c}"><span class="pos">${i+1}</span>${crestN(n2)}<div style="min-width:0"><div class="nm">${esc(n2.short)}</div><div class="trk"><i style="width:${(Math.max(0,Number(x.stars))/max*100).toFixed(0)}%"></i></div></div><span class="pts">${STAR}${fmtN(Number(x.stars))}</span></div>`}).join('')}</div>
+    ${council.length?`<div class="result-s">Council of ${esc(CAPITAL[mine.id].city)}: ${council.map((c,i)=>`<b>${esc(c.name||'Player')}</b> (${COUNCIL_T[i]})`).join(', ')}</div>`:''}
+    <div class="result-s">${won?'Your nation took the crown. You earned the <b>War Victor</b> title.':`${esc(mine.short)} will be back. A new war starts today.`}</div>
+    <button class="b3d block shine" type="button" data-act="closemodal">${won?'Glory to '+esc(mine.short):'To war'}</button></div>`;
+  $('modal').hidden=false;if(won){confetti();sfx('win')}else sfx('ach');
+}
 const NRANKS=[['Recruit',0],['Soldier',10],['Knight',40],['Captain',100],['Warlord',250],['Legend',600]];
 const natRank=()=>{const v=(P.legacy&&P.legacy.peak)||0;let r=0;NRANKS.forEach((x,i)=>{if(v>=x[1])r=i});return r};
 const ORDERS={
@@ -1993,7 +2104,7 @@ function netInit(){
       let me=await rpc('get_me');
       if(!me.imported)me=await rpc('import_local',{p_legacy:P.legacy.pts||0,p_nation:P.nation||null,p_nat_given:P.natGiven||0});
       me=await rpc('sync_profile',{p_name:P.name||'',p_av:P.av||'Q',p_avc:P.avc||'gold',p_rating:P.rating||700});
-      NET.on=true;applyServerMe(me);netRefreshBoards();netRefreshGames();
+      NET.on=true;applyServerMe(me);netRefreshBoards();netRefreshGames();setTimeout(checkCeremony,1200);
       return true;
     }catch(e){console.warn('Chess Battle server unavailable',e);NET.on=false;NET.init=null;return false}
   })();
@@ -2016,7 +2127,8 @@ async function netRefreshBoards(force){
   try{
     const [st,top,live]=await Promise.all([rpc('get_standings',{p_month:null}),rpc('top_players',{p_nation:null,p_limit:20}),rpc('live_games',{p_limit:12}).catch(()=>[])]);
     NET.stand=st;NET.top=top;NET.live=live;
-    if(P.nation)NET.heroes[P.nation]=await rpc('nation_heroes',{p_nation:P.nation,p_limit:10});
+    if(P.nation){NET.heroes[P.nation]=await rpc('nation_heroes',{p_nation:P.nation,p_limit:10});NET.council=NET.council||{};NET.council[P.nation]=await rpc('nation_heroes',{p_nation:P.nation,p_limit:3,p_month:prevMonthKey()}).catch(()=>[])}
+    NET.map=await rpc('get_map',{p_month:null}).catch(()=>NET.map||[]);
     if(route==='ranks'||route==='nat'||route==='home')netRerender();
   }catch(e){}
 }
@@ -2714,6 +2826,7 @@ function renderHome(){
   ${showInstall()?`<div class="panel resume"><span class="tile-ic ic-gold" style="flex:none">${ICON.help.replace('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 3.8M12 17h.01"/>','<path d="M12 4v11M7 9l5-5 5 5M5 14v5h14v-5"/>')}</span><div class="grow"><div class="row-t">Install the app</div><div class="row-s">Tap Share, then Add to Home Screen. It opens full screen.</div></div><button class="ghost" type="button" data-act="noinstall" aria-label="Dismiss">Later</button></div>`:''}
   ${netCfg()&&!resumable?`<div class="panel qm"><span class="qm-ic"><svg viewBox="0 0 24 24"><path d="M4 12h4l3-7 4 14 3-7h2"/></svg></span><div style="flex:1;min-width:0"><div class="row-t"><span class="live-dot"></span>Quick match</div><div class="row-s">Play a real opponent online. Win +5 stars${myNat()?` for ${esc(myNat().short)}`:''}.</div></div><button class="b3d sm" type="button" data-act="quickmatch">Play</button></div>`:''}
   ${resumable?`<div class="panel resume"><span class="avatar ${S.turn?'tw':'tb'}">${svgPiece('K')}</span><div class="grow"><div class="row-t">Resume your game</div><div class="row-s">${esc($('gk').textContent)} · turn ${Math.max(S.tc[0],S.tc[1])}</div></div><button class="b3d sm" type="button" data-act="resume">Resume</button></div>`:''}
+  ${weekendBar(true)}
   ${gamesPanel()}
   <section class="qp" aria-label="Quick play">
     <div class="qp-art" aria-hidden="true"><span class="glow"></span><svg class="k1 pcs tw" viewBox="0 0 100 100"><use href="#s-N" width="100" height="100"/></svg><svg class="k2 pcs tb" viewBox="0 0 100 100"><use href="#s-Q" width="100" height="100"/></svg><i class="cn" style="right:36px;top:130px"></i><i class="cn" style="right:18px;top:104px;width:12px;height:12px;animation-delay:-1s"></i></div>
@@ -3011,7 +3124,7 @@ function go(r,noAnim){
   const ti=TABS.indexOf(r);
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-current',t.dataset.tab===r?'page':'false'));
   if(ti>=0)$('tabInd').style.transform=`translateX(${ti*100}%)`;
-  if(r==='home'){renderHome();if(NET.on){if(Date.now()-(NET.gamesAt||0)>10000)netRefreshGames();netRefreshBoards()}}else if(r==='ranks'){renderRanks();netRefreshBoards()}else if(r==='nat'){renderNat();netRefreshBoards()}else if(r==='shop')renderShop();else if(r==='me')renderMe();
+  if(r==='home'){renderHome();setTimeout(checkCeremony,800);if(NET.on){if(Date.now()-(NET.gamesAt||0)>10000)netRefreshGames();netRefreshBoards()}}else if(r==='ranks'){renderRanks();netRefreshBoards()}else if(r==='nat'){renderNat();netRefreshBoards()}else if(r==='shop')renderShop();else if(r==='me')renderMe();
   window.scrollTo(0,0);
 }
 const ICON={
@@ -3042,8 +3155,9 @@ let resetArm=false;
 /* ================= meta: items, ranks, shop, profile ================= */
 const RAR={common:'Common',rare:'Rare',epic:'Epic',legendary:'Legendary'};
 const RAR_C={common:'#9ea8db',rare:'#6fb6ff',epic:'#c08cff',legendary:'#ffcc2e'};
-const owns=it=>!!it&&(!it.nation||it.nation===P.nation)&&((it.nation&&!it.price&&natRank()>=(it.rankReq||0))||P.owned.includes(it.id)||(it.ach&&P.ach.includes(it.ach))||(it.tierReq!=null&&tierOf(Math.max(P.peak||0,P.rating))>=it.tierReq));
+const owns=it=>!!it&&(!it.nation||it.nation===P.nation)&&((it.victor&&!!P.victor)||(it.nation&&!it.price&&natRank()>=(it.rankReq||0))||P.owned.includes(it.id)||(it.ach&&P.ach.includes(it.ach))||(it.tierReq!=null&&tierOf(Math.max(P.peak||0,P.rating))>=it.tierReq));
 function lockText(it){
+  if(it.victor)return 'Win a monthly nation war';
   if(it.nation&&it.nation!==P.nation)return `${(natOf(it.nation)||{}).short||''} only`;
   if(it.rankReq!=null&&natRank()<it.rankReq)return `Reach ${NRANKS[it.rankReq][0]}`;
   if(it.pass)return `Season level ${it.pass}`;
@@ -3214,7 +3328,8 @@ function warPanel(){
   return `<div class="panel war" style="--nc:${n.c}"><div class="war-top">${crestN(n)}<div style="min-width:0;flex:1"><div class="hero-k">Nation war · ${esc(monthName())}</div><div class="war-t" style="color:${n.c}">${esc(n.name)}</div></div><span class="cd">${fmtLeft(msToMonthEnd())}</span></div>
     <div class="war-rows">${rows.map((r,i)=>`<div class="war-row${r.x.id===n.id?' mine':''}" style="--nc:${r.x.c}"><span class="pos">${i+1}</span>${crestN(r.x)}<div style="min-width:0"><div class="nm">${esc(r.x.short)}${r.m!=null?`<span class="mem">${fmtN(r.m)} member${r.m===1?'':'s'}</span>`:''}</div><div class="trk"><i data-w="${(Math.max(0,r.v)/max*100).toFixed(0)}"></i></div></div><span class="pts">${STAR}${fmtN(r.v)}</span></div>`).join('')}</div>
     <div class="war-me"><div><b>${(NET.on&&NET.me?NET.me.month_stars:W.mine)>0?'+':''}${NET.on&&NET.me?NET.me.month_stars:W.mine}</b><span>Your stars this month</span></div><div><b>${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}</b><span>Online record</span></div><div><b>${P.natGiven>0?'+':''}${P.natGiven}</b><span>All-time for ${esc(n.short)}</span></div></div>
-    <p class="row-s" style="margin-top:12px">Online wins earn your nation 5 stars and losses cost 3. A draw gives both nations 1. ${NET.on?'Live worldwide standings. The top nation on the last day of the month wins.':'Offline: showing the online games played on this device until the server connects.'}</p></div>`;
+    ${NET.on?'<button class="ghost" type="button" data-tab="nat" style="width:100%;justify-content:center;margin-top:12px">Open the territory map</button>':''}
+    <p class="row-s" style="margin-top:12px">Online wins earn your nation 5 stars and losses cost 3, doubled on war weekends. A draw gives both nations 1. ${NET.on?'Live worldwide standings. The top nation on the last day of the month wins.':'Offline: showing the online games played on this device until the server connects.'}</p></div>`;
 }
 const dayNo=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
 function capSky(){let h='';for(let k=0;k<18;k++){const l=(k*53)%100,d=(5+((k*7)%6)).toFixed(1),dl=(-(k*0.9)%9).toFixed(1),dx=((k%5)-2)*14,sz=3+(k%3)*1.5;h+=`<i style="left:${l}%;width:${sz}px;height:${sz}px;animation-duration:${d}s;animation-delay:${dl}s;--dx:${dx}px"></i>`}return `<div class="cap-sky" aria-hidden="true">${h}</div>`}
@@ -3294,9 +3409,13 @@ function renderNat(){
     <div class="cap-rank"><div class="cap-rank-top"><b>${NRANKS[r][0]}</b><span>${next?`${next[1]-v} stars to ${next[0]}`:'Highest honor reached'}</span></div><div class="cap-bar"><i data-w="${pct.toFixed(0)}"></i></div></div>
     <div class="cap-stats"><div><b>${STAR}${P.natGiven}</b><span>Stars for ${esc(n.short)}</span></div><div><b>${days}</b><span>Days loyal</span></div><div><b>${(P.oath.last===dayNo()||P.oath.last===dayNo()-1)?P.oath.streak:0}</b><span>Oath streak</span></div></div></div>
   ${oathCard(n)}
+  ${weekendBar(false)}
+  ${NET.on?`<div class="cap-sec"><span class="sec-t">The front · ${esc(monthName())}</span><span class="cd">${NET.me&&NET.me.front?`fighting for ${esc((regionOf(NET.me.front)||[0,''])[1])}`:'tap a region to choose your front'}</span></div><div class="panel map-wrap">${mapSVG()}<div class="map-leg">${NATIONS.map(x=>`<span><i style="background:${x.c}"></i>${esc(x.short)}</span>`).join('')}<span><i style="background:#232c66"></i>Unclaimed</span></div></div>`:''}
   <div class="cap-sec"><span class="sec-t">War room · ${esc(monthName())}</span><span class="cd">${fmtLeft(msToMonthEnd())}</span></div>
   <div class="panel war" style="--nc:${n.c}">${warRowsHTML(n)}<div class="war-me"><div><b>${(NET.on&&NET.me?NET.me.month_stars:W.mine)>0?'+':''}${NET.on&&NET.me?NET.me.month_stars:W.mine}</b><span>Your stars this month</span></div><div><b>${NET.on&&NET.me?`${NET.me.wins}–${NET.me.losses}${NET.me.draws?`–${NET.me.draws}`:''}`:`${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}`}</b><span>Online record</span></div><div><b>${NET.on&&NET.me&&NET.me.nation_rank?'#'+NET.me.nation_rank:(P.medals||0)}</b><span>${NET.on&&NET.me&&NET.me.nation_rank?`Rank in ${esc(n.short)}`:'Campaign medals'}</span></div></div><p class="row-s" style="margin-top:12px">Online wins earn ${esc(n.short)} 5 stars and losses cost 3. ${NET.on?'Live worldwide standings.':'Offline: counting this device’s online games until the server connects.'}</p><button class="b3d block shine" type="button" data-act="${netCfg()?'quickmatch':'invite'}" style="margin-top:12px">${netCfg()?'Find a rival':'Challenge a rival'}</button></div>
   ${NET.on?`<div class="cap-sec"><span class="sec-t">Heroes of ${esc(c.city)}</span><span class="cd">this month</span></div><div class="panel">${lbRows(NET.heroes[n.id],{noCrest:true,key:'stars',sub:r=>`${fmtN(r.legacy)} legacy`,empty:`No heroes yet this month. Win an online game and your name goes here.`})}</div>`:''}
+  ${NET.on?`<div class="cap-sec"><span class="sec-t">Council of ${esc(c.city)}</span><span class="cd">${esc(prevMonthName())} war</span></div>${councilCard(n)}`:''}
+  ${recruitCard(n)}
   <div class="cap-sec"><span class="sec-t">War plans</span><span class="cd">${esc(monthName())} campaign</span></div>
   ${ordersCard(n)}
   <div class="cap-sec"><span class="sec-t">Training</span></div>
@@ -3584,7 +3703,7 @@ function showNationPick(){
 async function spinNation(){
   if(P.nation)return;const btn=$('nspinBtn');if(btn){btn.disabled=true;btn.textContent='Spinning…'}
   let i=-1;
-  if(netCfg()&&await Promise.race([netInit(),new Promise(r=>setTimeout(()=>r(false),5000))])){try{const me=await rpc('join_nation');i=NATIONS.findIndex(x=>x.id===me.nation);if(i>=0)NET.me=me}catch(e){}}
+  if(netCfg()&&await Promise.race([netInit(),new Promise(r=>setTimeout(()=>r(false),5000))])){try{const me=await rpc('join_nation',{p_ref:store.get('cb-ref')||null});i=NATIONS.findIndex(x=>x.id===me.nation);if(i>=0)NET.me=me}catch(e){}}
   if(P.nation&&i<0)return;
   if(i<0){let r;try{r=crypto.getRandomValues(new Uint32Array(1))[0]/4294967296}catch(e){r=Math.random()}i=Math.floor(r*NATIONS.length)}
   const n=NATIONS[i];P.nation=n.id;P.natSince=Date.now();saveP();
@@ -3618,7 +3737,7 @@ function openSheet(kind){
       <li><b>Shop</b><span>Pawn 1, knight 4, bishop 4, rook 6, queen 12. Pawns on your pawn row, others on your back row.</span></li>
       <li><b>Limits</b><span>No buying the same piece twice in a row. Max 8 pawns.</span></li>
       <li><b>Suicide</b><span>End your turn with your king attacked and you lose instantly.</span></li>
-      <li><b>Nations</b><span>Everyone fights for one of four nations. Online wins earn your nation 5 stars, losses cost 3, and draws give both sides 1. The top nation each month wins.</span></li>
+      <li><b>Nations</b><span>Everyone fights for one of four nations. Online wins earn your nation 5 stars, losses cost 3, and draws give both sides 1, all doubled on war weekends. Pick a front on the territory map and your wins fight for that region. The top nation each month wins.</span></li>
       <li><b>Premove</b><span>Against a bot or online, tap or drag your piece while your opponent thinks. It plays the moment your turn starts, if it’s still possible.</span></li>
       <li><b>Victory</b><span>Checkmate, suicide, resignation or time. No safe move and nothing to buy is a draw, as are 30 turns each without a capture, buy or pawn move, and bare kings with no gold left.</span></li></ul></details>
     <details class="fold"><summary>Move history</summary><ol class="histlist">${S?S.log.map(x=>`<li>${esc(x)}</li>`).join(''):''}</ol></details>`;
@@ -3757,6 +3876,9 @@ document.addEventListener('click',e=>{
     case 'npick':showNationPick();break;
     case 'quickmatch':quickMatch();break;
     case 'watch':watchGame(a.dataset.code);break;
+    case 'region':openRegion(a.dataset.id);break;
+    case 'setfront':setFront(a.dataset.id);break;
+    case 'recruit':shareRecruit();break;
     case 'claimwin':claimWin();break;
     case 'ygopen':openDaily(a.dataset.code);break;
     case 'ygaccept':if(a.dataset.kind==='live')joinOnline(a.dataset.code,false);else rpc('join_game',{p_code:a.dataset.code}).then(g=>openDaily(g.code,g)).catch(()=>toast('That challenge is no longer available.'));break;
@@ -3818,6 +3940,7 @@ for(const [fn,id] of [['renderHome','scr-home'],['renderRanks','scr-ranks'],['re
 renderHome=window.renderHome;renderRanks=window.renderRanks;renderNat=window.renderNat;renderShop=window.renderShop;renderMe=window.renderMe;
 try{const f=()=>{if(route!=='game')netRerender()};if(DESK.addEventListener)DESK.addEventListener('change',f);else if(DESK.addListener)DESK.addListener(f)}catch(e){}
 function start(){
+  try{const rf=new URLSearchParams(location.search).get('r');if(rf&&/^[0-9a-f-]{36}$/i.test(rf)){store.set('cb-ref',rf);history.replaceState(null,'',location.pathname+location.hash)}}catch(e){}
   applyCosmetics();
   {const sb2=document.querySelector('.side-brand svg');if(sb2)sb2.outerHTML=crest();}
   if(netCfg())netInit();
