@@ -1018,6 +1018,29 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
   .toast{left:calc(50% + 116px)!important}
 }
 @media (min-width:1500px){.screen:not(.game){max-width:1280px}}
+/* ---------- phones: whole game fits without scrolling ---------- */
+@media (max-width:899px) and (max-height:820px){
+  body.in-game{padding-top:4px}
+  .screen.game{gap:7px!important;padding-bottom:6px!important}
+  .gtop .icon-btn{width:36px;height:36px;border-radius:12px}
+  .glabel .gname{font-size:17px}.glabel .h-sub{font-size:10.5px}
+  .opp{min-height:32px}.opp .avatar{width:30px;height:30px}.opp .avatar svg{width:23px;height:23px}
+  .seat-name{font-size:17px}.seat-sub{margin-top:3px}
+  .mvbar{min-height:28px}.mvnav{width:28px;height:28px}.mvnav.live{height:28px}
+  .tray{padding:9px 10px;gap:7px;border-radius:18px}
+  .tray-head .avatar{width:30px;height:30px}.tray-head .avatar svg{width:23px;height:23px}
+  .bank-num{font-size:34px}
+  .pip{max-width:20px}
+  .breakdown{min-height:0;font-size:11px}
+  .card{padding:5px 0;gap:3px}.card .pcs{max-width:36px}.price{font-size:15px}
+  .action{min-height:44px;height:44px}.action .hint{font-size:13px;line-height:1.25}.action .cta,.action .ghost,.action .b3d{height:44px}
+  .clock{font-size:19px;padding:5px 8px;min-width:56px}
+}
+@media (max-width:899px) and (max-height:620px){
+  .gtop .icon-btn{width:32px;height:32px}.glabel .gname{font-size:15px}
+  .opp .seat-sub,.tray-head .seat-sub{display:none}
+  .breakdown{display:none}
+}
 /* ---------- rematch prompt ---------- */
 .rm-ask{display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 16px;border-radius:18px;background:rgba(3,6,20,.55);box-shadow:inset 0 0 0 1px rgba(255,204,46,.35);animation:popin .45s var(--spring) both}
 .rm-q{font:800 17px/1.2 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--gold-hi)}
@@ -1776,7 +1799,19 @@ function gameSkin(){
   if(wn)g.style.setProperty('--wa',wn.w);else g.style.removeProperty('--wa');
   if(bn)g.style.setProperty('--ba',bn.b);else g.style.removeProperty('--ba');
 }
-function renderAll(o={}){gameSkin();renderGameHead();renderBoard(o);renderOpp(o);renderTray(o);renderMoves();updateClocks()}
+let fitKey='';
+function fitBoard(){
+  const g=$('scr-game');if(!g||g.hidden)return;const fr=g.querySelector(':scope>.frame');if(!fr)return;
+  if(innerWidth>=900){fr.style.width='';fitKey='';return}
+  const key=(S&&S.gid)+':'+innerWidth+'x'+innerHeight;
+  const cur=fr.getBoundingClientRect().width,cs=getComputedStyle(document.body),bottom=g.getBoundingClientRect().bottom+scrollY+parseFloat(cs.paddingBottom||0),rest=bottom-fr.offsetHeight;
+  const maxW=Math.min(g.clientWidth,560),target=Math.floor(Math.max(200,Math.min(maxW,innerHeight-rest-2)));
+  if(target<=cur&&cur-target<=1)return;if(target>cur&&target-cur<12&&fitKey===key)return;
+  fitKey=key;fr.style.width=target+'px';
+}
+addEventListener('resize',()=>{fitKey='';if(route==='game')requestAnimationFrame(fitBoard)});
+{const _rt=renderTray;renderTray=function(o){const r=_rt(o);requestAnimationFrame(fitBoard);return r}}
+function renderAll(o={}){gameSkin();renderGameHead();renderBoard(o);renderOpp(o);renderTray(o);renderMoves();updateClocks();requestAnimationFrame(fitBoard)}
 
 function floater(i,amt){const [r,c]=vpos(i);playFx(fxEl,c*12.5,r*12.5,12.5,amt,P.equip.fx)}
 
