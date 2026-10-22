@@ -1041,6 +1041,22 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
   .opp .seat-sub,.tray-head .seat-sub{display:none}
   .breakdown{display:none}
 }
+/* ---------- accounts ---------- */
+.perks{display:flex;flex-direction:column;gap:10px;margin:2px 0 16px}
+.perk{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.perk i{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(75,227,180,.15);box-shadow:inset 0 0 0 1.5px rgba(75,227,180,.45);color:var(--mint);font:900 15px/1 var(--display);font-style:normal}
+.perk.hot i{background:color-mix(in srgb,var(--nc,#ffcc2e) 22%,transparent);box-shadow:inset 0 0 0 1.5px var(--nc,#ffcc2e);color:var(--nc,#ffcc2e)}
+.perk b{display:block;font:800 15px/1.2 var(--display);letter-spacing:.05em;text-transform:uppercase}
+.perk span{font:500 13px/1.35 var(--body);color:var(--muted)}
+.authf{display:flex;flex-direction:column;gap:10px}
+.pwrow{position:relative}
+.pwrow .emailin{padding-right:70px}
+.pwrow button{all:unset;cursor:pointer;position:absolute;right:12px;top:50%;transform:translateY(-50%);font:800 11px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:8px}
+.auth-err{font:600 13px/1.35 var(--body);color:#ff8a9c;min-height:0}
+.auth-note{font:600 13px/1.4 var(--body);color:var(--muted);padding:10px 12px;border-radius:12px;background:rgba(255,204,46,.08);box-shadow:inset 0 0 0 1px rgba(255,204,46,.25)}
+.save-cta{display:flex;align-items:center;gap:12px;background:linear-gradient(110deg,color-mix(in srgb,var(--nc,#ffcc2e) 18%,#18225a),#0d1438 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px color-mix(in srgb,var(--nc,#ffcc2e) 40%,transparent)}
+.welcome{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.welcome .ncrest{width:84px;height:93px;filter:drop-shadow(0 0 22px var(--nc));animation:popin .7s var(--spring) both}
 /* ---------- puzzle rush, review, clips ---------- */
 .rush-st{display:inline-flex;gap:5px;margin-left:8px;vertical-align:middle}
 .rush-st i{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--line)}
@@ -1384,7 +1400,8 @@ function loadP(){
 }
 let P=loadP();
 function initP(){for(const id of ['snd-wood','ti-rookie'])if(!P.owned.includes(id))P.owned.push(id);if(!P.since)P.since=Date.now();if(!Array.isArray(P.rh)||!P.rh.length)P.rh=[{t:Date.now(),r:P.rating}];P.peak=Math.max(P.peak||0,P.rating);if(!P.by||typeof P.by!=='object')P.by={};if(!P.by.buy)P.by.buy={};if(!P.by.cap)P.by.cap={};if(!P.rec)P.rec={fast:0,gold:0,caps:0,bestOpp:0};if(!P.days)P.days={};if(!item(P.equip.board))P.equip.board='b-amethyst';if(!item(P.equip.trim))P.equip.trim='t-gold';if(!item(P.equip.fx))P.equip.fx='f-coins';if(!item(P.equip.snd))P.equip.snd='snd-wood';if(!item(P.equip.title))P.equip.title='ti-rookie';if(!P.legacy||typeof P.legacy!=='object')P.legacy={pts:0,peak:0,un:['classic'],games:0};if(!Array.isArray(P.legacy.un))P.legacy.un=['classic'];if(!P.legacy.un.includes('classic'))P.legacy.un.unshift('classic');P.legacy.pts=Math.max(0,+P.legacy.pts||0);if(!lgSet(P.equip.set)||!P.legacy.un.includes(P.equip.set))P.equip.set='classic';if(P.nation&&!natOf(P.nation))P.nation=null;if(!P.war||typeof P.war!=='object')P.war={month:'',tally:{},mine:0,w:0,l:0,d:0};if(!P.war.tally)P.war.tally={};P.natGiven=+P.natGiven||0;if(!P.oath||typeof P.oath!=='object')P.oath={last:0,streak:0,best:0,total:0};if(!P.train||typeof P.train!=='object')P.train={n:0,solved:0,streak:0,best:0,day:0,today:0};if(!Array.isArray(P.learned))P.learned=[];const hh=item(P.equip.home);if(!hh||hh.nation!==P.nation)P.equip.home=P.nation?`h-${P.nation}`:null;const bb=item(P.equip.board);if(bb&&bb.nation&&bb.nation!==P.nation)P.equip.board='b-amethyst';const tt=item(P.equip.trim);if(tt&&tt.nation&&tt.nation!==P.nation)P.equip.trim='t-gold';const ti=item(P.equip.title);if(ti&&ti.nation&&(ti.nation!==P.nation||natRank()<(ti.rankReq||0))&&!P.owned.includes(ti.id))P.equip.title='ti-rookie'}
-const saveP=()=>store.set('cb-profile',JSON.stringify(P));
+let cloudHook=null;
+const saveP=()=>{store.set('cb-profile',JSON.stringify(P));if(cloudHook)cloudHook()};
 const myName=()=>P.name||('Player '+PID.slice(-4).toUpperCase());
 const AVC={gold:'#ffcc2e',mint:'#4be3b4',rose:'#f08a9a',sky:'#6fb6ff',lilac:'#7f95ff',ivory:'#fcf8ef'};
 const AVP=['K','Q','R','B','N','P'];
@@ -1437,6 +1454,7 @@ const ITEMS=[
   {id:'ti-devoted',kind:'title',name:'Devoted',ach:'daily3',rarity:'epic',desc:'Earned by playing 3 daily challenges in a row.'},
   {id:'ti-gilded',kind:'title',name:'Gilded',pass:18,rarity:'legendary',desc:'Season 1 pass exclusive.'},
   {id:'ti-gm',kind:'title',name:'Grandmaster',tierReq:6,rarity:'legendary',desc:'Reserved for players who reach the Grandmaster tier.'},
+  {id:'ti-sworn',kind:'title',name:'Sworn Member',sworn:true,rarity:'epic',desc:'Earned by creating a Chess Battle account.'},
   {id:'ti-victor',kind:'title',name:'War Victor',victor:true,rarity:'legendary',desc:'Earned when your nation wins a monthly nation war.'},
 ];
 const item=id=>ITEMS.find(x=>x.id===id);
@@ -2120,12 +2138,13 @@ function netInit(){
       let {data:{session}}=await sb.auth.getSession();
       if(!session){const r=await sb.auth.signInAnonymously();if(r.error)throw r.error;session=r.data.session}
       netSession(session);
-      sb.auth.onAuthStateChange((ev,ses)=>{if(ses){const was=NET.uid;netSession(ses);if(was&&was!==ses.user.id)netRefresh(true)}});
+      sb.auth.onAuthStateChange((ev,ses)=>{if(ses){const was=NET.uid;netSession(ses);if(was&&was!==ses.user.id)netRefresh(true)}if(ev==='PASSWORD_RECOVERY')setTimeout(()=>openSetPassword(true),600)});
+      let cloudT=null;cloudHook=()=>{if(!NET.on||NET.anon)return;clearTimeout(cloudT);cloudT=setTimeout(()=>rpc('save_cloud',{p_data:P}).catch(()=>{}),4000)};
       let me=await rpc('get_me');
-      if(!me.imported)me=await rpc('import_local',{p_legacy:P.legacy.pts||0,p_nation:P.nation||null,p_nat_given:P.natGiven||0});
+      if(!me.imported&&!P.imported)me=await rpc('import_local',{p_legacy:P.legacy.pts||0,p_nation:P.nation||null,p_nat_given:P.natGiven||0});
       if(P.kid)await rpc('set_kid',{p_kid:true}).catch(()=>{});
       me=await rpc('sync_profile',{p_name:P.kid?'':(P.name||''),p_av:P.av||'Q',p_avc:P.avc||'gold',p_rating:P.rating||700});
-      NET.on=true;applyServerMe(me);netRefreshBoards();netRefreshGames();setTimeout(checkCeremony,1200);
+      NET.on=true;applyServerMe(me);netRefreshBoards();netRefreshGames();if(!NET.anon){cloudHook();if(!me.signup_bonus)rpc('claim_signup_bonus').then(b=>{if(b&&b.me)applyServerMe(b.me)}).catch(()=>{})}setTimeout(checkCeremony,1200);
       return true;
     }catch(e){console.warn('Chess Battle server unavailable',e);NET.on=false;NET.init=null;return false}
   })();
@@ -2285,6 +2304,11 @@ function ygRow(g){
   else{tag='<span class="yg-tag wait">Their move</span>';sub=dailyLeft(g.deadline)}
   return `<button class="yg-row" type="button" ${act}>${avatar(av,avc,36)}<div style="min-width:0"><div class="yg-name"><span>${esc(oppName)}</span>${oppNat?crestN(oppNat):''}</div><div class="yg-sub">${esc(sub)}</div></div>${tag}</button>`;
 }
+function saveCTA(){
+  if(!NET.on||!NET.anon||!((P.legacy&&P.legacy.pts>=5)||(P.stats&&P.stats.games>=3)))return '';
+  const n=myNat();
+  return `<div class="panel save-cta" style="--nc:${n?n.c:'#ffcc2e'}"><span class="g-ic" style="background:color-mix(in srgb,var(--nc) 20%,transparent)">${n?crestN(n):STAR}</span><div style="flex:1;min-width:0"><div class="row-t">Save your progress</div><div class="row-s">Create an account to keep your ${pl(P.legacy.pts,'star')} and play on any device.${n?` ${esc(n.short)} gets +5 stars.`:''}</div></div><button class="b3d sm" type="button" data-act="authup">Sign up</button></div>`;
+}
 function gamesPanel(){
   if(!NET.on||!NET.games||!NET.games.length)return '';
   const mine=NET.games.filter(g=>g.my_turn).length;
@@ -2348,22 +2372,104 @@ function showSearching(){
 }
 
 /* ---- account: keep progress across devices ---- */
-function openAccount(){
-  $('sheetTitle').textContent='Your account';
-  const on=NET.on;
-  $('sheetBody').innerHTML=on?(NET.anon?`<p class="row-s" style="margin:0 0 14px">Your progress is saved to a guest account on the Chess Battle server. Add your email so you never lose it, and to sign in on another phone.</p><input class="emailin" id="emailIn" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com"><div style="height:12px"></div><button class="b3d block shine" type="button" data-act="acctsave">Save my progress to this email</button><div style="height:10px"></div><button class="ghost" type="button" data-act="acctsignin" style="width:100%;justify-content:center">I already have an account · sign in</button>`
-    :`<p class="row-s" style="margin:0 0 6px">Signed in as</p><div class="row-t" style="font-size:18px;margin-bottom:14px">${esc(NET.email||'')}</div><p class="row-s" style="margin:0 0 14px">Your stars, nation and legacy are saved to this account. Sign in with the same email on any phone to pick up where you left off.</p><button class="ghost" type="button" data-act="acctout" style="width:100%;justify-content:center">Sign out of this device</button>`)+`<div style="height:18px"></div><button class="linkbtn" type="button" data-act="acctdel" style="color:#ff8a9c;width:100%;text-align:center">Delete my account</button><p class="row-s" style="text-align:center;margin:6px 0 0"><a href="privacy.html" style="color:var(--muted)">Privacy</a> · <a href="terms.html" style="color:var(--muted)">Terms</a></p>`
-    :`<p class="row-s" style="margin:0">Can’t reach the Chess Battle server right now, so progress is only saved on this device. It syncs automatically once you’re back online.</p>`;
+/* ---- accounts: email + password, works the same in the browser and the home-screen app ---- */
+let authMode='up';
+const PERKS=n=>[['Keep everything forever','Stars, nation, legacy sets, crowns and cosmetics are saved to your account.',''],
+  ['Play anywhere','The same account on your phone, the home-screen app and any computer.',''],
+  [`${n?esc(n.short):'Your nation'} gets +5 stars`,'The moment you sign up, your nation scores 5 stars in this month’s war.','hot'],
+  ['+100 crowns and a title','Plus the Sworn Member title, so everyone knows you’re here for good.',''],
+  ['Claim your name','Your name on the world leaderboards and in your capital’s hall of heroes.','']];
+function openAuth(mode){
+  if(mode)authMode=mode;
+  if(!netCfg()){toast('Accounts need the Chess Battle server.');return}
+  if(NET.on&&!NET.anon){openAccount();return}
+  const n=myNat(),up=authMode==='up',stars=(P.legacy&&P.legacy.pts)||0;
+  $('sheetTitle').textContent=up?'Create your account':'Welcome back';
+  $('sheetBody').innerHTML=`<div class="seg modeseg" role="tablist" aria-label="Account" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:14px"><button type="button" data-act="authmode" data-k="up" aria-pressed="${up}">Create account</button><button type="button" data-act="authmode" data-k="in" aria-pressed="${!up}">Sign in</button></div>
+    ${up?`<div class="perks" style="--nc:${n?n.c:'#ffcc2e'}">${PERKS(n).filter((x,i)=>!(i===4&&P.kid)).map(([t,d,c])=>`<div class="perk ${c}"><i>${c?'+5':'✓'}</i><div><b>${t}</b><span>${d}</span></div></div>`).join('')}</div>`
+      :`${stars>0&&NET.anon?`<div class="auth-note" style="margin-bottom:12px">Signing in loads your account. The ${pl(stars,'star')} on this guest account won’t carry over. To keep them, create an account instead.</div>`:''}<p class="row-s" style="margin:0 0 12px">Use the email and password you signed up with. Works the same in the browser and the home-screen app.</p>`}
+    <div class="authf"><input class="emailin" id="auEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" placeholder="Email">
+      <div class="pwrow"><input class="emailin" id="auPw" type="password" autocomplete="${up?'new-password':'current-password'}" placeholder="${up?'Password (8+ characters)':'Password'}"><button type="button" data-act="pwshow">Show</button></div>
+      <div class="auth-err" id="auErr"></div>
+      <button class="b3d block shine" type="button" data-act="${up?'signup':'signin'}" id="auGo">${up?'Create account':'Sign in'}</button>
+      ${up?`<p class="row-s" style="margin:4px 0 0;text-align:center">No spam. We only email you if you forget your password. <a href="privacy.html" style="color:var(--muted)">Privacy</a></p>`:`<button class="linkbtn" type="button" data-act="forgotpw" style="width:100%;text-align:center">Forgot password?</button>`}</div>`;
+  $('sheetWrap').hidden=false;setTimeout(()=>{const e=$('auEmail');if(e&&!('ontouchstart' in window))e.focus()},250);
+}
+function authErr(m){const e=$('auErr');if(e)e.textContent=m||''}
+function authBusy(b,label){const g=$('auGo');if(g){g.disabled=b;if(label)g.textContent=label}}
+function authFields(){const em=($('auEmail')&&$('auEmail').value||'').trim().toLowerCase(),pw=($('auPw')&&$('auPw').value)||'';
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){authErr('Enter a valid email address.');return null}
+  if(pw.length<8){authErr('Passwords need at least 8 characters.');return null}
+  return {em,pw}}
+async function doSignUp(){
+  const f=authFields();if(!f)return;authErr('');authBusy(true,'Creating…');
+  if(!(await netReady())){authErr('Can’t reach the server. Check your connection.');authBusy(false,'Create account');return}
+  try{
+    const r=await sb.auth.updateUser({email:f.em,password:f.pw});
+    if(r.error)throw r.error;
+    const u=r.data&&r.data.user;
+    if(u&&u.email&&u.email.toLowerCase()===f.em){await finishSignUp(f.em)}
+    else{$('sheetTitle').textContent='Confirm your email';$('sheetBody').innerHTML=`<p class="row-s" style="margin:0 0 14px">We sent a confirmation link to <b>${esc(f.em)}</b>. Open it, then come back and sign in with your email and password.</p><button class="b3d block" type="button" data-act="authin">Go to sign in</button>`}
+  }catch(e){const m=String(e&&e.message||'');
+    authErr(/already|registered|exists|taken/i.test(m)?'That email already has an account. Tap Sign in above.':/password/i.test(m)?m:/rate|seconds/i.test(m)?'Too many tries. Wait a minute and try again.':'Couldn’t create the account. Try again in a minute.');
+    authBusy(false,'Create account')}
+}
+async function finishSignUp(em){
+  try{const {data:{session}}=await sb.auth.getSession();if(session)netSession(session)}catch(e){}
+  NET.anon=false;NET.email=em;
+  let bonus=null;try{bonus=await rpc('claim_signup_bonus');if(bonus&&bonus.me)applyServerMe(bonus.me)}catch(e){}
+  const first=!P.sworn;if(first){P.sworn=true;P.crowns+=100}
+  saveP();try{await rpc('save_cloud',{p_data:P})}catch(e){}
+  closeSheet();netRerender();showWelcome(!!(bonus&&bonus.bonus),first);
+}
+function showWelcome(bonus,first){
+  const n=myNat();
+  $('modalCard').innerHTML=`<div class="welcome" style="--nc:${n?n.c:'#ffcc2e'}">${n?crestN(n):svgPiece('K','tw')}<div class="result-k" style="color:${n?n.c:'var(--gold-hi)'}">Account created</div><div class="result-t" style="font-size:clamp(36px,11vw,52px)">You’re sworn in</div>
+    <div class="rewards">${bonus&&n?`<span class="rw lg">${STAR}+5 for ${esc(n.short)}</span>`:''}${first?`<span class="rw g">${crest('sm')}+100</span>`:''}</div>
+    <div class="result-s">Your progress is saved to ${esc(NET.email||'your account')}. Sign in with the same email and password on any phone, in the home-screen app or on a computer.</div>
+    ${first?'<button class="b3d block shine" type="button" data-act="equipsworn">Wear your new title</button>':''}<button class="${first?'ghost':'b3d block shine'}" type="button" data-act="closemodal" style="width:100%;justify-content:center">Continue</button></div>`;
+  $('modal').hidden=false;sfx('ach');vibrate(30);confetti();
+}
+function adoptCloud(c){
+  if(!c||typeof c!=='object')return false;
+  const d=DEF_P();for(const k in d){if(c[k]==null)c[k]=d[k];else if(d[k]!==null&&typeof d[k]==='object'&&!Array.isArray(d[k])&&typeof c[k]==='object'&&!Array.isArray(c[k]))c[k]={...d[k],...c[k]}}
+  c.set=P.set;c.age=P.age||c.age;c.seen=true;P=c;initP();return true;
+}
+async function doSignIn(){
+  const f=authFields();if(!f)return;authErr('');authBusy(true,'Signing in…');
+  if(!(await netReady())){authErr('Can’t reach the server. Check your connection.');authBusy(false,'Sign in');return}
+  try{
+    const r=await sb.auth.signInWithPassword({email:f.em,password:f.pw});if(r.error)throw r.error;
+    netSession(r.data.session);
+    let cloud=null;try{cloud=await rpc('get_cloud')}catch(e){}
+    if(!adoptCloud(cloud)){P.legacy={pts:0,peak:0,un:['classic'],games:0};P.nation=null}
+    const me=await rpc('get_me');applyServerMe(me);saveP();applyCosmetics();
+    closeSheet();go('home');toast(`Welcome back${P.name&&!P.kid?', '+P.name:''}`);sfx('ach');netRefreshBoards(true);netRefreshGames();
+  }catch(e){const m=String(e&&e.message||'');authErr(/invalid|credentials|password/i.test(m)?'Wrong email or password.':/confirm/i.test(m)?'Confirm your email first, then sign in.':'Couldn’t sign in. Try again in a minute.');authBusy(false,'Sign in')}
+}
+async function forgotPw(){
+  const em=($('auEmail')&&$('auEmail').value||'').trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){authErr('Type your email above first.');return}
+  try{const r=await sb.auth.resetPasswordForEmail(em,{redirectTo:SITE_URL});if(r.error)throw r.error;
+    authErr('');toast('Check your email for a reset link. It opens in your browser, where you set a new password.')}catch(e){authErr('Couldn’t send the email. Try again in a minute.')}
+}
+function openSetPassword(recovery){
+  $('sheetTitle').textContent=recovery?'Set a new password':'Change password';
+  $('sheetBody').innerHTML=`<p class="row-s" style="margin:0 0 12px">${recovery?'Choose a new password, then sign in with it anywhere, including the home-screen app.':'Choose a new password for '+esc(NET.email||'your account')+'.'}</p><div class="pwrow"><input class="emailin" id="auPw" type="password" autocomplete="new-password" placeholder="New password (8+ characters)"><button type="button" data-act="pwshow">Show</button></div><div class="auth-err" id="auErr" style="margin:8px 0"></div><button class="b3d block shine" type="button" data-act="setpw" id="auGo">Save password</button>`;
   $('sheetWrap').hidden=false;
 }
-async function acctEmail(mode){
-  const em=($('emailIn')&&$('emailIn').value||'').trim();
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast('Enter a valid email address.');return}
-  try{
-    const r=mode==='save'?await sb.auth.updateUser({email:em},{emailRedirectTo:SITE_URL}):await sb.auth.signInWithOtp({email:em,options:{shouldCreateUser:false,emailRedirectTo:SITE_URL}});
-    if(r.error)throw r.error;
-    closeSheet();toast(mode==='save'?'Check your email and tap the link to confirm.':'Check your email for a sign-in link.');
-  }catch(e){toast(mode==='signin'?'No account found for that email.':'Couldn’t send the email. Try again in a minute.')}
+async function setPassword(){
+  const pw=($('auPw')&&$('auPw').value)||'';if(pw.length<8){authErr('Passwords need at least 8 characters.');return}
+  try{const r=await sb.auth.updateUser({password:pw});if(r.error)throw r.error;closeSheet();toast('Password saved. Use it to sign in on any device.')}catch(e){authErr('Couldn’t save the password. Try again.')}
+}
+function openAccount(){
+  $('sheetTitle').textContent='Your account';
+  if(!NET.on){$('sheetBody').innerHTML=`<p class="row-s" style="margin:0">Can’t reach the Chess Battle server right now, so progress is only saved on this device. It syncs automatically once you’re back online.</p>`;$('sheetWrap').hidden=false;return}
+  if(NET.anon){openAuth('up');return}
+  $('sheetBody').innerHTML=`<p class="row-s" style="margin:0 0 6px">Signed in as</p><div class="row-t" style="font-size:18px;margin-bottom:6px">${esc(NET.email||'')}</div><p class="row-s" style="margin:0 0 16px">Stars, nation, legacy, crowns and cosmetics are saved to this account. Sign in with the same email and password on any device.</p>
+    <button class="ghost" type="button" data-act="changepw" style="width:100%;justify-content:center">Change password</button><div style="height:8px"></div>
+    <button class="ghost" type="button" data-act="acctout" style="width:100%;justify-content:center">Sign out of this device</button>`+`<div style="height:18px"></div><button class="linkbtn" type="button" data-act="acctdel" style="color:#ff8a9c;width:100%;text-align:center">Delete my account</button><p class="row-s" style="text-align:center;margin:6px 0 0"><a href="privacy.html" style="color:var(--muted)">Privacy</a> · <a href="terms.html" style="color:var(--muted)">Terms</a></p>`;
+  $('sheetWrap').hidden=false;
 }
 function acctDelete(confirmed){
   if(!confirmed){$('sheetTitle').textContent='Delete account?';$('sheetBody').innerHTML=`<p class="row-s" style="margin:0 0 16px">This permanently deletes your account, stars, nation, friends and saved games from the server, and clears this device. It can’t be undone.</p><button class="b3d block" type="button" data-act="acctdelyes" style="background:linear-gradient(180deg,#ff9aa8,#ff5e78);color:#2a060c;box-shadow:0 4px 0 #8a2234">Delete everything</button><div style="height:8px"></div><button class="ghost" type="button" data-act="account" style="width:100%;justify-content:center">Keep my account</button>`;return}
@@ -2371,7 +2477,9 @@ function acctDelete(confirmed){
     try{Object.keys(localStorage).filter(k=>k.startsWith('cb-')).forEach(k=>localStorage.removeItem(k))}catch(e){}
     toast('Account deleted');setTimeout(()=>location.reload(),800)}catch(e){toast('Couldn’t delete right now. Try again in a minute.')}})();
 }
-async function acctSignOut(){try{await sb.auth.signOut()}catch(e){}NET.on=false;NET.init=null;NET.me=null;closeSheet();toast('Signed out. This device now uses a new guest account.');netInit()}
+async function acctSignOut(){try{if(NET.on)await rpc('save_cloud',{p_data:P})}catch(e){}try{await sb.auth.signOut()}catch(e){}
+  const keep={set:P.set,age:P.age,kid:P.kid};P=DEF_P();Object.assign(P,keep,{seen:true,imported:true});initP();saveP();applyCosmetics();
+  NET.on=false;NET.init=null;NET.me=null;NET.email=null;NET.anon=true;closeSheet();go('home');toast('Signed out. Your progress is safe in your account. Sign in to get it back.');netInit()}
 
 /* ================= online (peer-to-peer) ================= */
 const CODE_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -2996,6 +3104,7 @@ function renderHome(){
   ${netCfg()&&!resumable?`<div class="panel qm"><span class="qm-ic"><svg viewBox="0 0 24 24"><path d="M4 12h4l3-7 4 14 3-7h2"/></svg></span><div style="flex:1;min-width:0"><div class="row-t"><span class="live-dot"></span>Quick match</div><div class="row-s">Play a real opponent online. Win +5 stars${myNat()?` for ${esc(myNat().short)}`:''}.</div></div><button class="b3d sm" type="button" data-act="quickmatch">Play</button></div>`:''}
   ${resumable?`<div class="panel resume"><span class="avatar ${S.turn?'tw':'tb'}">${svgPiece('K')}</span><div class="grow"><div class="row-t">Resume your game</div><div class="row-s">${esc($('gk').textContent)} · turn ${Math.max(S.tc[0],S.tc[1])}</div></div><button class="b3d sm" type="button" data-act="resume">Resume</button></div>`:''}
   ${weekendBar(true)}
+  ${saveCTA()}
   ${gamesPanel()}
   <section class="qp" aria-label="Quick play">
     <div class="qp-art" aria-hidden="true"><span class="glow"></span><svg class="k1 pcs tw" viewBox="0 0 100 100"><use href="#s-N" width="100" height="100"/></svg><svg class="k2 pcs tb" viewBox="0 0 100 100"><use href="#s-Q" width="100" height="100"/></svg><i class="cn" style="right:36px;top:130px"></i><i class="cn" style="right:18px;top:104px;width:12px;height:12px;animation-delay:-1s"></i></div>
@@ -3216,7 +3325,7 @@ function showResult(){
   const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Abandoned'?(fs!=null&&ov.win===fs?'Your opponent left the game':'You left the game'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
   const rw=S.reward;
   const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy${rw.lgCap?' · daily bot cap':''}</span>`:''}${rw.nat?`<span class="rw nat" style="--nc:${natOf(rw.nat.id).c}">${crestN(natOf(rw.nat.id))}${rw.nat.d>0?'+':''}${rw.nat.d} ${esc(natOf(rw.nat.id).short)}</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
-  r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}${isOnline()?rematchUI():`<div class="pair"><button class="cta sm shine" type="button" data-act="again">${S.mode==='daily'?'Replay daily':'Play again'}</button></div>`}<div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="clip">Clip</button><button class="ghost" type="button" data-act="review">Review</button></div><div><button class="linkbtn" type="button" data-act="replay">Replay</button><button class="linkbtn" type="button" data-act="viewboard">View board</button>${isOnline()?'':'<button class="linkbtn" type="button" data-act="invite">Challenge a friend</button>'}</div><div class="linkbox" id="shareBox" hidden></div></div>`;
+  r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}${isOnline()?rematchUI():`<div class="pair"><button class="cta sm shine" type="button" data-act="again">${S.mode==='daily'?'Replay daily':'Play again'}</button></div>`}<div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="clip">Clip</button><button class="ghost" type="button" data-act="review">Review</button></div><div>${NET.on&&NET.anon&&P.legacy.pts>=10?`<button class="linkbtn" type="button" data-act="authup" style="color:var(--gold)">Save your ${P.legacy.pts} stars</button>`:''}<button class="linkbtn" type="button" data-act="replay">Replay</button><button class="linkbtn" type="button" data-act="viewboard">View board</button>${isOnline()?'':'<button class="linkbtn" type="button" data-act="invite">Challenge a friend</button>'}</div><div class="linkbox" id="shareBox" hidden></div></div>`;
   r.hidden=false;
   if(firstShow){if(won&&(fs!=null||ov.win!=null)){sfx('win');if(fs!=null||true)confetti()}else if(fs!=null&&ov.win!==fs)sfx('lose');if(rw&&rw.lvlUp)setTimeout(()=>banner(`Level ${rw.lvlUp}`,'Season reward ready in the Shop'),900);if(S.promo){const pr=S.promo;setTimeout(()=>{if(route==='game')showPromo(pr)},1500)}if(rw&&rw.lgNew){const id=rw.lgNew;setTimeout(()=>showLegacyUnlock(id),S.promo?3200:1600)}}
 }
@@ -3324,9 +3433,10 @@ let resetArm=false;
 /* ================= meta: items, ranks, shop, profile ================= */
 const RAR={common:'Common',rare:'Rare',epic:'Epic',legendary:'Legendary'};
 const RAR_C={common:'#9ea8db',rare:'#6fb6ff',epic:'#c08cff',legendary:'#ffcc2e'};
-const owns=it=>!!it&&(!it.nation||it.nation===P.nation)&&((it.victor&&!!P.victor)||(it.nation&&!it.price&&natRank()>=(it.rankReq||0))||P.owned.includes(it.id)||(it.ach&&P.ach.includes(it.ach))||(it.tierReq!=null&&tierOf(Math.max(P.peak||0,P.rating))>=it.tierReq));
+const owns=it=>!!it&&(!it.nation||it.nation===P.nation)&&((it.victor&&!!P.victor)||(it.sworn&&!!P.sworn)||(it.nation&&!it.price&&natRank()>=(it.rankReq||0))||P.owned.includes(it.id)||(it.ach&&P.ach.includes(it.ach))||(it.tierReq!=null&&tierOf(Math.max(P.peak||0,P.rating))>=it.tierReq));
 function lockText(it){
   if(it.victor)return 'Win a monthly nation war';
+  if(it.sworn)return 'Create an account';
   if(it.nation&&it.nation!==P.nation)return `${(natOf(it.nation)||{}).short||''} only`;
   if(it.rankReq!=null&&natRank()<it.rankReq)return `Reach ${NRANKS[it.rankReq][0]}`;
   if(it.pass)return `Season level ${it.pass}`;
@@ -3759,7 +3869,7 @@ function renderMe(){
   const hm=heatmap(),reps=loadReps(),repT=new Set(reps.map(r=>r.t));
   const sw=(k,label,sub)=>`<div class="set-row"><div><div class="row-t">${label}</div>${sub?`<div class="row-s">${sub}</div>`:''}</div><button class="switch" type="button" role="switch" aria-checked="${!!P.set[k]}" aria-label="${label}" data-act="set" data-k="${k}"><span></span></button></div>`;
   const since=new Date(P.since||Date.now()).toLocaleDateString(undefined,{month:'short',year:'numeric'});
-  $('scr-me').innerHTML=`<header class="top"><h1 class="h-title">Profile</h1><button class="ghost" type="button" data-act="tosettings">Settings</button></header><div class="stagger" style="display:flex;flex-direction:column;gap:14px">
+  $('scr-me').innerHTML=`<header class="top"><h1 class="h-title">Profile</h1>${netCfg()&&!(NET.on&&!NET.anon)?'<button class="b3d sm shine" type="button" data-act="auth">Sign in</button>':netCfg()?'<button class="ghost" type="button" data-act="account">Account</button>':'<button class="ghost" type="button" data-act="tosettings">Settings</button>'}</header><div class="stagger" style="display:flex;flex-direction:column;gap:14px">
   <div class="pcard" id="pcard" style="--t1:${TIERS[t][2]};--t2:${TIERS[t][3]}"><div class="pcard-in">
     <div class="pc-top">${myNat()?`<span class="pc-nat" style="--nc:${myNat().c}">${crestN(myNat())}${esc(myNat().name)}</span>`:`<span class="h-sub">Season ${SEASON.n} player card</span>`}<span class="lg-need" title="Legacy">${STAR}${P.legacy.pts}</span></div>
     <div class="pc-main">${avatar(P.av,P.avc,92)}<div style="min-width:0;flex:1"><div class="pc-name">${esc(myName())}</div><div class="pc-title rc-${title.rarity}">${esc(title.name)}</div><div class="pc-rate">${badge(P.rating)}<b>${P.rating}</b><span>${TIERS[t][0]} ${divOf(P.rating)}</span></div></div></div>
@@ -3779,7 +3889,7 @@ function renderMe(){
     return `<div class="mile"><span class="medal${tier?' m'+tier:''}"><svg class="pcs ${tier?'tw':'tb'}" viewBox="0 0 100 100" aria-hidden="true"><use href="#s-${pc}" width="100" height="100"/></svg></span><div style="min-width:0"><div class="mile-top"><span class="row-t">${n}<span class="pips3">${[0,1,2].map(k=>`<i class="${k<tier?'on':''}"></i>`).join('')}</span></span><small>${done?`${v} · maxed`:`${v} / ${goal}`}</small></div><div class="row-s">${d}</div><div class="bar"><i data-w="${pct.toFixed(0)}"></i></div></div></div>`}).join('')}</div>
   <div class="sec-t">Achievements</div><div class="panel"><div class="achs">${ACH.map(([id,n,d,tp])=>`<div class="ach${P.ach.includes(id)?' on':''}" title="${esc(d)}"><i>${svgPiece(tp).replace('class="pcs ','class="')}</i><span>${esc(n)}</span></div>`).join('')}</div></div>
   <div class="sec-t">Match history</div><div class="panel"><div class="hist">${P.hist.length?P.hist.slice(0,15).map(h=>`<div class="h-row"><span class="h-dot ${h.res==='w'?'w':h.res==='l'?'l':''}"></span><div style="min-width:0"><div class="row-t" style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(h.label)}</div><div class="row-s">${new Date(h.t).toLocaleDateString(undefined,{month:'short',day:'numeric'})} · ${pl(h.turns,'turn')}</div></div><span class="h-d ${h.delta>0?'up':h.delta<0?'down':''}">${h.delta?((h.delta>0?'+':'')+h.delta):'–'}</span>${repT.has(h.t)?`<button class="repbtn" type="button" data-act="rep" data-t="${h.t}" aria-label="Watch replay"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></button>`:'<span></span>'}</div>`).join(''):'<div class="empty">No games yet. Your results land here.</div>'}</div></div>
-  ${netCfg()?`<div class="sec-t">Account</div><div class="panel acct"><span class="acct-dot${NET.on?' on':''}"></span><div style="flex:1;min-width:0"><div class="row-t">${NET.on?(NET.anon?'Guest account':esc(NET.email||'Signed in')):'Offline'}</div><div class="row-s">${NET.on?(NET.anon?'Progress syncs to the server. Add an email to keep it forever.':'Progress synced across your devices.'):'Progress is saved on this device until you’re back online.'}</div></div><button class="ghost" type="button" data-act="account">${NET.on&&NET.anon?'Save':'Manage'}</button></div>`:''}
+  ${netCfg()?`<div class="sec-t">Account</div><div class="panel acct"><span class="acct-dot${NET.on?' on':''}"></span><div style="flex:1;min-width:0"><div class="row-t">${NET.on?(NET.anon?'Guest account':esc(NET.email||'Signed in')):'Offline'}</div><div class="row-s">${NET.on?(NET.anon?'Create an account to keep your progress forever and play on any device.':'Progress synced across your devices.'):'Progress is saved on this device until you’re back online.'}</div></div><button class="${NET.on&&NET.anon?'b3d sm':'ghost'}" type="button" data-act="${NET.on&&NET.anon?'authup':'account'}">${NET.on&&NET.anon?'Sign up':'Manage'}</button></div>`:''}
   <div class="sec-t" id="settingsSec">Settings</div><div class="panel">${sw('sound','Sound','Moves, captures and coins')}${sw('haptics','Haptics','Taps and turn alerts where supported')}${sw('flip','Flip board in pass & play','Turn off when playing across a table')}
     <div class="set-row"><div><div class="row-t">How to play</div></div><button class="ghost" type="button" data-act="intro">Show</button></div>
     <div class="set-row"><div><div class="row-t">${resetArm?'Erase all progress?':'Reset progress'}</div><div class="row-s">${resetArm?'Rating, crowns, cosmetics and stats. This can’t be undone.':'Start over from scratch'}</div></div>${resetArm?'<div class="pair"><button class="ghost" type="button" data-act="noreset">Keep</button><button class="b3d danger sm" type="button" data-act="yesreset">Erase</button></div>':'<button class="ghost" type="button" data-act="reset">Reset</button>'}</div></div>
@@ -4074,8 +4184,17 @@ document.addEventListener('click',e=>{
     case 'flive':friendLive(a.dataset.id);break;
     case 'fdaily':closeSheet();newDaily(a.dataset.id);break;
     case 'account':openAccount();break;
-    case 'acctsave':acctEmail('save');break;
-    case 'acctsignin':acctEmail('signin');break;
+    case 'auth':openAuth('in');break;
+    case 'authup':openAuth('up');break;
+    case 'authin':openAuth('in');break;
+    case 'authmode':openAuth(a.dataset.k);break;
+    case 'signup':doSignUp();break;
+    case 'signin':doSignIn();break;
+    case 'forgotpw':forgotPw();break;
+    case 'changepw':openSetPassword(false);break;
+    case 'setpw':setPassword();break;
+    case 'pwshow':{const i=$('auPw');if(i){i.type=i.type==='password'?'text':'password';a.textContent=i.type==='password'?'Show':'Hide'}break}
+    case 'equipsworn':P.equip.title='ti-sworn';saveP();$('modal').hidden=true;toast('Sworn Member equipped');if(route==='me')renderMe();break;
     case 'acctout':acctSignOut();break;
     case 'acctdel':acctDelete(false);break;
     case 'acctdelyes':acctDelete(true);break;

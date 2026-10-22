@@ -29,6 +29,8 @@ alter table public.profiles add column if not exists last_seen timestamptz;
 alter table public.profiles add column if not exists front text;
 alter table public.profiles add column if not exists referred_by uuid;
 alter table public.profiles add column if not exists kid boolean not null default false;
+alter table public.profiles add column if not exists cloud jsonb;
+alter table public.profiles add column if not exists signup_bonus boolean not null default false;
 create unique index if not exists profiles_fcode_idx on public.profiles (fcode);
 create index if not exists profiles_legacy_idx on public.profiles (legacy desc);
 create index if not exists profiles_nation_idx on public.profiles (nation, legacy desc);
@@ -46,6 +48,8 @@ create table if not exists public.star_events (
   created_at timestamptz not null default now()
 );
 alter table public.star_events add column if not exists region text;
+alter table public.star_events drop constraint if exists star_events_kind_check;
+alter table public.star_events add constraint star_events_kind_check check (kind in ('online','bot','import','join'));
 create index if not exists star_events_month_idx on public.star_events (month, kind, nation);
 create index if not exists star_events_user_idx on public.star_events (user_id, month);
 create index if not exists star_events_region_idx on public.star_events (month, region);
@@ -237,7 +241,7 @@ begin
   return json_build_object('id', p.id, 'name', p.name, 'nation', p.nation, 'legacy', p.legacy, 'legacy_peak', p.legacy_peak,
     'nat_given', p.nat_given, 'rating', p.rating, 'wins', p.wins, 'losses', p.losses, 'draws', p.draws,
     'imported', p.imported, 'global_rank', g_rank, 'nation_rank', case when p.nation is null then null else n_rank end,
-    'month_stars', m_stars, 'fcode', p.fcode, 'front', p.front, 'recruits', recruits, 'kid', p.kid, 'weekend', cb_weekend());
+    'month_stars', m_stars, 'signup_bonus', p.signup_bonus, 'fcode', p.fcode, 'front', p.front, 'recruits', recruits, 'kid', p.kid, 'weekend', cb_weekend());
 end $$;
 
 -- deletes the account and everything tied to it
@@ -249,6 +253,44 @@ begin
   delete from profiles where id = me;
   delete from auth.users where id = me;
 end $$;
+
+-- ================================================================ accounts
+-- a player who signs up (adds an email) gives their nation +5 stars, once per account
+create or replace function public.cb_signup_bonus(me uuid) returns boolean
+language plpgsql security definer set search_path = public, auth as $$
+declare p profiles; real_user boolean;
+begin
+  select * into p from profiles where id = me;
+  if p.id is null or p.signup_bonus or p.nation is null then return false; end if;
+  select (u.email is not null and coalesce(u.is_anonymous, false) = false) into real_user from auth.users u where u.id = me;
+  if not coalesce(real_user, false) then return false; end if;
+  update profiles set signup_bonus = true, nat_given = nat_given + 5 where id = me;
+  insert into star_events (user_id, nation, month, delta, kind) values (me, p.nation, cb_month(), 5, 'join');
+  return true;
+end $$;
+revoke all on function public.cb_signup_bonus(uuid) from public, anon, authenticated;
+
+create or replace function public.claim_signup_bonus() returns json
+language plpgsql security definer set search_path = public as $$
+declare me uuid := cb_me(); got boolean;
+begin
+  perform cb_ensure();
+  got := cb_signup_bonus(me);
+  return json_build_object('bonus', got, 'me', get_me());
+end $$;
+
+-- progress that lives on the device (crowns, cosmetics, settings), backed up for signed-in players
+create or replace function public.save_cloud(p_data jsonb) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if p_data is null or octet_length(p_data::text) > 150000 then return false; end if;
+  perform cb_ensure();
+  update profiles set cloud = p_data, updated_at = now() where id = cb_me();
+  return true;
+end $$;
+
+create or replace function public.get_cloud() returns jsonb
+language sql security definer set search_path = public stable as $$ select cloud from profiles where id = auth.uid(); $$;
 
 -- ================================================================ nations
 -- assigns the nation with the fewest members, or the recruiter's nation when joining through a recruit link
@@ -270,6 +312,7 @@ begin
         group by n order by count(pr.id), random() limit 1;
     end if;
     update profiles set nation = pick, nation_at = now(), updated_at = now() where id = me;
+    perform cb_signup_bonus(me);
   end if;
   return get_me();
 end $$;
@@ -288,7 +331,7 @@ returns table (nation text, stars bigint, members bigint, active bigint)
 language sql security definer set search_path = public stable as $$
   with m as (select coalesce(p_month, cb_month()) as month)
   select v.n,
-    coalesce((select sum(e.delta) from star_events e, m where e.month = m.month and e.kind = 'online' and e.nation = v.n), 0),
+    coalesce((select sum(e.delta) from star_events e, m where e.month = m.month and e.kind in ('online','join') and e.nation = v.n), 0),
     (select count(*) from profiles pr where pr.nation = v.n),
     (select count(distinct e.user_id) from star_events e, m where e.month = m.month and e.kind = 'online' and e.nation = v.n)
   from (values ('ember'),('tide'),('grove'),('dusk')) v(n)
@@ -629,6 +672,9 @@ grant execute on function public.set_kid(boolean) to authenticated;
 grant execute on function public.import_local(int, text, int) to authenticated;
 grant execute on function public.get_me() to authenticated;
 grant execute on function public.delete_account() to authenticated;
+grant execute on function public.claim_signup_bonus() to authenticated;
+grant execute on function public.save_cloud(jsonb) to authenticated;
+grant execute on function public.get_cloud() to authenticated;
 grant execute on function public.join_nation(uuid) to authenticated;
 grant execute on function public.set_front(text) to authenticated;
 grant execute on function public.add_bot_result(text) to authenticated;
