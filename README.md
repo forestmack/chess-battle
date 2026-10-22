@@ -21,6 +21,11 @@ Play: https://forestmack.github.io/chess-battle/
 - Pass & play on one phone
 - Online head to head via an invite link
 
+## Nations and Legacy
+
+- **Chess Nations:** new players spin to join one of four nations: Ember Dominion, Tide Republic, Grove Order or Dusk Throne. Online wins earn your nation 3 stars, losses cost 3, and a draw gives both nations 1. Your nation's home board shows whenever you play White online, and both armies wear their nation's colors.
+- **Legacy:** stars also build your personal legacy, which unlocks five earn-only piece sets: Marble, Neon, Forged, Prism and Celestial. Bot and daily games award legacy too (win +5, draw +1, loss −2), but only online games count for your nation.
+
 ## Under the hood
 
 - Single-file app (`index.html`), with no build step and no backend
