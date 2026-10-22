@@ -1799,11 +1799,11 @@ function beginTurn(){
   S.chk=inCheck(S.b,w);
   const safe=anyLegal(S.b,w);
   if(S.chk&&!safe&&!blockingBuy())S.over={win:1-w,why:'Checkmate'};
-  else if(!S.chk&&!safe&&!canBuyAny())S.over={win:null,why:'Stalemate'};
+  else if(!S.chk&&!safe&&!canBuyAny())S.over={win:1-w,why:'Stalemate'};
   else if(!S.chk&&!safe)S.note='No safe moves. Buy reinforcements, or any move will expose your king.';
   if(!S.over&&(S.quiet||0)>=QUIET_MAX)S.over={win:null,why:'No progress'};
   if(!S.over&&S.b.every(p=>!p||p.t==='K')&&S.gold[0]<1&&S.gold[1]<1)S.over={win:null,why:'Bare kings'};
-  if(S.over)S.log.push(S.over.win==null?`Draw: ${S.over.why.toLowerCase()}.`:`Checkmate. ${SIDE[S.over.win]} wins.`);
+  if(S.over)S.log.push(S.over.win==null?`Draw: ${S.over.why.toLowerCase()}.`:`${S.over.why==='Stalemate'?`Stalemate. ${SIDE[1-S.over.win]} has no safe move`:'Checkmate'}. ${SIDE[S.over.win]} wins.`);
 }
 const QUIET_MAX=60;
 function snapHuman(){
@@ -2069,7 +2069,7 @@ function negamax(st,w,d,alpha,beta,ply,qd){
   if(performance.now()>deadline)throw 'time';
   if(d===0)return quiesce(st,w,alpha,beta,qd);
   const acts=genActs(st,w,false);
-  if(!acts.length){const any=st.b.some((p,i)=>p&&p.w===w&&pseudo(st.b,i).length);return (inCheck(st.b,w)||any)?-MATE+ply:0}
+  if(!acts.length)return -MATE+ply;
   let best=-Infinity;
   for(const a of acts){const v=-negamax(applyAct(st,a,w),1-w,d-1,-beta,-alpha,ply+1,qd);if(v>best)best=v;if(v>alpha)alpha=v;if(alpha>=beta)break}
   return best;
@@ -2143,7 +2143,7 @@ function playWar(gw,gb,R,maxPly){
     const chk=inCheck(b,w),safe=anyLegal(b,w);
     const blocking=SHOP.some(t=>canBuy(t)&&placeSquares(b,w,t).some(sq=>{const nb=b.slice();nb[sq]={t,w};return !inCheck(nb,w)}));
     if(chk&&!safe&&!blocking){over={win:1-w,why:'Checkmate'};break}
-    if(!chk&&!safe&&!SHOP.some(canBuy)){over={win:null,why:'Stalemate'};break}
+    if(!chk&&!safe&&!SHOP.some(canBuy)){over={win:1-w,why:'Stalemate'};break}
     if(quiet>=QUIET_MAX){over={win:null,why:'No progress'};break}
     if(b.every(x=>!x||x.t==='K')&&g[0]<1&&g[1]<1){over={win:null,why:'Bare kings'};break}
     const plan=chooseBot('guard',{b:b.map(x=>x&&{...x}),g:g.slice(),lb:lb.slice()},guardOpt(G[w],w));
@@ -3479,8 +3479,8 @@ function showResult(){
   const firstShow=!S.recorded;recordGame();
   const fs=fixedSide(),won=fs!=null?ov.win===fs:ov.win!=null;
   const k=ov.win==null?ov.why:fs!=null?(ov.win===fs?'You win':`${nameOf(1-fs)} wins`):`${SIDE[ov.win]} wins`;
-  const DRAWS={'Stalemate':'No safe move and nothing to buy','No progress':'30 turns each without a capture, buy or pawn move','Bare kings':'Only kings left and no gold to spend'};
-  const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Abandoned'?(fs!=null&&ov.win===fs?'Your opponent left the game':'You left the game'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${S.guard?esc(S.guard.name):vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
+  const DRAWS={'No progress':'30 turns each without a capture, buy or pawn move','Bare kings':'Only kings left and no gold to spend'};
+  const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Stalemate'?(fs!=null?(ov.win===fs?`${S.guard?esc(S.guard.name)+' has':vsBot()?'The bot has':'They have'} no safe move and nothing to buy`:'You have no safe move and nothing to buy'):`${SIDE[1-ov.win]} has no safe move and nothing to buy`):ov.why==='Abandoned'?(fs!=null&&ov.win===fs?'Your opponent left the game':'You left the game'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${S.guard?esc(S.guard.name):vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
   const rw=S.reward;
   const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy${rw.lgCap?' · daily bot cap':''}</span>`:''}${rw.nat?`<span class="rw nat" style="--nc:${natOf(rw.nat.id).c}">${crestN(natOf(rw.nat.id))}${rw.nat.d>0?'+':''}${rw.nat.d} ${esc(natOf(rw.nat.id).short)}</span>`:''}${S.guard&&S.over&&S.over.win===HUMAN?`<span class="rw">${esc(RANK_NAME[S.guard.rank])} defeated</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
   r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}${isOnline()?rematchUI():S.mode==='guard'?`<div class="pair"><button class="cta sm shine" type="button" data-act="quickmatch">Find next rival</button></div>`:`<div class="pair"><button class="cta sm shine" type="button" data-act="again">${S.mode==='daily'?'Replay daily':'Play again'}</button></div>`}<div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="clip">Clip</button><button class="ghost" type="button" data-act="review">Review</button></div><div>${NET.on&&NET.anon&&P.legacy.pts>=10?`<button class="linkbtn" type="button" data-act="authup" style="color:var(--gold)">Save your ${P.legacy.pts} stars</button>`:''}<button class="linkbtn" type="button" data-act="replay">Replay</button><button class="linkbtn" type="button" data-act="viewboard">View board</button>${isOnline()?'':'<button class="linkbtn" type="button" data-act="invite">Challenge a friend</button>'}</div><div class="linkbox" id="shareBox" hidden></div></div>`;
@@ -4187,7 +4187,7 @@ function openSheet(kind){
       <li><b>Suicide</b><span>End your turn with your king attacked and you lose instantly.</span></li>
       <li><b>Nations</b><span>Everyone fights for one of four nations. Online wins earn your nation 5 stars, losses cost 3, and draws give both sides 1, all doubled on war weekends. Pick a front on the territory map and your wins fight for that region. The top nation each month wins.</span></li>
       <li><b>Premove</b><span>Against a bot or online, tap or drag your piece while your opponent thinks. It plays the moment your turn starts, if it’s still possible.</span></li>
-      <li><b>Victory</b><span>Checkmate, suicide, resignation or time. No safe move and nothing to buy is a draw, as are 30 turns each without a capture, buy or pawn move, and bare kings with no gold left.</span></li></ul></details>
+      <li><b>Victory</b><span>Checkmate, suicide, resignation or time. Leaving your opponent with no safe move and nothing to buy also wins (stalemate). Draws: 30 turns each without a capture, buy or pawn move, and bare kings with no gold left.</span></li></ul></details>
     <details class="fold"><summary>Move history</summary><ol class="histlist">${S?S.log.map(x=>`<li>${esc(x)}</li>`).join(''):''}</ol></details>`;
   }
   $('sheetWrap').hidden=false;

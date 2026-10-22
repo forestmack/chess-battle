@@ -11,7 +11,8 @@ Play: https://forestmack.github.io/chess-battle/
 - **Shop:** pawn 1, knight 4, bishop 4, rook 6, queen 12. Pawns drop on your pawn row and everything else on your back row. You can't buy the same piece twice in a row, and you can have at most 8 pawns.
 - **Suicide:** if your king is still in check when your turn ends, you lose on the spot.
 - **Win:** by checkmate, suicide, resignation or time.
-- **Draw:** no safe move and nothing to buy, 30 turns each with no capture, buy or pawn move, or bare kings.
+- **Stalemate wins:** if your opponent has no safe move and nothing to buy on their turn, you win.
+- **Draw:** 30 turns each with no capture, buy or pawn move, or bare kings.
 
 ## Modes
 
