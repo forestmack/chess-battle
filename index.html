@@ -279,10 +279,27 @@ body.dragging,body.dragging *{cursor:grabbing!important}
 .pc.drag .pcs{filter:drop-shadow(0 10px 10px rgba(3,6,20,.45))}
 .tb.drag .pcs{filter:drop-shadow(0 0 1px rgba(200,212,255,.5)) drop-shadow(0 10px 10px rgba(3,6,20,.45))}
 .pc.snap{transition-duration:.16s!important}
-.pcs{fill:var(--fill);stroke:var(--stroke);stroke-width:4.5;stroke-linejoin:round;stroke-linecap:round}
-.tw{--fill:var(--pw-fill);--stroke:var(--pw-stroke);--acc:var(--trim-w)}
-.tb{--fill:var(--pb-fill);--stroke:var(--pb-stroke);--acc:var(--trim-b)}
-.tb .pcs{filter:drop-shadow(0 0 1px rgba(200,212,255,.5))}
+.pcs{fill:var(--fill);stroke:var(--stroke);stroke-width:var(--psw,4.5);stroke-linejoin:round;stroke-linecap:round;filter:var(--pf,none);color:var(--glow,transparent)}
+.tw{--fill:var(--wf);--stroke:var(--ws);--acc:var(--wa);--pf:var(--wp);--glow:var(--wg);--orb:var(--wo)}
+.tb{--fill:var(--bf);--stroke:var(--bs);--acc:var(--ba);--pf:var(--bp);--glow:var(--bg);--orb:var(--bo)}
+.tw .pk,.tw.pk{--fill:var(--wfk)}
+.tb .pk,.tb.pk{--fill:var(--bfk)}
+.pk{animation:var(--pka,none) 2.6s ease-in-out infinite}
+@keyframes neonk{0%,100%{filter:drop-shadow(0 0 2px currentColor) drop-shadow(0 0 5px currentColor)}50%{filter:drop-shadow(0 0 3px currentColor) drop-shadow(0 0 13px currentColor)}}
+/* legacy piece sets: every set defines every variable so previews can nest inside another set */
+:root,[data-pset="classic"]{--wf:var(--pw-fill);--ws:var(--pw-stroke);--wa:var(--trim-w);--wp:none;--wg:transparent;--wo:transparent;--wfk:var(--pw-fill);
+  --bf:var(--pb-fill);--bs:var(--pb-stroke);--ba:var(--trim-b);--bp:drop-shadow(0 0 1px rgba(200,212,255,.5));--bg:transparent;--bo:transparent;--bfk:var(--pb-fill);--psw:4.5;--pka:none;--ovd:none}
+[data-pset="marble"]{--wf:url(#lg-mw);--ws:#2a2e3c;--wa:#c9a14a;--wp:drop-shadow(0 1px 0 rgba(0,0,0,.18));--wg:transparent;--wo:transparent;--wfk:url(#lg-mw);
+  --bf:url(#lg-mb);--bs:#05060a;--ba:#e3c46e;--bp:drop-shadow(0 0 1px rgba(255,255,255,.55));--bg:transparent;--bo:transparent;--bfk:url(#lg-mb);--psw:4;--pka:none;--ovd:none}
+[data-pset="neon"]{--wf:#eafcff;--ws:#00a9d6;--wa:#00e5ff;--wp:drop-shadow(0 0 2px #00e5ff) drop-shadow(0 0 6px rgba(0,229,255,.55));--wg:#00e5ff;--wo:transparent;--wfk:#eafcff;
+  --bf:#1c0629;--bs:#ff3fd8;--ba:#ff3fd8;--bp:drop-shadow(0 0 2px #ff3fd8) drop-shadow(0 0 6px rgba(255,63,216,.55));--bg:#ff3fd8;--bo:transparent;--bfk:#1c0629;--psw:4;--pka:neonk;--ovd:none}
+[data-pset="forged"]{--wf:url(#lg-fw);--ws:#4a2e00;--wa:#d8213f;--wp:drop-shadow(0 1px 1px rgba(60,35,0,.35));--wg:transparent;--wo:transparent;--wfk:url(#lg-fwa);
+  --bf:url(#lg-fb);--bs:#06080f;--ba:#38c8ff;--bp:drop-shadow(0 0 1px rgba(220,230,255,.65));--bg:transparent;--bo:transparent;--bfk:url(#lg-fba);--psw:4;--pka:none;--ovd:none}
+[data-pset="prism"]{--wf:url(#lg-pw);--ws:#2f3590;--wa:#ffffff;--wp:drop-shadow(0 0 3px rgba(190,220,255,.75));--wg:transparent;--wo:transparent;--wfk:url(#lg-pwa);
+  --bf:url(#lg-pb);--bs:#d6dcff;--ba:#7ef9ff;--bp:drop-shadow(0 0 3px rgba(150,180,255,.75));--bg:transparent;--bo:transparent;--bfk:url(#lg-pba);--psw:3.6;--pka:none;--ovd:none}
+[data-pset="celestial"]{--wf:url(#lg-cw);--ws:#5a3000;--wa:#ff8a1e;--wp:drop-shadow(0 0 4px rgba(255,190,70,.8));--wg:transparent;--wo:#ffcf5a;--wfk:url(#lg-cwa);
+  --bf:url(#lg-cb);--bs:#bba9ff;--ba:#ffd36b;--bp:drop-shadow(0 0 3px rgba(150,120,255,.9));--bg:transparent;--bo:#bba9ff;--bfk:url(#lg-cba);--psw:3.6;--pka:none;--ovd:inline}
+@media (prefers-reduced-motion: reduce){.tw .pk,.tw.pk{--fill:var(--wf)}.tb .pk,.tb.pk{--fill:var(--bf)}.pk{animation:none!important}}
 .fx{position:absolute;inset:0;pointer-events:none;z-index:4}
 .float{position:absolute;width:12.5%;height:12.5%;display:flex;align-items:center;justify-content:center;gap:3px;
   font:900 clamp(16px,5.2cqw,26px)/1 var(--display);color:var(--gold-hi);text-shadow:0 2px 0 var(--gold-lo),0 0 14px rgba(255,204,46,.7);animation:rise .95s var(--ease) forwards}
@@ -798,6 +815,45 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 
 .tray.puz .pips,.tray.puz .breakdown,.tray.puz .shop,.tray.puz .bank{display:none}
 .opp.puz .next{display:none}
+/* ---------- legacy ---------- */
+.star{fill:var(--gold);stroke:var(--gold-lo);stroke-width:1.2;stroke-linejoin:round}
+.legacy{background:radial-gradient(110% 80% at 0% 0%,rgba(255,122,217,.2),transparent 55%),radial-gradient(110% 80% at 100% 0%,rgba(79,230,255,.17),transparent 55%),linear-gradient(180deg,#1a1f5e,#0b1130);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(160,140,255,.35),0 26px 50px -26px rgba(0,0,0,.85)}
+.lg-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.lg-pts{display:flex;align-items:center;gap:8px;margin-top:8px}
+.lg-pts b{font:900 44px/.9 var(--display);color:var(--gold);letter-spacing:.02em;text-shadow:0 3px 0 var(--gold-lo)}
+.lg-pts .star{width:32px;height:32px;filter:drop-shadow(0 0 10px rgba(255,204,46,.5))}
+.lg-rule{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.lg-rule span{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border-radius:12px;background:rgba(3,6,20,.5);box-shadow:inset 0 0 0 1px var(--line);font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lg-rule b{font:900 14px/1 var(--display);color:var(--text)}
+.lg-rule .w b{color:var(--mint)}.lg-rule .l b{color:var(--red)}
+.lg-next{display:flex;justify-content:space-between;gap:10px;font:600 13px/1.2 var(--body);color:var(--muted);margin:16px 0 8px}
+.lg-next b{color:var(--text)}
+.lg-row{display:flex;gap:10px;overflow-x:auto;margin:6px -16px 0;padding:14px 16px 12px;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.lg-row::-webkit-scrollbar{display:none}
+.lgc{all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:118px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 8px 12px;border-radius:18px;position:relative;background:linear-gradient(180deg,#18225a,#0d1438);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 0 0 1.5px color-mix(in srgb,var(--rc) 60%,transparent),0 4px 0 #050a1c;transition:transform .14s var(--spring)}
+.lgc:active{transform:translateY(3px)}
+.lgc.eq{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 2px var(--gold),0 4px 0 var(--gold-lo)}
+.lgc:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.lg-tier{font:800 10px/1 var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--rc)}
+.lg-art{width:100%;aspect-ratio:1;border-radius:13px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:7%;box-sizing:border-box;background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--rc) 32%,#1a2468),#070c24 78%);overflow:hidden;position:relative}
+.lg-art svg{width:60%;margin:0 -12%;position:relative}
+.lg-art svg+svg{width:50%}
+.lgc.locked .lg-art svg{filter:grayscale(.9) brightness(.5)!important}
+.lgc.locked .item-n{color:var(--muted)}
+.lg-lock{position:absolute;top:28px;right:14px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:rgba(3,6,20,.8);z-index:2}
+.lg-lock svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2.6}
+.lg-need{display:flex;align-items:center;gap:4px;font:800 14px/1 var(--display);letter-spacing:.06em;color:var(--gold)}
+.lg-need .star,.rw .star,.pillx .star{width:14px;height:14px}
+.lg-mini{width:100%;height:4px;border-radius:2px;background:var(--void);overflow:hidden;margin-top:-2px}
+.lg-mini i{display:block;height:100%;background:var(--rc)}
+.rw.lg{color:#ffd36b}
+.pillx.lg{color:var(--gold)}
+.lg-pv{aspect-ratio:auto;padding:22px 14px;background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--rc) 34%,#26338a),#070c24 80%)}
+.lg-board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));width:100%;max-width:380px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 3px rgba(0,0,0,.3),0 18px 30px -12px rgba(0,0,0,.7)}
+.lg-board i{aspect-ratio:1;display:grid;place-items:center}
+.lg-board svg{width:88%;height:88%}
+.lg-prog{display:flex;flex-direction:column;gap:8px;margin:4px 0 14px}
+.lg-prog .bar i{background:linear-gradient(90deg,color-mix(in srgb,var(--rc) 60%,#000),var(--rc))}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;animation-delay:0ms!important}
   .pc,.pc-in,.pip,.bar i{transition-duration:1ms!important}
@@ -808,7 +864,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <symbol id="s-P" viewBox="0 0 100 100">
       <path d="M38 54 H62 L68 79 H32 Z"/>
@@ -855,6 +911,44 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
       <rect x="31" y="47" width="38" height="9" rx="4.5" style="fill:var(--acc)"/>
       <rect x="20" y="78" width="60" height="11" rx="4"/>
     </symbol>
+    <!-- legacy: marble -->
+    <linearGradient id="lg-mwg" gradientUnits="userSpaceOnUse" x1="10" y1="0" x2="90" y2="100"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#eceff5"/><stop offset="1" stop-color="#d6dbe6"/></linearGradient>
+    <pattern id="lg-mw" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-mwg)"/><g fill="none" stroke-linecap="round">
+      <path d="M-4 22 C14 18 22 34 38 30 S62 12 78 22 S98 30 104 28" stroke="#6f7890" stroke-width="1.7" opacity=".85"/><path d="M38 30 C42 44 34 52 40 66 S58 80 54 104" stroke="#7d869c" stroke-width="1.1" opacity=".75"/>
+      <path d="M-2 58 C16 54 26 70 46 62 S80 48 104 60" stroke="#8a93a8" stroke-width="1.2" opacity=".7"/><path d="M70 0 C66 14 74 24 70 40 S84 70 78 100" stroke="#c9a14a" stroke-width="1.2" opacity=".8"/>
+      <path d="M12 80 C24 76 30 90 48 86" stroke="#848da3" stroke-width=".6" opacity=".6"/><path d="M46 62 C50 70 62 70 66 78" stroke="#97a0b4" stroke-width=".5" opacity=".55"/></g></pattern>
+    <linearGradient id="lg-mbg" gradientUnits="userSpaceOnUse" x1="10" y1="0" x2="90" y2="100"><stop offset="0" stop-color="#363a48"/><stop offset=".5" stop-color="#17181f"/><stop offset="1" stop-color="#090a0e"/></linearGradient>
+    <pattern id="lg-mb" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-mbg)"/><g fill="none" stroke-linecap="round">
+      <path d="M-4 30 C16 22 28 40 44 34 S70 14 104 24" stroke="#e2bd62" stroke-width="1.8" opacity=".95"/><path d="M44 34 C48 50 40 58 46 72 S62 86 58 104" stroke="#e2bd62" stroke-width="1.1" opacity=".85"/>
+      <path d="M-2 66 C18 60 30 76 50 68 S84 56 104 66" stroke="#e8e8f0" stroke-width=".7" opacity=".28"/><path d="M76 0 C72 16 80 28 74 46" stroke="#e8e8f0" stroke-width=".6" opacity=".3"/>
+      <path d="M14 86 C26 80 34 94 52 90" stroke="#d9b45c" stroke-width=".6" opacity=".6"/></g></pattern>
+    <!-- legacy: forged (the -a versions carry a moving sheen, used on kings) -->
+    <linearGradient id="lg-fw" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="80" y2="100"><stop offset="0" stop-color="#fff7cf"/><stop offset=".22" stop-color="#ffd84f"/><stop offset=".45" stop-color="#c98b12"/><stop offset=".58" stop-color="#ffe68f"/><stop offset=".78" stop-color="#b97d10"/><stop offset="1" stop-color="#6f4504"/></linearGradient>
+    <linearGradient id="lg-fwa" href="#lg-fw" xlink:href="#lg-fw" spreadMethod="reflect"><animateTransform attributeName="gradientTransform" type="translate" values="-30 -24;30 24;-30 -24" dur="4.5s" repeatCount="indefinite"/></linearGradient>
+    <linearGradient id="lg-fb" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="80" y2="100"><stop offset="0" stop-color="#eef2fa"/><stop offset=".2" stop-color="#9aa3b8"/><stop offset=".45" stop-color="#3a4155"/><stop offset=".6" stop-color="#8d97ad"/><stop offset=".8" stop-color="#2a3042"/><stop offset="1" stop-color="#10131c"/></linearGradient>
+    <linearGradient id="lg-fba" href="#lg-fb" xlink:href="#lg-fb" spreadMethod="reflect"><animateTransform attributeName="gradientTransform" type="translate" values="-30 -24;30 24;-30 -24" dur="4.5s" repeatCount="indefinite"/></linearGradient>
+    <!-- legacy: prism -->
+    <linearGradient id="lg-pwg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset="0" stop-color="#b8f6ff"/><stop offset=".2" stop-color="#8fd2ff"/><stop offset=".4" stop-color="#d2b4ff"/><stop offset=".6" stop-color="#ffb0dc"/><stop offset=".8" stop-color="#ffe9a0"/><stop offset="1" stop-color="#a8ffe0"/></linearGradient>
+    <linearGradient id="lg-pwga" href="#lg-pwg" xlink:href="#lg-pwg"><animateTransform attributeName="gradientTransform" type="rotate" values="0 50 50;360 50 50" dur="7s" repeatCount="indefinite"/></linearGradient>
+    <linearGradient id="lg-pbg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset="0" stop-color="#5b2bd6"/><stop offset=".3" stop-color="#0b6f99"/><stop offset=".55" stop-color="#a0208f"/><stop offset=".8" stop-color="#1b3a9a"/><stop offset="1" stop-color="#4a1580"/></linearGradient>
+    <linearGradient id="lg-pbga" href="#lg-pbg" xlink:href="#lg-pbg"><animateTransform attributeName="gradientTransform" type="rotate" values="0 50 50;360 50 50" dur="7s" repeatCount="indefinite"/></linearGradient>
+    <g id="lg-facW"><polygon points="50,6 74,38 50,56 26,38" fill="#fff" opacity=".55"/><polygon points="26,38 50,56 34,94 6,70" fill="#9fc2ff" opacity=".2"/><polygon points="74,38 94,70 66,94 50,56" fill="#ffb3dd" opacity=".18"/><polygon points="50,56 66,94 34,94" fill="#fff" opacity=".25"/><path d="M50 6 L50 56 M26 38 L74 38 M50 56 L6 70 M50 56 L94 70" stroke="#fff" stroke-width=".7" fill="none" opacity=".5"/></g>
+    <g id="lg-facB"><polygon points="50,6 74,38 50,56 26,38" fill="#bfe6ff" opacity=".32"/><polygon points="26,38 50,56 34,94 6,70" fill="#ff8fd8" opacity=".14"/><polygon points="74,38 94,70 66,94 50,56" fill="#7ef9ff" opacity=".14"/><polygon points="50,56 66,94 34,94" fill="#fff" opacity=".1"/><path d="M50 6 L50 56 M26 38 L74 38 M50 56 L6 70 M50 56 L94 70" stroke="#cfe0ff" stroke-width=".7" fill="none" opacity=".35"/></g>
+    <pattern id="lg-pw" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-pwg)"/><use href="#lg-facW" xlink:href="#lg-facW"/></pattern>
+    <pattern id="lg-pwa" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-pwga)"/><use href="#lg-facW" xlink:href="#lg-facW"/></pattern>
+    <pattern id="lg-pb" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-pbg)"/><use href="#lg-facB" xlink:href="#lg-facB"/></pattern>
+    <pattern id="lg-pba" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-pbga)"/><use href="#lg-facB" xlink:href="#lg-facB"/></pattern>
+    <!-- legacy: celestial -->
+    <radialGradient id="lg-cwg" gradientUnits="userSpaceOnUse" cx="50" cy="36" r="64"><stop offset="0" stop-color="#fffdf2"/><stop offset=".42" stop-color="#ffeaa8"/><stop offset=".78" stop-color="#ffb84a"/><stop offset="1" stop-color="#e0761a"/></radialGradient>
+    <radialGradient id="lg-cbg" gradientUnits="userSpaceOnUse" cx="34" cy="30" r="76"><stop offset="0" stop-color="#4f2ca0"/><stop offset=".45" stop-color="#1a0f45"/><stop offset="1" stop-color="#06041a"/></radialGradient>
+    <radialGradient id="lg-cbn" gradientUnits="userSpaceOnUse" cx="68" cy="66" r="30"><stop offset="0" stop-color="#ff5fb0" stop-opacity=".6"/><stop offset="1" stop-color="#ff5fb0" stop-opacity="0"/></radialGradient>
+    <g id="lg-starsW" fill="#fff" stroke="none"><circle cx="30" cy="22" r="1.1"/><circle cx="62" cy="30" r=".8"/><circle cx="44" cy="48" r="1.3"/><circle cx="70" cy="58" r=".9"/><circle cx="36" cy="70" r=".8"/><circle cx="58" cy="84" r="1"/><path d="M52 12 l1.2 3.3 3.3 1.2 -3.3 1.2 -1.2 3.3 -1.2 -3.3 -3.3 -1.2 3.3 -1.2z" opacity=".95"/></g>
+    <g id="lg-starsB" fill="#fff" stroke="none"><circle cx="22" cy="18" r=".9"/><circle cx="40" cy="26" r=".6"/><circle cx="62" cy="14" r="1.1"/><circle cx="74" cy="34" r=".7"/><circle cx="30" cy="44" r="1.2"/><circle cx="56" cy="50" r=".6"/><circle cx="80" cy="56" r=".9"/><circle cx="18" cy="62" r=".7"/><circle cx="44" cy="70" r="1"/><circle cx="66" cy="80" r=".7"/><circle cx="30" cy="88" r=".9"/><path d="M50 34 l1.3 3.6 3.6 1.3 -3.6 1.3 -1.3 3.6 -1.3 -3.6 -3.6 -1.3 3.6 -1.3z"/></g>
+    <pattern id="lg-cw" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-cwg)"/><use href="#lg-starsW" xlink:href="#lg-starsW" opacity=".85"/></pattern>
+    <pattern id="lg-cwa" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-cwg)"/><use href="#lg-starsW" xlink:href="#lg-starsW"><animate attributeName="opacity" values=".25;1;.25" dur="2.4s" repeatCount="indefinite"/></use></pattern>
+    <pattern id="lg-cb" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-cbg)"/><rect width="100" height="100" fill="url(#lg-cbn)"/><use href="#lg-starsB" xlink:href="#lg-starsB" opacity=".9"/></pattern>
+    <pattern id="lg-cba" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="url(#lg-cbg)"/><rect width="100" height="100" fill="url(#lg-cbn)"/><use href="#lg-starsB" xlink:href="#lg-starsB"><animate attributeName="opacity" values="1;.3;1" dur="2.4s" repeatCount="indefinite"/></use></pattern>
+    <symbol id="ov-orbit" viewBox="0 0 100 100"><g transform="rotate(-12 50 64)"><path d="M6 64 A44 9 0 0 1 94 64" style="fill:none;stroke:var(--orb);stroke-width:1.2;stroke-dasharray:2 3;opacity:.45"/><path d="M6 64 A44 9 0 0 0 94 64" style="fill:none;stroke:var(--orb);stroke-width:1.7;opacity:.95"/><circle cx="93" cy="62" r="3.4" style="fill:var(--orb);stroke:none"/></g></symbol>
   </defs>
 </svg>
 
@@ -951,7 +1045,7 @@ const rand=n=>Math.floor(Math.random()*n);
 const sqName=i=>FILES[i&7]+(8-(i>>3));
 const inB=(r,c)=>r>=0&&r<8&&c>=0&&c<8;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const svgPiece=(t,cls='')=>`<svg class="pcs ${cls}" viewBox="0 0 100 100" aria-hidden="true"><use href="#s-${t}" width="100" height="100"/></svg>`;
+const svgPiece=(t,cls='')=>`<svg class="pcs${t==='K'?' pk':''} ${cls}" viewBox="0 0 100 100" aria-hidden="true"><use href="#s-${t}" width="100" height="100"/><use href="#ov-orbit" width="100" height="100" style="display:var(--ovd,none)"/></svg>`;
 const crest=(cls='')=>`<span class="crest ${cls}"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#s-Q" width="100" height="100"/></svg></span>`;
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
 const PID=(()=>{let id=store.get('cb-pid');if(!id){id='p'+Math.random().toString(36).slice(2,12);store.set('cb-pid',id)}return id})();
@@ -959,7 +1053,7 @@ const reduced=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').mat
 
 /* ================= profile ================= */
 const DEF_P=()=>({name:'',av:'Q',avc:'gold',rating:700,crowns:150,xp:0,claimed:[],owned:['b-amethyst','t-gold','f-coins','snd-wood','ti-rookie'],
-  equip:{board:'b-amethyst',trim:'t-gold',fx:'f-coins',snd:'snd-wood',title:'ti-rookie'},rh:[],days:{},by:{buy:{},cap:{}},rec:{fast:0,gold:0,caps:0,bestOpp:0},peak:0,since:0,
+  equip:{board:'b-amethyst',trim:'t-gold',fx:'f-coins',snd:'snd-wood',title:'ti-rookie',set:'classic'},legacy:{pts:0,peak:0,un:['classic'],games:0},rh:[],days:{},by:{buy:{},cap:{}},rec:{fast:0,gold:0,caps:0,bestOpp:0},peak:0,since:0,
   stats:{games:0,wins:0,losses:0,draws:0,streak:0,best:0,caps:0,buys:0,earned:0,mates:0},
   ach:[],hist:[],set:{sound:true,haptics:true,flip:true},daily:{last:0,streak:0,best:0},seen:false,tips:{},vs:{easy:{w:0,l:0,d:0},medium:{w:0,l:0,d:0},hard:{w:0,l:0,d:0}},bestDaily:0});
 function loadP(){
@@ -969,7 +1063,7 @@ function loadP(){
   return p;
 }
 let P=loadP();
-function initP(){for(const id of ['snd-wood','ti-rookie'])if(!P.owned.includes(id))P.owned.push(id);if(!P.since)P.since=Date.now();if(!Array.isArray(P.rh)||!P.rh.length)P.rh=[{t:Date.now(),r:P.rating}];P.peak=Math.max(P.peak||0,P.rating);if(!P.by||typeof P.by!=='object')P.by={};if(!P.by.buy)P.by.buy={};if(!P.by.cap)P.by.cap={};if(!P.rec)P.rec={fast:0,gold:0,caps:0,bestOpp:0};if(!P.days)P.days={};if(!item(P.equip.board))P.equip.board='b-amethyst';if(!item(P.equip.trim))P.equip.trim='t-gold';if(!item(P.equip.fx))P.equip.fx='f-coins';if(!item(P.equip.snd))P.equip.snd='snd-wood';if(!item(P.equip.title))P.equip.title='ti-rookie'}
+function initP(){for(const id of ['snd-wood','ti-rookie'])if(!P.owned.includes(id))P.owned.push(id);if(!P.since)P.since=Date.now();if(!Array.isArray(P.rh)||!P.rh.length)P.rh=[{t:Date.now(),r:P.rating}];P.peak=Math.max(P.peak||0,P.rating);if(!P.by||typeof P.by!=='object')P.by={};if(!P.by.buy)P.by.buy={};if(!P.by.cap)P.by.cap={};if(!P.rec)P.rec={fast:0,gold:0,caps:0,bestOpp:0};if(!P.days)P.days={};if(!item(P.equip.board))P.equip.board='b-amethyst';if(!item(P.equip.trim))P.equip.trim='t-gold';if(!item(P.equip.fx))P.equip.fx='f-coins';if(!item(P.equip.snd))P.equip.snd='snd-wood';if(!item(P.equip.title))P.equip.title='ti-rookie';if(!P.legacy||typeof P.legacy!=='object')P.legacy={pts:0,peak:0,un:['classic'],games:0};if(!Array.isArray(P.legacy.un))P.legacy.un=['classic'];if(!P.legacy.un.includes('classic'))P.legacy.un.unshift('classic');P.legacy.pts=Math.max(0,+P.legacy.pts||0);if(!lgSet(P.equip.set)||!P.legacy.un.includes(P.equip.set))P.equip.set='classic'}
 const saveP=()=>store.set('cb-profile',JSON.stringify(P));
 const myName=()=>P.name||('Player '+PID.slice(-4).toUpperCase());
 const AVC={gold:'#ffcc2e',mint:'#4be3b4',rose:'#f08a9a',sky:'#6fb6ff',lilac:'#7f95ff',ivory:'#fcf8ef'};
@@ -1025,6 +1119,19 @@ const ITEMS=[
   {id:'ti-gm',kind:'title',name:'Grandmaster',tierReq:6,rarity:'legendary',desc:'Reserved for players who reach the Grandmaster tier.'},
 ];
 const item=id=>ITEMS.find(x=>x.id===id);
+/* legacy piece sets: earned only by playing, never bought */
+const LEGACY=[
+  {id:'classic',name:'Classic',tier:0,need:0,c:'#9ea8db',desc:'The house set. Every legend starts here.'},
+  {id:'marble',name:'Marble',tier:1,need:25,c:'#dfe3ee',desc:'Carrara white and Nero black, veined in grey and gold. Proof you keep coming back.'},
+  {id:'neon',name:'Neon',tier:2,need:75,c:'#4fe6ff',desc:'Glass tubes humming with light: ice blue against hot magenta. Your king pulses.'},
+  {id:'forged',name:'Forged',tier:3,need:175,c:'#ffcc2e',desc:'Polished gold against gunmetal, set with rubies and sapphires. Light rolls across your king.'},
+  {id:'prism',name:'Prism',tier:4,need:350,c:'#c08cff',desc:'Cut crystal that splits the light into color. Your king turns through the whole spectrum.'},
+  {id:'celestial',name:'Celestial',tier:5,need:700,c:'#ff7ad9',desc:'Solar fire against a living starfield, every piece in orbit. Almost nobody will ever own this.'},
+];
+const lgSet=id=>LEGACY.find(x=>x.id===id);
+const ROMAN=['','I','II','III','IV','V'];
+const STAR='<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+const LG_PTS={w:5,d:1,l:-2};
 initP();
 const PASS={2:{crowns:50},4:{crowns:75},6:{item:'t-emerald'},8:{crowns:100},10:{item:'b-gilded'},12:{crowns:125},14:{item:'f-shock'},16:{crowns:150},18:{item:'ti-gilded'},20:{crowns:300}};
 const PRO_PASS={1:'Pro badge',3:'Animated board',5:'Gilded pieces',7:'Neon trail',9:'Crown emote',11:'Velvet board',13:'Diamond trim',15:'Victory fanfare',17:'Royal frame',19:'Obsidian pieces'};
@@ -1034,6 +1141,7 @@ function applyCosmetics(){
   const b=item(P.equip.board)||ITEMS[0],t=item(P.equip.trim)||item('t-gold');
   const r=document.documentElement.style;
   r.setProperty('--sq-l',b.l);r.setProperty('--sq-d',b.d);r.setProperty('--trim-w',t.w);r.setProperty('--trim-b',t.b);
+  document.documentElement.dataset.pset=lgSet(P.equip.set)?P.equip.set:'classic';
 }
 
 /* achievements */
@@ -1932,7 +2040,7 @@ function renderHome(){
   const allClaimed=gs.every(g=>P.q.claimed.includes(g.id));
   const pzMini=pz?miniBoard(pz.b):'';
   $('scr-home').innerHTML=`${topBar()}<div class="stagger" style="display:flex;flex-direction:column;gap:14px">
-  <div class="greet"><div><div class="greet-t">${greetText()}${P.name?`, ${esc(P.name)}`:''}</div><div class="greet-s">${P.daily.streak?`<span class="pillx hot">${IC2.flame}${pl(P.daily.streak,'day')}</span>`:''}<span class="pillx">${badge(P.rating)}${TIERS[tierOf(P.rating)][0]} ${divOf(P.rating)}</span><span class="pillx">LV ${lvl}</span></div></div><button class="icon-btn help" type="button" data-act="intro" aria-label="How to play">${ICON.help}</button></div>
+  <div class="greet"><div><div class="greet-t">${greetText()}${P.name?`, ${esc(P.name)}`:''}</div><div class="greet-s">${P.daily.streak?`<span class="pillx hot">${IC2.flame}${pl(P.daily.streak,'day')}</span>`:''}<span class="pillx">${badge(P.rating)}${TIERS[tierOf(P.rating)][0]} ${divOf(P.rating)}</span><span class="pillx">LV ${lvl}</span><span class="pillx lg" title="Legacy">${STAR}${P.legacy.pts}</span></div></div><button class="icon-btn help" type="button" data-act="intro" aria-label="How to play">${ICON.help}</button></div>
   ${showInstall()?`<div class="panel resume"><span class="tile-ic ic-gold" style="flex:none">${ICON.help.replace('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 3.8M12 17h.01"/>','<path d="M12 4v11M7 9l5-5 5 5M5 14v5h14v-5"/>')}</span><div class="grow"><div class="row-t">Install the app</div><div class="row-s">Tap Share, then Add to Home Screen. It opens full screen.</div></div><button class="ghost" type="button" data-act="noinstall" aria-label="Dismiss">Later</button></div>`:''}
   ${resumable?`<div class="panel resume"><span class="avatar ${S.turn?'tw':'tb'}">${svgPiece('K')}</span><div class="grow"><div class="row-t">Resume your game</div><div class="row-s">${esc($('gk').textContent)} · turn ${Math.max(S.tc[0],S.tc[1])}</div></div><button class="b3d sm" type="button" data-act="resume">Resume</button></div>`:''}
   <section class="qp" aria-label="Quick play">
@@ -2078,10 +2186,11 @@ function recordGame(){
   if(S.mode==='puzzle')return;
   if(S.recorded)return;S.recorded=true;
   const ov=S.over,fs=fixedSide(),mode=S.mode;let delta=0,crowns=0,xp=0,label,res;const tier0=tierOf(P.rating),now=Date.now();
-  const lvl0=level();
+  const lvl0=level();let lgD=null,lgNew=null;
   if(fs==null){P.stats.games++;xp=30;crowns=5;res=ov.win==null?'d':'p';label=ov.win==null?'Pass & play · draw':`Pass & play · ${SIDE[ov.win]} won`}
   else{
     const won=ov.win===fs,draw=ov.win==null;
+    const lgOk=!S.undone&&(mode!=='daily'||!dailyRec(S.dailyNo));
     P.stats.games++;
     if(won){P.stats.wins++;P.stats.streak++;P.stats.best=Math.max(P.stats.best,P.stats.streak)}else if(draw)P.stats.draws++;else{P.stats.losses++;P.stats.streak=0}
     const rated=mode!=='daily'&&!S.undone;
@@ -2100,6 +2209,7 @@ function recordGame(){
         P.daily.streak=P.daily.last===n-1?P.daily.streak+1:1;P.daily.last=n;P.daily.best=Math.max(P.daily.best,P.daily.streak);if(P.daily.streak>=3)unlock('daily3')}
     }
     res=won?'w':draw?'d':'l';
+    if(lgOk){const r0=legacyAward(res);lgD=r0.d;lgNew=r0.unlocked}
     label=`${mode==='daily'?`Daily #${S.dailyNo}`:isOnline()?`vs ${S.online.oppName||'Opponent'}`:`${MODE_NAME[mode]} bot`} · ${won?'won':draw?'draw':'lost'} ${ov.why==='Time'?'on time':'by '+ov.why.toLowerCase()}`;
   }
   P.crowns+=crowns;P.xp+=xp;
@@ -2109,8 +2219,13 @@ function recordGame(){
   const tier1=tierOf(P.rating);S.promo=ratedG&&tier1!==tier0?{from:tier0,to:tier1}:null;
   P.hist.unshift({t:now,label,res,turns:Math.max(S.tc[0],S.tc[1]),delta});saveRep(now,label,res,S.frames);P.hist=P.hist.slice(0,30);
   saveP();
-  S.reward={delta,crowns,xp,lvlUp:level()>lvl0?level():0,rated:fs!=null&&mode!=='daily'&&!S.undone};
+  S.reward={delta,crowns,xp,lvlUp:level()>lvl0?level():0,rated:fs!=null&&mode!=='daily'&&!S.undone,lg:lgD,lgNew};
   store.set('cb-replay',JSON.stringify({label,frames:S.frames.slice(0,400)}));
+}
+function legacyAward(res){
+  const L=P.legacy,before=L.pts;L.pts=Math.max(0,before+LG_PTS[res]);L.peak=Math.max(L.peak||0,L.pts);L.games=(L.games||0)+1;
+  let unlocked=null;for(const s of LEGACY)if(s.need&&L.pts>=s.need&&!L.un.includes(s.id)){L.un.push(s.id);unlocked=s.id}
+  return {d:L.pts-before,unlocked};
 }
 function showResult(){
   if(S&&S.mode==='puzzle'){if(S.over&&S.over.why==='Solved'&&!RP)showPuzzleWin();return}
@@ -2122,10 +2237,10 @@ function showResult(){
   const DRAWS={'Stalemate':'No safe move and nothing to buy','No progress':'30 turns each without a capture, buy or pawn move','Bare kings':'Only kings left and no gold to spend'};
   const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
   const rw=S.reward;
-  const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span></div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
+  const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
   r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}<div class="pair"><button class="cta sm shine" type="button" data-act="${isOnline()?'rematch':'again'}">${isOnline()?'Rematch':S.mode==='daily'?'Replay daily':'Play again'}</button></div><div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="replay">Replay</button>${isOnline()?'':'<button class="ghost" type="button" data-act="invite">Challenge</button>'}</div><button class="linkbtn" type="button" data-act="viewboard">View board</button><div class="linkbox" id="shareBox" hidden></div></div>`;
   r.hidden=false;
-  if(firstShow){if(won&&(fs!=null||ov.win!=null)){sfx('win');if(fs!=null||true)confetti()}else if(fs!=null&&ov.win!==fs)sfx('lose');if(rw&&rw.lvlUp)setTimeout(()=>banner(`Level ${rw.lvlUp}`,'Season reward ready in the Shop'),900);if(S.promo){const pr=S.promo;setTimeout(()=>{if(route==='game')showPromo(pr)},1500)}}
+  if(firstShow){if(won&&(fs!=null||ov.win!=null)){sfx('win');if(fs!=null||true)confetti()}else if(fs!=null&&ov.win!==fs)sfx('lose');if(rw&&rw.lvlUp)setTimeout(()=>banner(`Level ${rw.lvlUp}`,'Season reward ready in the Shop'),900);if(S.promo){const pr=S.promo;setTimeout(()=>{if(route==='game')showPromo(pr)},1500)}if(rw&&rw.lgNew){const id=rw.lgNew;setTimeout(()=>showLegacyUnlock(id),S.promo?3200:1600)}}
 }
 function shareText(){
   const ov=S.over,fs=fixedSide(),me=fs!=null?fs:(ov&&ov.win!=null?ov.win:1),won=ov&&ov.win===me,st=STAT(me),turns=S.tc[me];
@@ -2408,17 +2523,57 @@ function renderRanks(){
 
 /* ---------- SHOP ---------- */
 let shopTab='board';
+function lgCard(s){
+  const L=P.legacy,own=L.un.includes(s.id),eq=P.equip.set===s.id;
+  const tag=eq?'<span class="item-p eqd">Equipped</span>':own?'<span class="item-p own">Equip</span>':`<span class="lg-need">${STAR}${s.need}</span>`;
+  return `<button class="lgc${eq?' eq':''}${own?'':' locked'}" type="button" data-act="lgitem" data-id="${s.id}" style="--rc:${s.c}" aria-label="${esc(s.name)} piece set, ${s.tier?'tier '+s.tier:'base set'}, ${eq?'equipped':own?'unlocked':`needs ${s.need} legacy`}"><span class="lg-tier">${s.tier?'Tier '+ROMAN[s.tier]:'Base'}</span><div class="lg-art" data-pset="${s.id}">${svgPiece('K','tw')}${svgPiece('N','tb')}</div>${own?'':`<span class="lg-lock">${LOCK_SVG}</span>`}<span class="item-n">${esc(s.name)}</span>${tag}${own?'':`<div class="lg-mini"><i style="width:${Math.min(100,L.pts/s.need*100).toFixed(0)}%"></i></div>`}</button>`;
+}
+function legacyPanel(){
+  const L=P.legacy,next=LEGACY.find(s=>s.need&&!L.un.includes(s.id));
+  return `<div class="panel legacy" id="legacyPanel"><div class="lg-top"><div><div class="hero-k">Legacy</div><div class="lg-pts">${STAR}<b>${L.pts}</b></div></div>
+    <div class="lg-rule"><span class="w">Win <b>+5</b></span><span>Draw <b>+1</b></span><span class="l">Loss <b>−2</b></span></div></div>
+    <div class="lg-next">${next?`<span><b>${next.need-L.pts}</b> to unlock <b>${esc(next.name)}</b></span><span>${L.pts} / ${next.need}</span>`:'<span><b>Every set unlocked.</b> You are a legend.</span>'}</div>
+    <div class="bar"><i id="lgBar" data-w="${next?Math.min(100,L.pts/next.need*100).toFixed(1):100}"></i></div>
+    <div class="lg-row" id="lgRow">${LEGACY.map(lgCard).join('')}</div>
+    <p class="row-s">Legacy sets restyle every piece on the board. They can’t be bought with crowns. You earn them in bot, daily and online games, and once a set is unlocked it’s yours for good.</p></div>`;
+}
+function lgPreview(s){
+  const b=item(P.equip.board)||ITEMS[0],row=(ts,cls,off)=>ts.map((t,k)=>`<i style="background:${(k+off)%2?b.d:b.l}">${svgPiece(t,cls)}</i>`).join('');
+  return `<div class="pv lg-pv" data-pset="${s.id}" style="--rc:${s.c}"><div class="lg-board">${row(['R','N','B','Q','K','P'],'tb',0)}${row(['P','K','Q','B','N','R'],'tw',1)}</div></div>`;
+}
+function openLegacy(id){
+  const s=lgSet(id);if(!s)return;const L=P.legacy,own=L.un.includes(id),eq=P.equip.set===id;
+  let btn;
+  if(eq)btn='<button class="b3d block alt" type="button" disabled>Equipped</button>';
+  else if(own)btn=`<button class="b3d block shine" type="button" data-act="lgequip" data-id="${id}">Equip</button>`;
+  else{const left=s.need-L.pts,w=Math.ceil(left/LG_PTS.w);
+    btn=`<div class="lg-prog" style="--rc:${s.c}"><div class="lg-next" style="margin:0"><span><b>${left}</b> more legacy</span><span>${L.pts} / ${s.need}</span></div><div class="bar"><i style="width:${Math.min(100,L.pts/s.need*100).toFixed(1)}%"></i></div></div><button class="b3d block alt" type="button" disabled>About ${pl(w,'more win')}</button>`}
+  $('sheetTitle').innerHTML=`<span class="rar" style="--rc:${s.c}">${s.tier?`Legacy · Tier ${ROMAN[s.tier]}`:'Base set'}</span>`;
+  $('sheetBody').innerHTML=`${lgPreview(s)}<div class="pv-row"><span class="pv-name">${esc(s.name)}</span>${s.need?`<span class="lg-need" style="font-size:18px">${STAR}${s.need}</span>`:''}</div><p class="pv-desc">${esc(s.desc)}</p>${btn}`;
+  $('sheetWrap').hidden=false;sfx('tap');
+}
+function equipLegacy(id){
+  if(!P.legacy.un.includes(id))return;P.equip.set=id;saveP();applyCosmetics();sfx('tap');vibrate(8);
+  closeSheet();$('modal').hidden=true;if(route==='shop')renderShop();toast(`${lgSet(id).name} set equipped`);
+}
+function showLegacyUnlock(id){
+  const s=lgSet(id);if(!s)return;
+  if(!$('modal').hidden||route!=='game'){banner(`${s.name} set unlocked`,'Legacy reward · equip it in the Shop');sfx('ach');return}
+  $('modalCard').innerHTML=`<div class="reveal" style="--rc:${s.c}"><div class="art lg-art" data-pset="${id}" style="--rc:${s.c}">${svgPiece('K','tw')}${svgPiece('Q','tb')}</div></div><div class="rar" style="--rc:${s.c}">Legacy unlocked · Tier ${ROMAN[s.tier]}</div><div class="result-t">${esc(s.name)}</div><div class="result-s">${esc(s.desc)}</div><button class="b3d block shine" type="button" data-act="lgequip" data-id="${id}">Equip now</button><button class="linkbtn" type="button" data-act="closemodal">Later</button>`;
+  $('modal').hidden=false;sfx('ach');vibrate(30);confetti();
+}
 function renderShop(){
   const lvl=level(),inLvl=P.xp%XP_LVL,feat=featuredItem(),deals=dealIds().map(item);
   const total=ITEMS.length,have=ITEMS.filter(owns).length;
   const track=Array.from({length:MAX_LVL},(_,k)=>{const L=k+1,rw=PASS[L],pro=PRO_PASS[L],reached=L<=lvl,claimed=P.claimed.includes(L);
     const free=rw?`<div class="reward ${claimed?'done':reached?'ready':'lock'}">${rw.crowns?`${crest('sm')}<span>${rw.crowns}</span>`:`<span>${esc(item(rw.item).name)}</span>`}${claimed?'<span class="ok">Claimed</span>':reached?`<button class="claim" type="button" data-act="claim" data-l="${L}">Claim</button>`:''}</div>`:`<div class="reward ${reached?'done':'lock'}"><span>+XP</span></div>`;
     return `<div class="node${reached?' reached':''}${L===lvl?' now':''}"><span class="lvdot">${L}</span>${free}<div class="reward pro lock"><span>${pro?esc(pro):'Pro'}</span><span class="tagapp">App</span></div></div>`}).join('');
-  const tabs=[['board','Boards'],['trim','Pieces'],['fx','Effects'],['snd','Sounds'],['title','Titles']];
+  const tabs=[['board','Boards'],['trim','Trims'],['fx','Effects'],['snd','Sounds'],['title','Titles']];
   $('scr-shop').innerHTML=`<header class="top"><h1 class="h-title">Shop</h1><div class="wallet-chip">${crest()}<span id="walletN">${P.crowns}</span></div></header><div class="stagger" style="display:flex;flex-direction:column;gap:14px">
   <div class="panel feat rc-${feat.rarity} holo" data-act="item" data-id="${feat.id}" role="button" tabindex="0" aria-label="Featured: ${esc(feat.name)}">
     ${itemArt(feat)}<div style="min-width:0;position:relative"><div class="feat-k"><span class="rar">Featured · ${RAR[feat.rarity]}</span></div><div class="feat-t">${esc(feat.name)}</div><div class="row-s">${esc(feat.desc||kindOf(feat.kind))}</div>
     <div style="display:flex;align-items:center;gap:10px;margin-top:12px">${owns(feat)?'<span class="item-p eqd">Owned</span>':`<span class="item-p" style="font-size:20px">${crest('sm')}${feat.price}</span>`}<span class="cd" style="margin-left:auto" data-cd="week">${fmtLeft(msToWeek())}</span></div></div></div>
+  ${legacyPanel()}
   <div class="sec-row"><span class="sec-t">Daily deals · ${Math.round(DEAL_OFF*100)}% off</span><span class="cd" data-cd="day">${fmtLeft(msToMidnight())}</span></div>
   <div class="deals">${deals.map(it=>itemCard(it,owns(it)?'':`<span class="ribbon">-${Math.round(DEAL_OFF*100)}%</span>`)).join('')}</div>
   <div class="panel hero season pass"><div class="season-top"><div><div class="hero-k">Season ${SEASON.n} pass · ${SEASON.name}</div><div class="hero-t" style="font-size:28px;margin-top:6px">Level ${lvl}</div></div><span class="h-sub">${lvl>=MAX_LVL?'Max level':`${XP_LVL-inLvl} XP to LV ${lvl+1}`}</span></div><div class="bar"><i id="shopBar"></i></div>
@@ -2426,13 +2581,13 @@ function renderShop(){
   <div class="sec-row"><span class="sec-t">Collection</span><span class="cd">${have} / ${total} owned</span></div>
   <div class="coll"><div class="bar"><i style="width:${(have/total*100).toFixed(0)}%"></i></div></div>
   <div class="seg" role="tablist" aria-label="Item type">${tabs.map(([k,l])=>`<button type="button" role="tab" data-act="stab" data-k="${k}" aria-pressed="${shopTab===k}">${l}</button>`).join('')}</div>
-  <div class="shop-grid">${ITEMS.filter(i=>i.kind===shopTab).map(it=>itemCard(it)).join('')}</div>
+  <div class="shop-grid">${ITEMS.filter(i=>i.kind===shopTab).map(it=>itemCard(it)).join('')}</div>${shopTab==='trim'&&P.equip.set!=='classic'?'<p class="row-s" style="margin-top:-4px">Trims color the bands on the Classic piece set. Your legacy set uses its own.</p>':''}
   <div class="panel pro-card" style="display:flex;flex-direction:column;gap:14px"><div class="season-top"><div><div class="hero-k">Chess Battle Pro</div><div class="hero-t" style="font-size:30px;margin-top:6px">$4.99 / month</div></div><span class="tagapp">App</span></div>
     <ul class="pro-list"><li>Unlimited rated games and the Pro season pass</li><li>Game review with the Hard bot’s best moves</li><li>Exclusive boards, trims and emotes</li><li>No ads, ever</li></ul>
     <button class="b3d block" type="button" disabled>Available in the app</button></div>
   <div class="panel" style="display:flex;align-items:center;gap:12px"><div style="flex:1"><div class="row-t">Crown packs</div><div class="row-s">Buy crowns directly. Cosmetics only, never gold or pieces.</div></div><span class="tagapp">App</span></div>
   </div>`;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{const bi=$('shopBar');if(bi)bi.style.width=(lvl>=MAX_LVL?100:inLvl/XP_LVL*100)+'%';const tr=$('track');if(tr)tr.scrollLeft=Math.max(0,(lvl-2)*92)}));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const bi=$('shopBar');if(bi)bi.style.width=(lvl>=MAX_LVL?100:inLvl/XP_LVL*100)+'%';const tr=$('track');if(tr)tr.scrollLeft=Math.max(0,(lvl-2)*92);const lb=$('lgBar');if(lb)lb.style.width=lb.dataset.w+'%';const lr=$('lgRow');if(lr){const k=Math.max(0,LEGACY.findIndex(s=>s.need&&!P.legacy.un.includes(s.id))-1);lr.scrollLeft=k*128}}));
 }
 setInterval(()=>{if(route!=='shop')return;document.querySelectorAll('[data-cd]').forEach(el=>{el.textContent=fmtLeft(el.dataset.cd==='week'?msToWeek():msToMidnight())})},1000);
 
@@ -2736,6 +2891,8 @@ document.addEventListener('click',e=>{
     case 'pvfx':pvFx();break;
     case 'pvsnd':previewSound(openItemId);break;
     case 'stab':shopTab=a.dataset.k;sfx('tap');renderShop();break;
+    case 'lgitem':openLegacy(a.dataset.id);break;
+    case 'lgequip':equipLegacy(a.dataset.id);break;
     case 'crange':chartRange=a.dataset.k;renderRanks();break;
     case 'pbtab':pbarTab=a.dataset.k;renderMe();break;
     case 'edit':openEdit();break;
