@@ -1,4 +1,4 @@
-const CACHE='chess-battle-v13';
+const CACHE='chess-battle-v14';
 const CORE=['./','./index.html','./manifest.json','./icon-192.png','./apple-touch-icon.png','https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js'];
 const CACHEABLE=/^(https:\/\/(cdnjs\.cloudflare\.com|fonts\.googleapis\.com|fonts\.gstatic\.com)\/)/;
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.allSettled(CORE.map(u=>c.add(u)))).then(()=>self.skipWaiting()))});
