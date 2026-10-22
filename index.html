@@ -1196,7 +1196,7 @@ const DEF_P=()=>({name:'',av:'Q',avc:'gold',rating:700,crowns:150,xp:0,claimed:[
 function loadP(){
   const d=DEF_P();let p;try{p=JSON.parse(store.get('cb-profile')||'null')}catch(e){p=null}
   if(!p||typeof p!=='object')return d;
-  for(const k in d){if(p[k]==null)p[k]=d[k];else if(typeof d[k]==='object'&&!Array.isArray(d[k]))p[k]={...d[k],...p[k]}}
+  for(const k in d){if(p[k]==null)p[k]=d[k];else if(d[k]!==null&&typeof d[k]==='object'&&!Array.isArray(d[k])&&typeof p[k]==='object'&&!Array.isArray(p[k]))p[k]={...d[k],...p[k]}}
   return p;
 }
 let P=loadP();
