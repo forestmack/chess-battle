@@ -1125,6 +1125,18 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 .live-vs{font:900 13px/1 var(--display);color:var(--muted);letter-spacing:.1em}
 .live-p{display:flex;align-items:center;gap:8px;min-width:0}
 .live-p .lb-name{font-size:14px}
+.gbadge{display:inline-flex;align-items:center;font:900 9.5px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;padding:3px 6px 2px;border-radius:6px;background:rgba(255,255,255,.13);color:#cfd6ff;margin-left:6px;vertical-align:2px;flex:none}
+.gav{border-radius:50%;background:color-mix(in srgb,var(--c) 18%,#0c1338);display:inline-grid;place-items:center;flex:none}.gav svg{width:72%;height:72%}
+.gf-head{display:flex;align-items:center;gap:12px;margin:2px 0}
+.gfound .gf-art{display:grid;place-items:center;filter:drop-shadow(0 8px 22px color-mix(in srgb,var(--nc) 55%,transparent))}
+.gf-name{font:900 clamp(22px,7cqw,30px)/1.05 var(--display);color:var(--nc);letter-spacing:.02em;text-transform:uppercase}
+.gf-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font:700 13px/1.2 var(--body);color:var(--muted);margin-top:5px}.gf-meta .gbadge{margin:0}
+.wfeed .wf-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid rgba(43,56,120,.5)}.wfeed .wf-row:first-child{border-top:0;padding-top:2px}
+.wf-t{font:600 13.5px/1.25 var(--body);overflow:hidden;text-overflow:ellipsis}.wf-t b{font-weight:800}
+.wf-pts{display:inline-flex;align-items:center;gap:4px;font:900 14px/1 var(--display);color:var(--nc)}.wf-pts .ncrest{width:15px;height:17px}
+.groster .gr-row{display:grid;grid-template-columns:118px minmax(0,1fr);gap:10px;align-items:start;padding:9px 0;border-top:1px solid rgba(43,56,120,.5)}
+.gr-k{display:grid;grid-template-columns:26px 1fr;column-gap:6px;align-items:center}.gr-k svg{width:26px;height:26px;grid-row:span 2;fill:var(--nc)}.gr-k b{font:800 13px/1.1 var(--body)}.gr-k small{font:700 10.5px/1.2 var(--body);color:var(--muted)}
+.gr-n{display:flex;flex-wrap:wrap;gap:5px 12px;font:600 13px/1.3 var(--body)}.gr-n i{font-style:normal;color:var(--muted);font-size:11px}
 .watch-tag{display:inline-flex;align-items:center;gap:6px;font:800 11px/1 var(--display);letter-spacing:.14em;color:#ff5e78;text-transform:uppercase}
 .watch-tag::before{content:"";width:7px;height:7px;border-radius:50%;background:#ff5e78;box-shadow:0 0 8px #ff5e78;animation:pulse 1.4s ease-in-out infinite}
 .tab-dot{position:absolute;top:6px;right:calc(50% - 20px);width:9px;height:9px;border-radius:50%;background:#ff5e78;box-shadow:0 0 0 2px #060b20}
@@ -1748,12 +1760,13 @@ const pawnCount=(b,w)=>b.reduce((n,p)=>n+(p&&p.w===w&&p.t==='P'?1:0),0);
 
 /* ================= game state ================= */
 let S=null,busy=false;
-const BOT=0,HUMAN=1,MODE_NAME={easy:'Easy',medium:'Medium',hard:'Hard',daily:'Daily'},BOT_R={easy:600,medium:1000,hard:1400,daily:1000};
+const BOT=0,HUMAN=1,MODE_NAME={easy:'Easy',medium:'Medium',hard:'Hard',daily:'Daily',guard:'Guard'},BOT_R={easy:600,medium:1000,hard:1400,daily:1000,guard:1000};
+const botRating=()=>S&&S.mode==='guard'&&S.guard?S.guard.rating:BOT_R[S&&S.mode]||1000;
 const vsBot=()=>!!(S&&MODE_NAME[S.mode]);
 const isOnline=()=>!!(S&&S.mode==='online'&&S.online);
 const fixedSide=()=>isOnline()?S.online.me:vsBot()?HUMAN:null;
 const isBotTurn=()=>vsBot()&&S.turn===BOT;
-const nameOf=w=>isOnline()?(S.online.spectate?((S.online.names&&S.online.names[w])||SIDE[w]):w===S.online.me?'You':(S.online.oppName||'Opponent')):vsBot()?(w===BOT?`${MODE_NAME[S.mode]} bot`:'You'):SIDE[w];
+const nameOf=w=>isOnline()?(S.online.spectate?((S.online.names&&S.online.names[w])||SIDE[w]):w===S.online.me?'You':(S.online.oppName||'Opponent')):vsBot()?(w===BOT?(S.guard?guardName(S.guard):`${MODE_NAME[S.mode]} bot`):'You'):SIDE[w];
 let RP=null;
 const canAct=()=>!busy&&!RP&&HV==null&&S&&!S.over&&!(S.online&&S.online.spectate)&&(fixedSide()==null||S.turn===fixedSide())&&!(isOnline()&&!S.online.ready);
 function buyBlock(t){const w=S.turn;if(S.lastBuy[w]===t)return 'Last buy';if(t==='P'&&pawnCount(S.b,w)>=8)return 'Max 8';return ''}
@@ -1798,7 +1811,7 @@ function snapHuman(){
   const o={};for(const k of PACK)o[k]=S[k];if(S.clock){o.clock={...S.clock,ms:S.clock.ms.slice()}}o.quiet=S.quiet;o.capd=S.capd;o.fl=S.frames.length;o.ll=S.log.length;
   S.snaps.push(JSON.stringify(o));if(S.snaps.length>40)S.snaps.shift();
 }
-const canUndo=()=>!!(S&&vsBot()&&S.mode!=='daily'&&!S.over&&S.turn===HUMAN&&!busy&&!RP&&(S.bought?S.snaps.length>=1:S.snaps.length>=2));
+const canUndo=()=>!!(S&&vsBot()&&S.mode!=='daily'&&S.mode!=='guard'&&!S.over&&S.turn===HUMAN&&!busy&&!RP&&(S.bought?S.snaps.length>=1:S.snaps.length>=2));
 function undo(){
   if(!canUndo())return;
   if(!S.bought)S.snaps.pop();
@@ -1888,14 +1901,14 @@ function capsHTML(w){
   return `<div class="caps" aria-label="Captured ${sorted.map(t=>NAME[t]).join(', ')}">${sorted.map(t=>`<svg class="pcs ${w?'tb':'tw'}" viewBox="0 0 100 100" aria-hidden="true"><use href="#s-${t}" width="100" height="100"/></svg>`).join('')}${d>0?`<em>+${d}</em>`:''}</div>`;
 }
 function seatHTML(w,sub,live){
-  const sn=isOnline()?natOf(S.online.spectate?(S.online.nats&&S.online.nats[w]):w===S.online.me?P.nation:S.online.oppNation):null;
-  return `<span class="avatar ${w?'tw':'tb'}">${svgPiece('K')}</span><div style="min-width:0"><div class="seat-name">${esc(nameOf(w))}${sn?crestN(sn):''}${live!=null?`<span class="live${live?' on':''}" title="${live?'Connected':'Offline'}"></span>`:''}</div><div class="seat-sub">${esc(sub)}</div>${capsHTML(w)}</div>`;
+  const gd=S.mode==='guard'&&S.guard,sn=isOnline()?natOf(S.online.spectate?(S.online.nats&&S.online.nats[w]):w===S.online.me?P.nation:S.online.oppNation):gd?(w===BOT?natOf(gd.nation):myNat()):null;
+  return `<span class="avatar ${w?'tw':'tb'}">${svgPiece(gd&&w===BOT&&RANK_NAME[gd.rank]?gd.rank:'K')}</span><div style="min-width:0"><div class="seat-name">${esc(nameOf(w))}${sn?crestN(sn):''}${gd&&w===BOT?GBADGE:''}${live!=null?`<span class="live${live?' on':''}" title="${live?'Connected':'Offline'}"></span>`:''}</div><div class="seat-sub">${esc(sub)}</div>${capsHTML(w)}</div>`;
 }
 function renderOpp(o={}){
   const fs=fixedSide(),op=fs!=null?1-fs:1-S.turn,el=$('opp');el.classList.toggle('puz',S.mode==='puzzle');
   const sub=S.over?(S.over.win===op?'Victorious':S.over.win==null?'Draw':'Defeated'):(isOnline()&&!S.online.ready)?'Not joined yet':(S.turn===op?(vsBot()?'Thinking…':'Their move'):'Waiting');
   const pend=S.pend[op],next=S.gold[op];
-  const extra=isOnline()&&S.online.oppRating?` · ${S.online.oppRating}`:vsBot()?` · ${BOT_R[S.mode]}`:'';
+  const extra=isOnline()&&S.online.oppRating?` · ${S.online.oppRating}`:vsBot()?` · ${botRating()}`:'';
   el.innerHTML=`<div class="seat">${seatHTML(op,sub+extra,isOnline()?!!(conn&&conn.open):null)}</div><div class="oppr"><span class="clock" id="clkOpp" hidden></span><div class="next"><span class="seat-sub">Bank</span><span class="next-num">${pend?`<span class="tag">+${pend} spoils</span>`:''}<span class="coin"></span>${next}</span></div></div>`;
   if(o.swap){el.classList.remove('swap');void el.offsetWidth;el.classList.add('swap')}
 }
@@ -1959,6 +1972,7 @@ function renderGameHead(){
   if(S.mode==='puzzle'&&S.puz&&S.puz.rush)k='Puzzle Rush';
   else if(S.mode==='puzzle')k=S.puz&&S.puz.train?`Training drill #${S.drillNo}`:`Daily puzzle #${S.dailyNo}`;
   else if(S.mode==='daily')k=`Daily #${S.dailyNo} · vs bot`;
+  else if(S.mode==='guard'&&S.guard)k=`Quick match · ${(natOf(S.guard.nation)||{short:''}).short} Guard`;
   else if(vsBot())k=`${MODE_NAME[S.mode]} bot · ${BOT_R[S.mode]}${S.undone?' · unrated':''}`;
   else if(isOnline()&&S.online.spectate)k=`Watching live · ${S.online.code}`;
   else if(isOnline()&&S.online.daily)k='One move a day';
@@ -1973,14 +1987,14 @@ function renderGameHead(){
   else if(isOnline()&&!S.online.ready)n='Waiting…';
   else if(fs==null)n=`${SIDE[S.turn]} to move`;
   else if(S.turn===fs)n=S.chk?'Check!':'Your move';
-  else n=vsBot()?'Bot thinking…':'Their move';
+  else n=S.guard?`${S.guard.name} is thinking…`:vsBot()?'Bot thinking…':'Their move';
   $('gk').textContent=k;$('gn').textContent=n;
   $('emoteBtn').hidden=!isOnline();
 }
 function gameSkin(){
   const g=$('scr-game'),bd=boardEl;if(!g||!bd)return;
-  const on=isOnline(),me=on?S.online.me:null,wn=on?natOf(me===1?P.nation:S.online.oppNation):null,bn=on?natOf(me===0?P.nation:S.online.oppNation):null;
-  const hb=on?(me===1?item(P.equip.home):S.online.oppHome):null,hl=hb?hb.l:wn&&wn.l,hd=hb?hb.d:wn&&wn.d;
+  const on=isOnline(),gd=!on&&S&&S.mode==='guard'&&S.guard,me=on?S.online.me:null,wn=on?natOf(me===1?P.nation:S.online.oppNation):gd?myNat():null,bn=on?natOf(me===0?P.nation:S.online.oppNation):gd?natOf(gd.nation):null;
+  const hb=on?(me===1?item(P.equip.home):S.online.oppHome):gd?item(P.equip.home):null,hl=hb?hb.l:wn&&wn.l,hd=hb?hb.d:wn&&wn.d;
   if(wn){bd.style.setProperty('--sq-l',hl);bd.style.setProperty('--sq-d',hd)}else{bd.style.removeProperty('--sq-l');bd.style.removeProperty('--sq-d')}
   if(wn)g.style.setProperty('--wa',wn.w);else g.style.removeProperty('--wa');
   if(bn)g.style.setProperty('--ba',bn.b);else g.style.removeProperty('--ba');
@@ -2003,15 +2017,24 @@ function floater(i,amt){const [r,c]=vpos(i);playFx(fxEl,c*12.5,r*12.5,12.5,amt,P
 
 /* ================= bot ================= */
 let deadline=Infinity;const MATE=1e6;
+/* EV: a nation's playstyle, applied to the searching side (EVW) only. null = the plain bot. */
+let EV=null,EVW=0;
 function evalW(st){
-  let s=0;const b=st.b;
+  let s=0;const b=st.b,E=EV;let k0=-1,k1=-1;
+  if(E)for(let i=0;i<64;i++){const p=b[i];if(p&&p.t==='K'){if(p.w)k1=i;else k0=i}}
   for(let i=0;i<64;i++){const p=b[i];if(!p)continue;const r=i>>3,c=i&7;let v=0;
     if(p.t!=='K')v=VAL[p.t]*100;
     if(p.t==='P')v+=(p.w?6-r:r-1)*12;
     else if(p.t==='N'||p.t==='B')v+=14-(Math.abs(c-3.5)+Math.abs(r-3.5))*4;
     else if(p.t==='Q'||p.t==='R')v+=6-Math.abs(c-3.5)*2;
+    if(E&&p.w===EVW&&p.t!=='K'){
+      if(p.t==='P')v+=(E.pawn?(p.w?6-r:r-1)*E.pawn:0)+(E.pv||0);
+      else if((p.t==='N'||p.t==='B')&&E.minor)v+=E.minor;
+      if(E.agg){const ek=p.w?k0:k1;if(ek>=0)v+=(7-Math.max(Math.abs((ek>>3)-r),Math.abs((ek&7)-c)))*E.agg}
+      if(E.guard){const mk=p.w?k1:k0;if(mk>=0&&Math.max(Math.abs((mk>>3)-r),Math.abs((mk&7)-c))<=1)v+=E.guard}}
     s+=p.w?v:-v}
-  return s+(st.g[1]-st.g[0])*45;
+  let gs=(st.g[1]-st.g[0])*45;if(E&&E.gold)gs+=(EVW?st.g[1]:-st.g[0])*E.gold;
+  return s+gs;
 }
 function genActs(st,w,capsOnly){
   const b=st.b,acts=[];
@@ -2051,11 +2074,11 @@ function negamax(st,w,d,alpha,beta,ply,qd){
   for(const a of acts){const v=-negamax(applyAct(st,a,w),1-w,d-1,-beta,-alpha,ply+1,qd);if(v>best)best=v;if(v>alpha)alpha=v;if(alpha>=beta)break}
   return best;
 }
-function chooseBot(mode,st){
-  const w=BOT;
+function chooseBot(mode,st,opt){
+  opt=opt||{};const w=opt.w!=null?opt.w:BOT;EV=opt.ev||null;EVW=w;
   let acts=genActs(st,w,false);
   if(!acts.length){for(let i=0;i<64;i++){const p=st.b[i];if(p&&p.w===w){const m=pseudo(st.b,i);if(m.length)return [{type:'move',from:i,to:m[0]}]}}return null}
-  const cfg={easy:{d:1,qd:0,noise:140,rnd:.3},medium:{d:2,qd:2,noise:18,rnd:0},hard:{d:4,qd:4,noise:0,rnd:0,ms:1300}}[mode==='daily'?'medium':mode];
+  const cfg=opt.cfg||{easy:{d:1,qd:0,noise:140,rnd:.3},medium:{d:2,qd:2,noise:18,rnd:0},hard:{d:4,qd:4,noise:0,rnd:0,ms:1300}}[mode==='daily'?'medium':mode]||{d:2,qd:2,noise:18,rnd:0};
   if(Math.random()<cfg.rnd)return [acts[rand(acts.length)]];
   let best=acts[0];
   const search=d=>{let bv=-Infinity,ba=null,alpha=-Infinity;const scored=[];
@@ -2063,8 +2086,9 @@ function chooseBot(mode,st){
     scored.sort((x,y)=>y[0]-x[0]);acts=scored.map(x=>x[1]);return ba};
   deadline=cfg.ms?performance.now()+cfg.ms:Infinity;
   try{if(cfg.ms){for(let d=1;d<=cfg.d;d++)best=search(d)}else best=search(cfg.d)}catch(e){if(e!=='time')throw e}
-  deadline=Infinity;
+  deadline=Infinity;EV=null;
   const plan=[best];
+  EV=opt.ev||null;
   if(best.type==='buy'&&mode!=='easy'){
     let cur=applyAct(st,best,w);
     for(let k=0;k<4;k++){
@@ -2072,6 +2096,7 @@ function chooseBot(mode,st){
       for(const a of genActs(cur,w,false)){if(a.type!=='buy')continue;const v=-negamax(applyAct(cur,a,w),1-w,1,-Infinity,Infinity,1,2);if(v>bv+10){bv=v;ba=a}}
       if(!ba)break;plan.push(ba);cur=applyAct(cur,ba,w)}
   }
+  EV=null;
   return plan.map(a=>({type:a.type,from:a.from,to:a.to,t:a.t,sq:a.sq}));
 }
 /* bot search runs in a worker so the UI never freezes */
@@ -2080,23 +2105,71 @@ function getWorker(){
   if(botWorker===false)return null;
   if(botWorker)return botWorker;
   try{
-    const src=[`const BOT=${BOT},MATE=${MATE};let deadline=Infinity;`,
+    const src=[`const BOT=${BOT},MATE=${MATE};let deadline=Infinity,EV=null,EVW=0;`,
       `const KN=${JSON.stringify(KN)},DIAG=${JSON.stringify(DIAG)},ORTH=${JSON.stringify(ORTH)},VAL=${JSON.stringify(VAL)},PRICE=${JSON.stringify(PRICE)},SHOP=${JSON.stringify(SHOP)};`,
       `const inB=${inB.toString()};const rand=${rand.toString()};const kingIdx=${kingIdx.toString()};const pawnCount=${pawnCount.toString()};`,
       ...[attacks,pseudo,apply,inCheck,placeSquares,evalW,genActs,applyAct,quiesce,negamax,chooseBot].map(f=>f.toString()),
-      `onmessage=e=>{let plan=null;try{plan=chooseBot(e.data.mode,e.data.st)}catch(err){}postMessage({id:e.data.id,plan})};`].join('\n');
+      `onmessage=e=>{let plan=null;try{plan=chooseBot(e.data.mode,e.data.st,e.data.opt)}catch(err){}postMessage({id:e.data.id,plan})};`].join('\n');
     botWorker=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
   }catch(e){botWorker=false}
   return botWorker||null;
 }
-function thinkBot(mode,st,cb){
+function thinkBot(mode,st,cb,opt){
   const w=getWorker(),id=++botReq;
-  if(!w){setTimeout(()=>cb(chooseBot(mode,st)),0);return}
+  if(!w){setTimeout(()=>cb(chooseBot(mode,st,opt)),0);return}
   let done=false;
-  const fallback=()=>{if(done)return;done=true;botWorker=false;cb(chooseBot(mode,st))};
+  const fallback=()=>{if(done)return;done=true;botWorker=false;cb(chooseBot(mode,st,opt))};
   w.onmessage=e=>{if(e.data.id!==id||done)return;done=true;cb(e.data.plan)};
   w.onerror=fallback;
-  try{w.postMessage({mode,st:JSON.parse(JSON.stringify(st)),id})}catch(e){fallback()}
+  try{w.postMessage({mode,st:JSON.parse(JSON.stringify(st)),id,opt:opt||null})}catch(e){fallback()}
+}
+/* ---- Nation Guards: 25 bots per nation, always labeled. Strength comes from rank, playstyle from nation. ---- */
+const GUARD_CFG={P:{d:2,qd:2,noise:18,rnd:0},N:{d:2,qd:3,noise:10,rnd:0},B:{d:3,qd:3,noise:8,rnd:0,ms:700},R:{d:3,qd:4,noise:4,rnd:0,ms:950},Q:{d:4,qd:4,noise:0,rnd:0,ms:1300},K:{d:5,qd:5,noise:0,rnd:0,ms:2300}};
+const GUARD_STYLE={ember:{agg:8,tag:'Attacks the king early'},tide:{gold:18,guard:14,tag:'Banks gold, guards the king'},grove:{pawn:12,pv:25,tag:'Pawn walls and promotions'},dusk:{minor:30,qx:1,nx:.5,tag:'Traps and deep tactics'}};
+const GUARD_PTS={P:1,N:2,B:2,R:3,Q:4,K:5},RANK_NAME={K:'King',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
+function guardOpt(g,w){const c={...(GUARD_CFG[g&&g.rank]||GUARD_CFG.P)},e=GUARD_STYLE[g&&g.nation]||null;if(e&&e.qx)c.qd+=e.qx;if(e&&e.nx)c.noise*=e.nx;return {w,cfg:c,ev:e?{agg:e.agg||0,gold:e.gold||0,guard:e.guard||0,pawn:e.pawn||0,pv:e.pv||0,minor:e.minor||0}:null}}
+const guardName=g=>g?`${RANK_NAME[g.rank]||'Guard'} ${g.name}`:'Guard';
+function gavatar(g,sz){const n=natOf(g&&g.nation),c=n?n.c:'#ffcc2e',t=g&&RANK_NAME[g.rank]?g.rank:'P';
+  return `<span class="avt gav" style="width:${sz}px;height:${sz}px;--c:${c}"><svg viewBox="0 0 100 100" aria-hidden="true" style="fill:${c};stroke:#060b20;stroke-width:5;stroke-linejoin:round;--acc:#060b20"><use href="#s-${t}" width="100" height="100"/></svg></span>`}
+const GBADGE='<span class="gbadge" title="Nation Guard: a bot that defends its nation">Guard</span>';
+/* a whole Guard vs Guard game, played headless. Used by the war runner (server/war-runner.mjs) and the tests. */
+function playWar(gw,gb,R,maxPly){
+  R=R||Math.random;maxPly=maxPly||300;
+  const {b:b0}=setupBoard(R);let b=b0.map(x=>x&&{t:x.t,w:x.w});
+  const init=b.map(x=>x?x.t+(x.w?'w':'b'):'');
+  const g=[3,3],lb=[null,null],G=[gb,gw],acts=[];let w=1,quiet=0,ply=0,over=null;
+  const canBuy=t=>lb[w]!==t&&g[w]>=PRICE[t]&&placeSquares(b,w,t).length&&!(t==='P'&&pawnCount(b,w)>=8);
+  while(!over&&ply<maxPly){
+    const chk=inCheck(b,w),safe=anyLegal(b,w);
+    const blocking=SHOP.some(t=>canBuy(t)&&placeSquares(b,w,t).some(sq=>{const nb=b.slice();nb[sq]={t,w};return !inCheck(nb,w)}));
+    if(chk&&!safe&&!blocking){over={win:1-w,why:'Checkmate'};break}
+    if(!chk&&!safe&&!SHOP.some(canBuy)){over={win:null,why:'Stalemate'};break}
+    if(quiet>=QUIET_MAX){over={win:null,why:'No progress'};break}
+    if(b.every(x=>!x||x.t==='K')&&g[0]<1&&g[1]<1){over={win:null,why:'Bare kings'};break}
+    const plan=chooseBot('guard',{b:b.map(x=>x&&{...x}),g:g.slice(),lb:lb.slice()},guardOpt(G[w],w));
+    if(!plan){over={win:1-w,why:'Checkmate'};break}
+    let prog=false;
+    if(plan[0].type==='move'){const {from,to}=plan[0],mv=b[from],cap=b[to];
+      if(!mv||mv.w!==w||!pseudo(b,from).includes(to)){over={win:1-w,why:'Forfeit'};break}
+      if(cap){g[w]+=VAL[cap.t];prog=true}if(mv.t==='P')prog=true;
+      b=apply(b,from,to);acts.push([from,to]);
+    }else{const buys=[];
+      for(const a of plan){if(!canBuy(a.t)||b[a.sq])break;b[a.sq]={t:a.t,w};g[w]-=PRICE[a.t];lb[w]=a.t;buys.push([a.t,a.sq])}
+      if(!buys.length){over={win:1-w,why:'Forfeit'};break}
+      prog=true;acts.push({b:buys})}
+    if(inCheck(b,w)){over={win:1-w,why:'Suicide'};ply++;break}
+    quiet=prog?0:quiet+1;ply++;w=1-w;
+  }
+  if(!over)over={win:null,why:'Turn limit'};
+  /* a drawn battle goes to whoever holds the bigger army (pieces plus gold), if the lead is at least 3 */
+  if(over.win==null){const worth=s=>b.reduce((n,x)=>n+(x&&x.w===s&&x.t!=='K'?VAL[x.t]:0),0)+g[s],d=worth(1)-worth(0);if(Math.abs(d)>=3)over={win:d>0?1:0,why:'On points'}}
+  return {init,acts,plies:ply,outcome:over.win==null?'draw':over.win===1?'white':'black',why:over.why};
+}
+/* rebuild the boards of a Guard battle from its moves */
+function warFrames(init,acts){
+  let id=1,b=init.map(x=>x?{t:x[0],w:x[1]==='w'?1:0,id:id++}:null);const fr=[{b:b.slice(),last:[]}];let w=1;
+  for(const a of acts||[]){if(Array.isArray(a)){b=apply(b,a[0],a[1]);fr.push({b:b.slice(),last:[a[0],a[1]]})}else{b=b.slice();const l=[];for(const [t,sq] of a.b||[]){b[sq]={t,w,id:id++};l.push(sq)}fr.push({b:b.slice(),last:l})}w=1-w}
+  return fr;
 }
 function botTurn(){
   const gid=S.gid;busy=true;renderOpp();renderTray();
@@ -2115,7 +2188,7 @@ function botTurn(){
       if(inCheck(S.b,BOT))suicide(BOT);else passTurn(false);
     };
     setTimeout(step,150);
-  },Math.max(0,550-(performance.now()-t0))));
+  },Math.max(0,(S.guard?750:550)-(performance.now()-t0))),S.guard?guardOpt(S.guard,BOT):null);
 }
 
 /* ================= server (Supabase) =================
@@ -2169,6 +2242,8 @@ async function netRefreshBoards(force){
     NET.stand=st;NET.top=top;NET.live=live;NET.rush=rush;
     if(P.nation){NET.heroes[P.nation]=await rpc('nation_heroes',{p_nation:P.nation,p_limit:10});NET.council=NET.council||{};NET.council[P.nation]=await rpc('nation_heroes',{p_nation:P.nation,p_limit:3,p_month:prevMonthKey()}).catch(()=>[])}
     NET.map=await rpc('get_map',{p_month:null}).catch(()=>NET.map||[]);
+    [NET.war,NET.feed]=await Promise.all([rpc('war_live',{p_limit:5}).catch(()=>[]),rpc('war_feed',{p_nation:null,p_limit:12}).catch(()=>NET.feed||[])]);
+    if(P.nation&&!NET.roster)NET.roster=await rpc('guard_roster',{p_nation:P.nation}).catch(()=>null);
     if(route==='ranks'||route==='nat'||route==='home')netRerender();
   }catch(e){}
 }
@@ -2304,6 +2379,52 @@ function ygRow(g){
   else{tag='<span class="yg-tag wait">Their move</span>';sub=dailyLeft(g.deadline)}
   return `<button class="yg-row" type="button" ${act}>${avatar(av,avc,36)}<div style="min-width:0"><div class="yg-name"><span>${esc(oppName)}</span>${oppNat?crestN(oppNat):''}</div><div class="yg-sub">${esc(sub)}</div></div>${tag}</button>`;
 }
+/* ---- the war feed: guard battles and duels against guards ---- */
+function feedRow(x){
+  const ago=t=>{const m=Math.max(0,Math.round((Date.now()-new Date(t))/6e4));return m<1?'just now':m<60?`${m}m ago`:m<1440?`${Math.round(m/60)}h ago`:`${Math.round(m/1440)}d ago`};
+  const reg=x.region&&regionOf(x.region)?` · ${esc(regionOf(x.region)[1])}`:'';
+  if(x.kind==='war'){const W=x.outcome==='white'?x.white:x.outcome==='black'?x.black:null,Lo=W===x.white?x.black:x.white,wn=natOf(W&&W.nation);
+    if(!W)return `<div class="wf-row">${gavatar(x.white,30)}<div style="min-width:0"><div class="wf-t">${esc(guardName(x.white))} and ${esc(guardName(x.black))} fought to a draw</div><div class="lb-sub">Guard battle${reg} · ${ago(x.at)}</div></div><span></span></div>`;
+    return `<div class="wf-row">${gavatar(W,30)}<div style="min-width:0"><div class="wf-t"><b style="color:${wn?wn.c:'inherit'}">${esc(guardName(W))}</b> beat ${esc(guardName(Lo))}</div><div class="lb-sub">Guard battle${x.why==='On points'?' · on points':''}${reg} · ${ago(x.at)}</div></div><span class="wf-pts" style="--nc:${wn?wn.c:'#ffcc2e'}">${wn?crestN(wn):''}+${x.pts}</span></div>`}
+  const pn=natOf(x.player&&x.player.nation),gn=natOf(x.guard&&x.guard.nation),pname=esc((x.player&&x.player.name)||'A player'),won=x.outcome==='w';
+  return `<div class="wf-row">${won?avatar(x.player.av||'Q',x.player.avc||'gold',30):gavatar(x.guard,30)}<div style="min-width:0"><div class="wf-t">${won?`<b style="color:${pn?pn.c:'inherit'}">${pname}</b> beat ${esc(guardName(x.guard))}`:`<b style="color:${gn?gn.c:'inherit'}">${esc(guardName(x.guard))}</b> held off ${pname}`}</div><div class="lb-sub">Quick match${reg} · ${ago(x.at)}</div></div><span class="wf-pts" style="--nc:${(won?pn:gn)?(won?pn:gn).c:'#ffcc2e'}">${(won?pn:gn)?crestN(won?pn:gn):''}+${x.pts}</span></div>`;
+}
+function feedPanel(title){
+  if(!NET.on||!NET.feed||!NET.feed.length)return '';
+  return `<div class="cap-sec"><span class="sec-t">${title||'Dispatches from the front'}</span><span class="cd">live</span></div><div class="panel wfeed">${NET.feed.slice(0,8).map(feedRow).join('')}</div>`;
+}
+function rosterPanel(n){
+  if(!NET.on||!NET.roster||!NET.roster.length||NET.roster[0].nation!==n.id)return '';
+  const by=r=>NET.roster.filter(g=>g.rank===r);
+  return `<div class="cap-sec"><span class="sec-t">The Guard of ${esc(CAPITAL[n.id].city)}</span><span class="cd">${NET.roster.length} bots</span></div><div class="panel groster" style="--nc:${n.c}"><p class="row-s" style="margin:0 0 10px">${esc(n.short)}’s Guards are bots that defend the nation. They take on players from rival nations in quick match when no one else is searching, and battle the other nations’ Guards day and night. ${esc(GUARD_STYLE[n.id].tag)}.</p>${['K','Q','R','B','N','P'].map(r=>`<div class="gr-row"><span class="gr-k">${svgPiece(r,'tw')}<b>${RANK_NAME[r]}${by(r).length>1?'s':''}</b><small>+${GUARD_PTS[r]} to beat</small></span><span class="gr-n">${by(r).map(g=>`<span>${esc(g.name)} <i>${g.rating}</i></span>`).join('')}</span></div>`).join('')}</div>`;
+}
+/* watch a Guard battle as it plays out: one move every few seconds, the same moment for every viewer */
+let WARW=null;
+async function watchWar(id){
+  if(!(await netReady()))return;
+  let g=null;try{g=await rpc('war_game',{p_id:id})}catch(e){}
+  if(!g||!g.init){toast('That battle has ended.');return}
+  const frames=warFrames(g.init,g.acts),skew=Date.now()-new Date(g.now).getTime(),t0=new Date(g.start_at).getTime()+skew,ms=g.ply_ms||6000;
+  const due=()=>Math.max(1,Math.min(frames.length,Math.floor((Date.now()-t0)/ms)+1));
+  const lbl=`${guardName(g.white)} vs ${guardName(g.black)}`;
+  if(isOnline())leaveOnline();S=null;
+  enterReplay(frames.slice(0,Math.max(2,due())),`Live · ${lbl}`);if(!RP)return;
+  RP.back='home';const wn=natOf(g.white.nation),bn=natOf(g.black.nation);if(wn){boardEl.style.setProperty('--sq-l',wn.l);boardEl.style.setProperty('--sq-d',wn.d)}
+  const reg=g.region&&regionOf(g.region);$('gk').textContent=`Guard battle${reg?' · '+reg[1]:''}`;$('gn').textContent=`${wn?wn.short:''} vs ${bn?bn.short:''}`;
+  const seat=(x,col)=>`<div class="seat" style="flex:1;min-width:0"><span class="avatar ${col}">${svgPiece(RANK_NAME[x.rank]?x.rank:'K')}</span><div style="min-width:0"><div class="seat-name">${esc(x.name)}${natOf(x.nation)?crestN(natOf(x.nation)):''}</div><div class="seat-sub">${RANK_NAME[x.rank]} · ${x.rating}</div></div></div>`;
+  $('opp').innerHTML=`${seat(g.white,'tw')}<span class="live-vs" style="align-self:center;padding:0 6px">VS</span>${seat(g.black,'tb')}`;
+  rpShow(RP.frames.length-1);
+  clearInterval(WARW);const rp=RP;
+  WARW=setInterval(()=>{
+    if(RP!==rp){clearInterval(WARW);return}
+    const n=due();if(n>rp.frames.length){const atEnd=rp.i>=rp.frames.length-1;rp.frames=frames.slice(0,n);$('rpRange').max=rp.frames.length-1;if(atEnd){rpShow(rp.frames.length-1);sfx('move')}else rpShow(rp.i)}
+    if(n>=frames.length&&Date.now()>=new Date(g.end_at).getTime()+skew){clearInterval(WARW);
+      rpc('war_game',{p_id:id}).then(x=>{if(RP!==rp||!x)return;const W=x.outcome==='white'?x.white:x.outcome==='black'?x.black:null;
+        $('rpLabel').textContent=W?`${guardName(W)} wins${x.why==='On points'?' on points':''} · +${x.pts} ${(natOf(W.nation)||{short:''}).short}`:'Draw';
+        toast(W?`${guardName(W)} wins for ${(natOf(W.nation)||{short:''}).short}. +${x.pts} stars.`:'The battle ended in a draw.');netRefreshBoards(true)}).catch(()=>{})}
+  },1000);
+  sfx('start');
+}
 function saveCTA(){
   if(!NET.on||!NET.anon||!((P.legacy&&P.legacy.pts>=5)||(P.stats&&P.stats.games>=3)))return '';
   const n=myNat();
@@ -2315,10 +2436,12 @@ function gamesPanel(){
   return `<div class="sec-row"><span class="sec-t">Your games</span><span class="cd">${mine?`${pl(mine,'move')} waiting`:'One move a day'}</span></div><div class="panel yg">${NET.games.slice(0,8).map(ygRow).join('')}</div>`;
 }
 function livePanel(){
-  const L=(NET.live||[]).filter(g=>g.host!==NET.uid&&g.guest!==NET.uid);
-  if(!NET.on||!L.length)return '';
+  const L=(NET.live||[]).filter(g=>g.host!==NET.uid&&g.guest!==NET.uid),WL=(NET.war||[]).filter(w=>new Date(w.end_at)>Date.now());
+  if(!NET.on||(!L.length&&!WL.length))return '';
+  const gside=g=>`<div class="live-p">${gavatar(g,30)}<div style="min-width:0"><div class="lb-name"><span>${esc(guardName(g))}</span>${natOf(g.nation)?crestN(natOf(g.nation)):''}</div><div class="lb-sub">${g.rating} · Guard</div></div></div>`;
+  const wrows=WL.slice(0,3).map(w=>`<button class="yg-row live-row" type="button" data-act="watchwar" data-id="${w.id}">${gside(w.white)}<span class="live-vs">VS</span>${gside(w.black)}<span class="yg-tag wait">Watch</span></button>`).join('');
   const side=(nm,nat,leg,av,avc)=>`<div class="live-p">${avatar(av||'Q',avc||'gold',30)}<div style="min-width:0"><div class="lb-name"><span>${esc(nm||'Player')}</span>${natOf(nat)?crestN(natOf(nat)):''}</div><div class="lb-sub">${STAR.replace('class="star"','class="star" style="width:11px;height:11px"')} ${fmtN(leg||0)}</div></div></div>`;
-  return `<div class="sec-row"><span class="watch-tag">Live now</span><span class="cd">${pl(L.length,'game')}</span></div><div class="panel yg">${L.slice(0,5).map(g=>`<button class="yg-row live-row" type="button" data-act="watch" data-code="${g.code}">${side(g.host_name,g.host_nation,g.host_legacy,g.host_av,g.host_avc)}<span class="live-vs">VS</span>${side(g.guest_name,g.guest_nation,g.guest_legacy,g.guest_av,g.guest_avc)}<span class="yg-tag wait">Watch</span></button>`).join('')}</div>`;
+  return `<div class="sec-row"><span class="watch-tag">Live now</span><span class="cd">${pl(L.length+WL.length,'game')}</span></div><div class="panel yg">${wrows}${L.slice(0,5).map(g=>`<button class="yg-row live-row" type="button" data-act="watch" data-code="${g.code}">${side(g.host_name,g.host_nation,g.host_legacy,g.host_av,g.host_avc)}<span class="live-vs">VS</span>${side(g.guest_name,g.guest_nation,g.guest_legacy,g.guest_av,g.guest_avc)}<span class="yg-tag wait">Watch</span></button>`).join('')}</div>`;
 }
 
 /* ---- friends ---- */
@@ -2349,6 +2472,7 @@ async function quickMatch(){
   if(!netCfg()){openSetup('invite');return}
   if(!(await netInit())){toast('Can’t reach the Chess Battle server. Check your connection, or invite a friend with a link.');return}
   if(!P.nation){showNationPick();toast('Join a nation first. Quick matches count for your nation.');return}
+  guardForfeit();if(guardPending)await guardPending.catch(()=>{});
   let code='';for(let k=0;k<6;k++)code+=CODE_ABC[rand(CODE_ABC.length)];
   const ok=await hostOnline('5',{code,quick:true});if(!ok)return;
   let polls=0;
@@ -2359,11 +2483,22 @@ async function quickMatch(){
       const r=await rpc('find_match',{p_code:code});
       if(!isOnline()||S.online.code!==code)return;
       if(r.role==='join'&&r.code&&r.code!==code){qmStop(false);await joinOnline(r.code,true,{quick:true});return}
+      if(r.role==='guard'&&r.guard){qmStop(false);guardFound(r);return}
       const w=$('qmCount');if(w)w.textContent=r.matched?'Opponent found. Connecting…':`${pl(Math.max(1,Number(r.waiting)||1),'player')} searching`;
     }catch(e){}
     qmTimer=setTimeout(poll,polls<20?2500:4000);
   };
   poll();
+}
+/* nobody else is searching: a Nation Guard takes the seat */
+function guardFound(r){
+  const g=r.guard,n=natOf(g.nation),mine=myNat(),pts=GUARD_PTS[g.rank]||1,mult=NET.me&&NET.me.weekend?2:1,sty=GUARD_STYLE[g.nation];
+  if(isOnline())leaveOnline();S=null;
+  const el=$('result');
+  el.innerHTML=`<div class="result-card gfound" style="--nc:${n?n.c:'#ffcc2e'}"><div class="result-k">No one else searching · a Guard takes the seat</div><div class="gf-head"><div class="gf-art">${gavatar(g,56)}</div><div style="min-width:0;text-align:left"><div class="gf-name">${esc(guardName(g))}</div><div class="gf-meta">${n?crestN(n):''}<span>${esc(n?n.short:'')}</span>${GBADGE}<span>${g.rating}</span></div></div></div><div class="result-s">${esc(sty?sty.tag:'')}</div><div class="rewards"><span class="rw nat" style="--nc:${mine?mine.c:'#ffcc2e'}">${mine?crestN(mine):''}Win +${pts*mult} ${esc(mine?mine.short:'')}</span><span class="rw">Loss: +${mult} ${esc(n?n.short:'')}</span></div><div class="pair"><button class="ghost" type="button" data-act="home">Not now</button><button class="cta sm shine" type="button" id="gfGo">Play · 5 min</button></div></div>`;
+  el.hidden=false;sfx('ach');
+  let started=false;const start=()=>{if(started)return;started=true;clearTimeout(t);el.hidden=true;startGame('guard','5',{guard:g,guardTicket:r.ticket})};
+  $('gfGo').onclick=start;const t=setTimeout(()=>{if(!el.hidden&&$('gfGo'))start()},6000);
 }
 function showSearching(){
   const r=$('result');const n=myNat();
@@ -3236,13 +3371,34 @@ function doMove(from,i){
   vibrate(cap?20:10);passTurn(!!cap);
 }
 function clickBuy(t){if(!canAct()||!canBuyType(t))return;S.buy=S.buy===t?null:t;S.sel=null;S.tgts=[];sfx('tap');renderBoard();renderTray()}
-function startGame(mode,tctl){
+function startGame(mode,tctl,extra){
   if(mode==='puzzle'){startPuzzle();return}
   if(isOnline())leaveOnline();
+  guardForfeit();
   const dn=dailyNo();newGame(mode,mode==='daily'?seeded(dn):null,mode==='daily'?'off':(tctl==null?(P.set.tc||'off'):tctl));HV=null;AR={arrows:[],marks:[]};
+  if(extra)Object.assign(S,extra);
   if(mode==='daily'){S.dailyNo=dn;S.log=[`Daily #${dn}. Same starting board for everyone today.`]}
   snapHuman();busy=false;resetDom();go('game');renderAll({stagger:true,swap:true});sfx('start');resumeClock();
-  if(vsBot())setTimeout(()=>coach('pre','While the bot thinks, tap your pieces to queue a premove.'),2500);
+  if(vsBot()&&!S.guard)setTimeout(()=>coach('pre','While the bot thinks, tap your pieces to queue a premove.'),2500);
+}
+/* leaving a Guard game part way through counts as a loss */
+function guardForfeit(){if(S&&S.mode==='guard'&&S.guardTicket&&!S.over&&!S.recorded&&S.tc[HUMAN]>1){S.recorded=true;netGuardResult(S.guardTicket,'l','Abandoned')}}
+let guardPending=null;
+function netGuardResult(ticket,res,why){
+  if(!NET.on||!ticket)return Promise.resolve(null);
+  const go=async k=>{try{const r=await rpc('report_guard_result',{p_ticket:ticket,p_res:res,p_why:why||null});if(r&&r.me)applyServerMe(r.me);netRefreshBoards(true);return r}
+    catch(e){if(/too fast/.test(e.message||'')&&k<3){await new Promise(z=>setTimeout(z,12000));return go(k+1)}if(k<2){await new Promise(z=>setTimeout(z,4000));return go(k+1)}return null}};
+  guardPending=go(0).finally(()=>{guardPending=null});return guardPending;
+}
+function guardAward(res){
+  const g=S.guard,L=P.legacy,before=L.pts,mult=NET.me&&NET.me.weekend?2:1,pts=GUARD_PTS[g.rank]||1;
+  const add=res==='w'?pts:res==='l'?-1:0;L.pts=Math.max(0,before+add);L.peak=Math.max(L.peak||0,L.pts);L.games=(L.games||0)+1;
+  let unlocked=null;for(const s2 of LEGACY)if(s2.need&&L.pts>=s2.need&&!L.un.includes(s2.id)){L.un.push(s2.id);unlocked=s2.id}
+  const mine=myNat(),W=warRoll();let nat=null;
+  if(res==='w'&&mine){W.tally[mine.id]=(W.tally[mine.id]||0)+pts*mult;W.mine+=pts*mult;P.natGiven+=pts*mult;nat={d:pts*mult,id:mine.id}}
+  else if(res==='l'&&natOf(g.nation)){W.tally[g.nation]=(W.tally[g.nation]||0)+mult;nat={d:mult,id:g.nation,them:true}}
+  W[res]=(W[res]||0)+1;
+  return {d:L.pts-before,unlocked,nat};
 }
 
 /* record & rewards */
@@ -3262,7 +3418,7 @@ function recordGame(){
     const rated=mode!=='daily'&&!S.undone;
     if(P.vs&&P.vs[mode]){const v=P.vs[mode];if(won)v.w++;else if(draw)v.d++;else v.l++}
     if(mode==='daily'&&won)P.bestDaily=P.bestDaily?Math.min(P.bestDaily,S.tc[fs]):S.tc[fs];
-    if(rated){const o=isOnline()?(S.online.oppRating||P.rating):BOT_R[mode];delta=elo(P.rating,o,won?1:draw?.5:0);P.rating=Math.max(100,P.rating+delta)}
+    if(rated){const o=isOnline()?(S.online.oppRating||P.rating):botRating();delta=elo(P.rating,o,won?1:draw?.5:0);P.rating=Math.max(100,P.rating+delta)}
     crowns=won?20+(mode==='hard'?15:0):draw?8:5;xp=won?80:40;
     if(won&&ov.why==='Checkmate'){P.stats.mates++;unlock('mate')}
     if(won&&mode==='hard')unlock('hard');
@@ -3275,15 +3431,17 @@ function recordGame(){
         P.daily.streak=P.daily.last===n-1?P.daily.streak+1:1;P.daily.last=n;P.daily.best=Math.max(P.daily.best,P.daily.streak);if(P.daily.streak>=3)unlock('daily3')}
     }
     res=won?'w':draw?'d':'l';
+    if(mode==='guard'&&S.guard){const r0=guardAward(res);lgD=r0.d;lgNew=r0.unlocked;natD=r0.nat;if(NET.on)netGuardResult(S.guardTicket,res,ov.why)}
+    else{
     if(lgOk){const r0=legacyAward(res,isOnline());lgD=r0.d;lgNew=r0.unlocked;lgCap=r0.capped}
     if(isOnline())natD=nationAward(res);
-    if(lgOk&&NET.on){if(isOnline())setTimeout(netReport,300);else netBotResult(res)}
-    label=`${mode==='daily'?`Daily #${S.dailyNo}`:isOnline()?`vs ${S.online.oppName||'Opponent'}`:`${MODE_NAME[mode]} bot`} · ${won?'won':draw?'draw':'lost'} ${ov.why==='Time'?'on time':'by '+ov.why.toLowerCase()}`;
+    if(lgOk&&NET.on){if(isOnline())setTimeout(netReport,300);else netBotResult(res)}}
+    label=`${mode==='daily'?`Daily #${S.dailyNo}`:isOnline()?`vs ${S.online.oppName||'Opponent'}`:S.guard?`vs ${guardName(S.guard)} (Guard)`:`${MODE_NAME[mode]} bot`} · ${won?'won':draw?'draw':'lost'} ${ov.why==='Time'?'on time':'by '+ov.why.toLowerCase()}`;
   }
   P.crowns+=crowns;P.xp+=xp;
   const ratedG=fs!=null&&mode!=='daily'&&!S.undone;
   questEvent('game');if(fs!=null&&ov.win===fs){questEvent('win',1,{mode});if(ov.why==='Checkmate')questEvent('mate')}if(mode==='daily')questEvent('daily');
-  trackGame({t:now,rated:ratedG,me:fs!=null?fs:(ov.win!=null?ov.win:null),won:fs!=null&&ov.win===fs,turns:fs!=null?S.tc[fs]:0,opp:fs!=null&&ov.win===fs?(isOnline()?(S.online.oppRating||0):(BOT_R[mode]||0)):0});
+  trackGame({t:now,rated:ratedG,me:fs!=null?fs:(ov.win!=null?ov.win:null),won:fs!=null&&ov.win===fs,turns:fs!=null?S.tc[fs]:0,opp:fs!=null&&ov.win===fs?(isOnline()?(S.online.oppRating||0):botRating()):0});
   const tier1=tierOf(P.rating);S.promo=ratedG&&tier1!==tier0?{from:tier0,to:tier1}:null;
   P.hist.unshift({t:now,label,res,turns:Math.max(S.tc[0],S.tc[1]),delta});saveRep(now,label,res,S.frames);P.hist=P.hist.slice(0,30);
   saveP();
@@ -3322,10 +3480,10 @@ function showResult(){
   const fs=fixedSide(),won=fs!=null?ov.win===fs:ov.win!=null;
   const k=ov.win==null?ov.why:fs!=null?(ov.win===fs?'You win':`${nameOf(1-fs)} wins`):`${SIDE[ov.win]} wins`;
   const DRAWS={'Stalemate':'No safe move and nothing to buy','No progress':'30 turns each without a capture, buy or pawn move','Bare kings':'Only kings left and no gold to spend'};
-  const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Abandoned'?(fs!=null&&ov.win===fs?'Your opponent left the game':'You left the game'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
+  const s=ov.win==null?(DRAWS[ov.why]||'Nobody could win'):ov.why==='Abandoned'?(fs!=null&&ov.win===fs?'Your opponent left the game':'You left the game'):ov.why==='Suicide'?(fs!=null?(ov.win===fs?`${S.guard?esc(S.guard.name):vsBot()?'The bot':'Your opponent'} left their king open`:'You left your king open'):`${SIDE[1-ov.win]} left their king open`):ov.why==='Resignation'?'The game was resigned':ov.why==='Time'?(fs!=null?(ov.win===fs?`${vsBot()?'The bot':'Your opponent'} ran out of time`:'You ran out of time'):`${SIDE[1-ov.win]} ran out of time`):`in ${pl(S.tc[ov.win],'turn')}`;
   const rw=S.reward;
-  const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy${rw.lgCap?' · daily bot cap':''}</span>`:''}${rw.nat?`<span class="rw nat" style="--nc:${natOf(rw.nat.id).c}">${crestN(natOf(rw.nat.id))}${rw.nat.d>0?'+':''}${rw.nat.d} ${esc(natOf(rw.nat.id).short)}</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
-  r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}${isOnline()?rematchUI():`<div class="pair"><button class="cta sm shine" type="button" data-act="again">${S.mode==='daily'?'Replay daily':'Play again'}</button></div>`}<div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="clip">Clip</button><button class="ghost" type="button" data-act="review">Review</button></div><div>${NET.on&&NET.anon&&P.legacy.pts>=10?`<button class="linkbtn" type="button" data-act="authup" style="color:var(--gold)">Save your ${P.legacy.pts} stars</button>`:''}<button class="linkbtn" type="button" data-act="replay">Replay</button><button class="linkbtn" type="button" data-act="viewboard">View board</button>${isOnline()?'':'<button class="linkbtn" type="button" data-act="invite">Challenge a friend</button>'}</div><div class="linkbox" id="shareBox" hidden></div></div>`;
+  const rws=rw?`<div class="rewards">${rw.rated?`<span class="rw ${rw.delta>=0?'up':'down'}">${rw.delta>=0?'+':''}${rw.delta} rating</span>`:''}<span class="rw g">${crest('sm')}+${rw.crowns}</span><span class="rw">+${rw.xp} XP</span>${rw.lg!=null?`<span class="rw lg">${STAR}${rw.lg>0?'+':''}${rw.lg} legacy${rw.lgCap?' · daily bot cap':''}</span>`:''}${rw.nat?`<span class="rw nat" style="--nc:${natOf(rw.nat.id).c}">${crestN(natOf(rw.nat.id))}${rw.nat.d>0?'+':''}${rw.nat.d} ${esc(natOf(rw.nat.id).short)}</span>`:''}${S.guard&&S.over&&S.over.win===HUMAN?`<span class="rw">${esc(RANK_NAME[S.guard.rank])} defeated</span>`:''}</div>${rw.lvlUp?`<div class="result-k">Season level ${rw.lvlUp} reached</div>`:''}`:'';
+  r.innerHTML=`<div class="result-card"><div class="result-k">${esc(k)}</div><div class="result-t">${ov.win==null?'Draw':ov.why==='Time'?'Time’s up':ov.why}</div><div class="result-s">${esc(s)}</div>${rws}${isOnline()?rematchUI():S.mode==='guard'?`<div class="pair"><button class="cta sm shine" type="button" data-act="quickmatch">Find next rival</button></div>`:`<div class="pair"><button class="cta sm shine" type="button" data-act="again">${S.mode==='daily'?'Replay daily':'Play again'}</button></div>`}<div class="pair"><button class="ghost" type="button" data-act="share">Share</button><button class="ghost" type="button" data-act="clip">Clip</button><button class="ghost" type="button" data-act="review">Review</button></div><div>${NET.on&&NET.anon&&P.legacy.pts>=10?`<button class="linkbtn" type="button" data-act="authup" style="color:var(--gold)">Save your ${P.legacy.pts} stars</button>`:''}<button class="linkbtn" type="button" data-act="replay">Replay</button><button class="linkbtn" type="button" data-act="viewboard">View board</button>${isOnline()?'':'<button class="linkbtn" type="button" data-act="invite">Challenge a friend</button>'}</div><div class="linkbox" id="shareBox" hidden></div></div>`;
   r.hidden=false;
   if(firstShow){if(won&&(fs!=null||ov.win!=null)){sfx('win');if(fs!=null||true)confetti()}else if(fs!=null&&ov.win!==fs)sfx('lose');if(rw&&rw.lvlUp)setTimeout(()=>banner(`Level ${rw.lvlUp}`,'Season reward ready in the Shop'),900);if(S.promo){const pr=S.promo;setTimeout(()=>{if(route==='game')showPromo(pr)},1500)}if(rw&&rw.lgNew){const id=rw.lgNew;setTimeout(()=>showLegacyUnlock(id),S.promo?3200:1600)}}
 }
@@ -3334,6 +3492,7 @@ function shareText(){
   const how=ov?(ov.why==='Time'?'⏱ on time':ov.why==='Suicide'?'💀 suicide':ov.why==='Checkmate'?'♚ checkmate':ov.why==='Resignation'?'🏳 resignation':'🤝 draw'):'';
   let head,link=SITE_URL;
   if(S.mode==='daily'){head=`Chess Battle Daily #${S.dailyNo} ${won?'👑':'❌'} ${won?`won in ${pl(turns,'turn')}`:'lost'}`;link+='#daily'}
+  else if(S.guard)head=`Chess Battle: ${won?'I beat':ov&&ov.win==null?'I drew with':'I lost to'} ${guardName(S.guard)}, a ${(natOf(S.guard.nation)||{short:''}).short} Guard, in ${pl(turns,'turn')}`;
   else if(vsBot())head=`Chess Battle: ${won?'I beat':ov&&ov.win==null?'I drew with':'I lost to'} the ${MODE_NAME[S.mode]} bot in ${pl(turns,'turn')}`;
   else if(isOnline())head=`Chess Battle: ${won?'I won':ov&&ov.win==null?'I drew':'I lost'} head to head in ${pl(turns,'turn')}`;
   else head=ov&&ov.win!=null?`Chess Battle: ${SIDE[ov.win]} won in ${pl(S.tc[ov.win],'turn')}`:'Chess Battle: draw';
@@ -3368,8 +3527,8 @@ function rpPlay(){
 }
 function exitReplay(){
   if(!RP)return;if(RP.timer)clearInterval(RP.timer);
-  const real=RP.real,syn=RP.synthetic;RP=null;
-  if(syn){S=null;boardEl.classList.remove('replay');$('tray').hidden=false;$('replayBar').hidden=true;resetDom();go('me');return}
+  const real=RP.real,syn=RP.synthetic,back=RP.back;RP=null;
+  if(syn){S=null;boardEl.classList.remove('replay');boardEl.style.removeProperty('--sq-l');boardEl.style.removeProperty('--sq-d');$('tray').hidden=false;$('replayBar').hidden=true;resetDom();go(back||'me');return}
   if(real){S.b=real.b;S.last=real.last;S.sel=real.sel;S.tgts=real.tgts;S.buy=real.buy}
   boardEl.classList.remove('replay');$('tray').hidden=false;$('replayBar').hidden=true;
   resetDom();renderAll();if(S.over)showResult();
@@ -3692,9 +3851,11 @@ function renderNat(){
   ${weekendBar(false)}
   ${NET.on?`<div class="cap-sec"><span class="sec-t">The front · ${esc(monthName())}</span><span class="cd">${NET.me&&NET.me.front?`fighting for ${esc((regionOf(NET.me.front)||[0,''])[1])}`:'tap a region to choose your front'}</span></div><div class="panel map-wrap">${mapSVG()}<div class="map-leg">${NATIONS.map(x=>`<span><i style="background:${x.c}"></i>${esc(x.short)}</span>`).join('')}<span><i style="background:#232c66"></i>Unclaimed</span></div></div>`:''}
   <div class="cap-sec"><span class="sec-t">War room · ${esc(monthName())}</span><span class="cd">${fmtLeft(msToMonthEnd())}</span></div>
-  <div class="panel war" style="--nc:${n.c}">${warRowsHTML(n)}<div class="war-me"><div><b>${(NET.on&&NET.me?NET.me.month_stars:W.mine)>0?'+':''}${NET.on&&NET.me?NET.me.month_stars:W.mine}</b><span>Your stars this month</span></div><div><b>${NET.on&&NET.me?`${NET.me.wins}–${NET.me.losses}${NET.me.draws?`–${NET.me.draws}`:''}`:`${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}`}</b><span>Online record</span></div><div><b>${NET.on&&NET.me&&NET.me.nation_rank?'#'+NET.me.nation_rank:(P.medals||0)}</b><span>${NET.on&&NET.me&&NET.me.nation_rank?`Rank in ${esc(n.short)}`:'Campaign medals'}</span></div></div><p class="row-s" style="margin-top:12px">Online wins earn ${esc(n.short)} 5 stars and losses cost 3. ${NET.on?'Live worldwide standings.':'Offline: counting this device’s online games until the server connects.'}</p><button class="b3d block shine" type="button" data-act="${netCfg()?'quickmatch':'invite'}" style="margin-top:12px">${netCfg()?'Find a rival':'Challenge a rival'}</button></div>
+  <div class="panel war" style="--nc:${n.c}">${warRowsHTML(n)}<div class="war-me"><div><b>${(NET.on&&NET.me?NET.me.month_stars:W.mine)>0?'+':''}${NET.on&&NET.me?NET.me.month_stars:W.mine}</b><span>Your stars this month</span></div><div><b>${NET.on&&NET.me?`${NET.me.wins}–${NET.me.losses}${NET.me.draws?`–${NET.me.draws}`:''}`:`${W.w||0}–${W.l||0}${W.d?`–${W.d}`:''}`}</b><span>Online record</span></div><div><b>${NET.on&&NET.me&&NET.me.nation_rank?'#'+NET.me.nation_rank:(P.medals||0)}</b><span>${NET.on&&NET.me&&NET.me.nation_rank?`Rank in ${esc(n.short)}`:'Campaign medals'}</span></div></div><p class="row-s" style="margin-top:12px">Online wins earn ${esc(n.short)} 5 stars and losses cost 3. Beating a rival nation’s Guard earns its rank: pawn 1 up to king 5. ${NET.on?'Live worldwide standings.':'Offline: counting this device’s online games until the server connects.'}</p><button class="b3d block shine" type="button" data-act="${netCfg()?'quickmatch':'invite'}" style="margin-top:12px">${netCfg()?'Find a rival':'Challenge a rival'}</button></div>
+  ${feedPanel()}
   ${NET.on?`<div class="cap-sec"><span class="sec-t">Heroes of ${esc(c.city)}</span><span class="cd">this month</span></div><div class="panel">${lbRows(NET.heroes[n.id],{noCrest:true,key:'stars',sub:r=>`${fmtN(r.legacy)} legacy`,empty:`No heroes yet this month. Win an online game and your name goes here.`})}</div>`:''}
   ${NET.on?`<div class="cap-sec"><span class="sec-t">Council of ${esc(c.city)}</span><span class="cd">${esc(prevMonthName())} war</span></div>${councilCard(n)}`:''}
+  ${rosterPanel(n)}
   ${recruitCard(n)}
   <div class="cap-sec"><span class="sec-t">War plans</span><span class="cd">${esc(monthName())} campaign</span></div>
   ${ordersCard(n)}
@@ -4125,7 +4286,8 @@ document.addEventListener('click',e=>{
     case 'noresign':resignArm=false;openSheet('game');break;
     case 'yesresign':closeSheet();resign();break;
     case 'flip':S.autoFlip=!S.autoFlip;openSheet('game');if(S.autoFlip&&!busy&&!S.over&&S.view!==S.turn&&fixedSide()==null){busy=true;flipTo(S.turn,()=>{busy=false})}break;
-    case 'home':if(RP){const syn=RP.synthetic;exitReplay();if(syn)break}go('home');break;
+    case 'home':if(RP){const syn=RP.synthetic;exitReplay();if(syn)break}if(!$('result').hidden&&!S)$('result').hidden=true;go('home');break;
+    case 'watchwar':watchWar(+a.dataset.id);break;
     case 'resume':go('game');renderAll();if(S.over)showResult();break;
     case 'daily':startGame('daily');break;
     case 'pass':openSetup('pass');break;

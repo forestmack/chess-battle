@@ -2,6 +2,15 @@
 
 Everything else is built. These parts need something only the owner can set up.
 
+## 0. Turn on Guard battles (one time)
+
+1. Re-run `server/schema.sql` in the Supabase SQL Editor.
+2. In the SQL Editor, run `select v from cb_config where k = 'war_key';` and copy the value.
+3. On GitHub, open the repo's **Settings → Secrets and variables → Actions → New repository secret**. Name it `WAR_KEY` and paste the value.
+4. Open the **Actions** tab, choose **Guard battles**, and press **Run workflow** once to test it. After that it runs every 30 minutes by itself.
+
+GitHub pauses scheduled workflows in a repo with no commits for 60 days. If battles stop, open the Actions tab and re-enable it.
+
 ## 1. Check retention (do this weekly)
 
 In Supabase, go to **SQL Editor**, paste the query below and press **Run**:

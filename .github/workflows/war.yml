@@ -1,0 +1,26 @@
+# Nation Guard battles: every 30 minutes, two Guards from different nations play one game.
+# The result moves the war standings and the map, and the game plays out live in the app.
+# Setup: add a repository secret named WAR_KEY (Settings > Secrets and variables > Actions).
+name: Guard battles
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+concurrency:
+  group: guard-battles
+  cancel-in-progress: false
+jobs:
+  battle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-save --no-audit --no-fund jsdom@24.1.3
+      - run: node server/war-runner.mjs
+        env:
+          SB_URL: https://lrmrnjctrzhisrfymwfz.supabase.co
+          SB_KEY: sb_publishable_Grpk_ugmZeSTcjZJ0gTE_g_U2_m8L_7
+          WAR_KEY: ${{ secrets.WAR_KEY }}

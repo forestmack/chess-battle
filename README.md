@@ -37,6 +37,25 @@ Play: https://forestmack.github.io/chess-battle/
 
 See `docs/NEXT_STEPS.md` for push notifications, app stores, payments and the retention report.
 
+## Nation Guards
+
+Each nation has 25 Guards: labeled bots that defend it while the player base grows.
+
+| Rank | Count | Rating | Points for beating one |
+|---|---|---|---|
+| King | 1 | 1600 | 5 |
+| Queen | 2 | 1420–1460 | 4 |
+| Rook | 3 | 1310–1370 | 3 |
+| Bishop | 4 | 1210–1290 | 2 |
+| Knight | 5 | 1100–1180 | 2 |
+| Pawn | 10 | 1000–1090 (Medium bot strength) | 1 |
+
+- **Quick match** always pairs two searching players first. If nobody else is searching after 6 to 12 seconds, a random Guard from another nation takes the seat. It's always shown with a Guard badge.
+- **Beating a Guard** scores its points for your nation and your legacy. A loss costs 1 legacy and gives the Guard's nation 1 point. Up to 12 Guard games a day count. Leaving one part way through counts as a loss.
+- **Playstyles:** Ember attacks the king, Tide banks gold and guards its king, Grove builds pawn walls and promotes, Dusk searches deeper for tactics.
+- **Guard battles:** every 30 minutes two Guards from different nations play a game (`server/war-runner.mjs`, run by `.github/workflows/war.yml`). The game plays out live in the app at one move every 6 seconds, then the winner's nation scores the loser's rank. A drawn battle goes to the side with an army (pieces plus gold) at least 3 bigger.
+- Guard ratings move with results but stay within 80 of their rank's base, so a king always outranks a queen.
+
 ## Under the hood
 
 - Single-file app (`index.html`), with no build step and no backend
