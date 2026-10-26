@@ -38,6 +38,17 @@ Play: https://forestmack.github.io/chess-battle/
 
 See `docs/NEXT_STEPS.md` for push notifications, app stores, payments and the retention report.
 
+## Game review (free for everyone)
+
+After any game, tap **Review**. An engine built for Chess Battle's rules (gold from captures, buying, no repeat buys, the suicide rule, stalemate wins) checks every turn and gives:
+
+- accuracy for both players and a winning-chances graph
+- a grade for every turn: Best, Excellent, Good, Inaccuracy, Mistake, Blunder or Missed win
+- the best move or buy, shown with arrows, and a plain-English reason ("Your knight on e1 is left hanging", "You had 6 gold banked, spending it was stronger")
+- a step-through coach for the whole game
+
+Saved games on your profile can be reviewed too. No paywall.
+
 ## Nation Guards
 
 Each nation has 25 Guards: labeled bots that defend it while the player base grows.

@@ -1066,7 +1066,26 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 .flash-bad{animation:flashbad .45s ease}
 @keyframes flashbad{30%{box-shadow:0 0 0 6px rgba(255,94,120,.75)}}
 .rush-big{font:900 clamp(56px,20cqw,96px)/.9 var(--display);color:var(--gold);text-shadow:0 5px 0 var(--gold-lo)}
-.rv-graph{width:100%;height:120px;display:block;margin:6px 0 12px}
+.rv-graph{width:100%;height:96px;display:block;margin:10px 0 12px;border-radius:12px;background:rgba(0,0,0,.18)}
+.rv-load{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:10px 0 6px}.rv-load .row-s{margin:0}
+.rv-spin svg{width:56px;height:56px;animation:rvhop 1.1s var(--ease) infinite}@keyframes rvhop{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px) rotate(-8deg)}}
+.rv-bar{width:100%}.rv-bar i{transition:width .3s}
+.rv-acc{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rv-pl{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line)}
+.rv-pl.me{box-shadow:inset 0 0 0 1.5px rgba(255,204,46,.55)}.rv-pl b{display:block;font:900 26px/1 var(--display)}.rv-pl span:not(.avatar){font:700 11px/1.2 var(--body);color:var(--muted);letter-spacing:.04em}
+.rv-tbl{display:grid;grid-template-columns:minmax(0,1fr) 72px 72px;gap:6px 8px;align-items:center;font:700 13px/1.2 var(--body)}.rv-tbl>b{text-align:center;font:800 13px/1 var(--display)}.rv-tbl>b.z{color:var(--muted);opacity:.5}
+.rv-tbl>b:nth-child(2),.rv-tbl>b:nth-child(3){font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-cl{display:flex;align-items:center;gap:8px;color:var(--rc)}.rv-cl i{font-style:normal;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font:900 12px/1 var(--display);background:color-mix(in srgb,var(--rc) 20%,transparent)}
+.rv-list .rv-item{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;align-items:start;padding:11px 0;border-top:1px solid rgba(43,56,120,.5);width:100%}
+.rv-list .rv-item:first-child{border-top:0}.rv-list .row-s{line-height:1.4;margin-top:3px}.rv-list .row-s b{color:var(--mint);font-weight:700}
+.rv-ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:900 15px/1 var(--display);color:var(--rc);background:color-mix(in srgb,var(--rc) 18%,transparent);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc) 55%,transparent)}
+.rv-tag{display:inline-block;font:800 9.5px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;padding:3px 6px 2px;border-radius:6px;background:rgba(255,255,255,.1);color:#cfd6ff;vertical-align:1px}
+.rv-coach{border-radius:14px;padding:11px 12px;background:color-mix(in srgb,var(--rc,#8fb4ff) 11%,rgba(0,0,0,.2));box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc,#8fb4ff) 45%,transparent)}
+.rvc-top{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:10px;align-items:center}.rvc-b{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font:900 14px/1 var(--display);background:var(--rc);color:#0b1130}
+.rvc-n{font:800 11px/1 var(--display);color:var(--muted);margin-right:6px}.rvc-t{font:800 14px/1.2 var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rvc-k{font:900 11px/1.2 var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--rc);margin-top:3px}
+.rvc-ev{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 8px;border-radius:8px;background:rgba(255,255,255,.9);color:#0b1130}.rvc-ev b{font:900 14px/1 var(--display)}.rvc-ev small{font:800 8.5px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+.replaybar.rv-mode{gap:10px;padding:12px}.replaybar.rv-mode #rpRange,.replaybar.rv-mode .rp-meta,.replaybar.rv-mode #rpPlay{display:none}.replaybar.rv-mode .rp-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:10px}.replaybar.rv-mode .rp-ctrl .icon-btn{width:100%}
+@media (max-width:899px){.screen.game.rv-on>.mvbar{display:none}}
+.rvc-why{font:500 13.5px/1.45 var(--body);margin-top:8px}.rvc-best{margin-top:8px;font:700 13px/1.3 var(--body);color:var(--mint)}.rvc-best span{font:900 10px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;padding:3px 6px 2px;border-radius:6px;background:rgba(75,227,180,.18);margin-right:7px}
 .rv-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid rgba(43,56,120,.5)}
 .rv-item:first-of-type{border-top:0}
 .rv-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font:900 18px/1 var(--display)}
@@ -1342,6 +1361,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
       <div class="action" id="action"></div>
     </section>
     <section class="replaybar" id="replayBar" hidden>
+      <div class="rv-coach" id="rvCoach" hidden></div>
       <div class="rp-meta"><span id="rpLabel">Replay</span><span id="rpPos">Move 0 / 0</span></div>
       <input type="range" id="rpRange" min="0" max="0" value="0" aria-label="Replay position">
       <div class="rp-ctrl">
@@ -1349,7 +1369,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
         <button class="icon-btn big" type="button" data-act="rp-play" id="rpPlay" aria-label="Play replay"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></button>
         <button class="icon-btn" type="button" data-act="rp-next" aria-label="Next move"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
-      <div class="pair"><button class="ghost" type="button" data-act="rp-exit">Exit replay</button><button class="ghost" type="button" disabled>Export clip <span class="tagapp">App</span></button></div>
+      <div class="pair"><button class="ghost" type="button" data-act="rp-exit">Exit replay</button><button class="ghost" type="button" data-act="review" id="rpReview">Game review</button></div>
     </section>
   </section>
 </main>
@@ -1789,9 +1809,10 @@ function newGame(mode,rng,tctl){
      last:[],over:null,log:['New game. Each side gets a king, 3 pawns and a knight.'],chk:false,note:'',autoFlip:P.set.flip,nid,
      resultHidden:false,lastBuy:[null,null],gid:Math.random(),online:null,recorded:false,reward:null,
      stats:[{earned:0,buys:0,caps:0},{earned:0,buys:0,caps:0}],frames:[],capd:[[],[]],quiet:0,prog:false,snaps:[],undone:false,moves:[],tm:[],tctl:TCS[tctl]?tctl:'off',clock:TCS[tctl]?{ms:[TCS[tctl].ms,TCS[tctl].ms],inc:TCS[tctl].inc}:null,clockT:null};
-  S.frames.push({b:b.slice(),last:[]});
+  S.frames.push({b:b.slice(),last:[],g:S.gold.slice(),lb:S.lastBuy.slice(),t:S.turn});
   beginTurn();
 }
+const curFrame=()=>({b:S.b.slice(),last:(S.last||[]).slice(),g:S.gold.slice(),lb:S.lastBuy.slice(),t:S.turn});
 function beginTurn(){
   const w=S.turn;S.tc[w]++;
   S.bonus=S.pend[w];S.pend[w]=0;
@@ -2081,8 +2102,9 @@ function chooseBot(mode,st,opt){
   const cfg=opt.cfg||{easy:{d:1,qd:0,noise:140,rnd:.3},medium:{d:2,qd:2,noise:18,rnd:0},hard:{d:4,qd:4,noise:0,rnd:0,ms:1300}}[mode==='daily'?'medium':mode]||{d:2,qd:2,noise:18,rnd:0};
   if(Math.random()<cfg.rnd)return [acts[rand(acts.length)]];
   let best=acts[0];
+  /* with noise, every root move needs its exact score (a narrowed window only gives bounds, and noise would pick among them at random) */
   const search=d=>{let bv=-Infinity,ba=null,alpha=-Infinity;const scored=[];
-    for(const a of acts){const v=-negamax(applyAct(st,a,w),1-w,d-1,-Infinity,-alpha,1,cfg.qd)+(Math.random()-.5)*cfg.noise;scored.push([v,a]);if(v>bv){bv=v;ba=a}if(v>alpha)alpha=v}
+    for(const a of acts){const v=-negamax(applyAct(st,a,w),1-w,d-1,-Infinity,cfg.noise?Infinity:-alpha,1,cfg.qd)+(Math.random()-.5)*cfg.noise;scored.push([v,a]);if(v>bv){bv=v;ba=a}if(v>alpha)alpha=v}
     scored.sort((x,y)=>y[0]-x[0]);acts=scored.map(x=>x[1]);return ba};
   deadline=cfg.ms?performance.now()+cfg.ms:Infinity;
   try{if(cfg.ms){for(let d=1;d<=cfg.d;d++)best=search(d)}else best=search(cfg.d)}catch(e){if(e!=='time')throw e}
@@ -2101,6 +2123,33 @@ function chooseBot(mode,st,opt){
 }
 /* bot search runs in a worker so the UI never freezes */
 let botWorker=null,botReq=0;
+/* game review engine: for one turn, find the best move or buy under Chess Battle rules and score what was played.
+   Both are judged the same way, so the gap between them is how much the turn cost. */
+function analyzeTurn(st,w,pl,ms){
+  EV=null;const QD=3,lean=a=>({type:a.type,from:a.from,to:a.to,t:a.t,sq:a.sq,cap:a.cap||0});
+  let acts=genActs(st,w,false);if(!acts.length)return null;
+  let best=acts[0],depth=1;
+  deadline=performance.now()+(ms||500);
+  try{for(let d=0;d<3;d++){let bv=-Infinity,ba=null;const sc=[];
+      for(const a of acts){const v=-negamax(applyAct(st,a,w),1-w,d,-Infinity,-bv,1,QD);sc.push([v,a]);if(v>bv){bv=v;ba=a}}
+      sc.sort((x,y)=>y[0]-x[0]);acts=sc.map(x=>x[1]);best=ba;depth=d+1;if(bv>MATE/2)break}}
+  catch(e){if(e!=='time')throw e}
+  deadline=Infinity;
+  const plan=[best];let bs=applyAct(st,best,w);
+  if(best.type==='buy'){for(let k=0;k<4;k++){const stop=-negamax(bs,1-w,1,-Infinity,Infinity,1,2);let bv=stop,ba=null;
+      for(const a of genActs(bs,w,false)){if(a.type!=='buy')continue;const v=-negamax(applyAct(bs,a,w),1-w,1,-Infinity,Infinity,1,2);if(v>bv+10){bv=v;ba=a}}
+      if(!ba)break;plan.push(ba);bs=applyAct(bs,ba,w)}}
+  const Dv=Math.max(0,Math.min(2,depth-1));
+  const val=x=>inCheck(x.b,w)?-MATE:-negamax(x,1-w,Dv,-Infinity,Infinity,1,QD);
+  const same=bs.b.every((p,i)=>{const q=pl.b[i];return (!p&&!q)||(p&&q&&p.t===q.t&&p.w===q.w)});
+  let bestV=val(bs),playedV=same?bestV:val(pl);
+  if(playedV>bestV)bestV=playedV;
+  let reply=null;
+  if(!inCheck(pl.b,w)){let rv=-Infinity;for(const a of genActs(pl,1-w,false)){const v=-negamax(applyAct(pl,a,1-w),w,0,-Infinity,Infinity,1,2);if(v>rv){rv=v;reply=a}}}
+  const term=genActs(bs,1-w,false).length?null:(inCheck(bs.b,1-w)?'mate':'stalemate');
+  const pterm=inCheck(pl.b,w)||genActs(pl,1-w,false).length?null:(inCheck(pl.b,1-w)?'mate':'stalemate');
+  return {best:plan.map(lean),same,bestV,playedV,depth,reply:reply&&lean(reply),term,pterm,chk:inCheck(st.b,w),bestChk:inCheck(bs.b,1-w),playedChk:inCheck(pl.b,1-w)};
+}
 function getWorker(){
   if(botWorker===false)return null;
   if(botWorker)return botWorker;
@@ -2108,8 +2157,8 @@ function getWorker(){
     const src=[`const BOT=${BOT},MATE=${MATE};let deadline=Infinity,EV=null,EVW=0;`,
       `const KN=${JSON.stringify(KN)},DIAG=${JSON.stringify(DIAG)},ORTH=${JSON.stringify(ORTH)},VAL=${JSON.stringify(VAL)},PRICE=${JSON.stringify(PRICE)},SHOP=${JSON.stringify(SHOP)};`,
       `const inB=${inB.toString()};const rand=${rand.toString()};const kingIdx=${kingIdx.toString()};const pawnCount=${pawnCount.toString()};`,
-      ...[attacks,pseudo,apply,inCheck,placeSquares,evalW,genActs,applyAct,quiesce,negamax,chooseBot].map(f=>f.toString()),
-      `onmessage=e=>{let plan=null;try{plan=chooseBot(e.data.mode,e.data.st,e.data.opt)}catch(err){}postMessage({id:e.data.id,plan})};`].join('\n');
+      ...[attacks,pseudo,apply,inCheck,placeSquares,evalW,genActs,applyAct,quiesce,negamax,chooseBot,analyzeTurn].map(f=>f.toString()),
+      `onmessage=e=>{if(e.data.an){let res=null;try{res=analyzeTurn(e.data.st,e.data.w,e.data.pl,e.data.ms)}catch(err){}postMessage({id:e.data.id,res});return}let plan=null;try{plan=chooseBot(e.data.mode,e.data.st,e.data.opt)}catch(err){}postMessage({id:e.data.id,plan})};`].join('\n');
     botWorker=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
   }catch(e){botWorker=false}
   return botWorker||null;
@@ -2319,7 +2368,7 @@ async function watchGame(code){
   const names={};names[g.host_color]=g.host_name||'Player';names[1-g.host_color]=g.guest_name||'Player';
   const nats={};nats[g.host_color]=g.host_nation;nats[1-g.host_color]=g.guest_nation;
   S.online={code:g.code,me:1,host:false,spectate:true,ready:true,rev:g.rev,gameNo:g.game_no,names,nats,hostName:g.host_name,guestName:g.guest_name,hostNation:g.host_nation,guestNation:g.guest_nation};
-  S.view=1;S.frames=[{b:S.b.slice(),last:S.last||[]}];HV=null;busy=false;resetDom();go('game');renderAll({stagger:true});
+  S.view=1;S.frames=[curFrame()];HV=null;busy=false;resetDom();go('game');renderAll({stagger:true});
   const c=rtConn(code,{watch:true});conn=c;
   c.on('data',d=>{if(conn!==c||!isOnline()||!S.online.spectate||!d)return;if(d.type==='state'&&(d.gameNo>S.online.gameNo||(d.gameNo===S.online.gameNo&&d.rev>S.online.rev))){S.online.lastRecv=Date.now();applyRemote(d)}});
   const poll=async()=>{if(conn!==c||!isOnline()||!S.online.spectate)return;try{const x=await rpc('get_game',{p_code:code});if(x&&x.state&&(x.game_no>S.online.gameNo||(x.game_no===S.online.gameNo&&x.rev>S.online.rev)))applyRemote({state:x.state,rev:x.rev,gameNo:x.game_no,hostMe:x.host_color})}catch(e){}setTimeout(poll,8000)};
@@ -2345,7 +2394,7 @@ async function openDaily(code,pre){
   const host=g.host===NET.uid,me=g.my_color!=null?g.my_color:(host?g.host_color:1-g.host_color);
   S.online={code:g.code,me,host,daily:true,srv:true,ready:!!g.guest,rev:g.rev,gameNo:g.game_no,status:g.status,deadline:g.deadline,
     oppName:(host?g.guest_name:g.host_name)||(host&&g.invitee?'your friend':'Opponent'),oppNation:host?g.guest_nation:g.host_nation,oppUid:host?g.guest:g.host,oppRating:host?g.guest_rating:g.host_rating};
-  S.view=me;S.frames=[{b:S.b.slice(),last:S.last||[]}];HV=null;busy=false;resetDom();go('game');renderAll({stagger:true});
+  S.view=me;S.frames=[curFrame()];HV=null;busy=false;resetDom();go('game');renderAll({stagger:true});
   const c=rtConn(g.code);conn=c;
   c.on('data',d=>{if(conn!==c||!isOnline()||!S.online.daily||!d)return;
     if(d.type==='state'&&(d.gameNo>S.online.gameNo||(d.gameNo===S.online.gameNo&&d.rev>S.online.rev))){S.online.ready=true;applyRemote(d)}});
@@ -2710,7 +2759,7 @@ function applyRemote(d){
   const me=S.online.me,wasMine=S.turn===me;
   let capVal=0;const lt=st.last||[];
   if(lt.length===2){const t=S.b[lt[1]];if(t&&t.w===me)capVal=VAL[t.t]}
-  unpack(st);S.online.rev=d.rev;HV=null;S.clockT=null;resumeClock();if(st.last&&st.last.length===2)clearArrows();S.frames.push({b:S.b.slice(),last:S.last.slice()});
+  unpack(st);S.online.rev=d.rev;HV=null;S.clockT=null;resumeClock();if(st.last&&st.last.length===2)clearArrows();S.frames.push(curFrame());
   const nowMine=S.turn===me;
   renderAll({swap:false});if(nowMine&&!wasMine&&!S.over)renderTray({swap:true});
   if(capVal){floater(lt[1],capVal);sfx('cap')}else if(lt.length)sfx(lt.length===2?'move':'buy');
@@ -2931,6 +2980,7 @@ function renderArrows(){
     const line2=[[sx,sy]].concat(pts.slice(1,-1)).concat([[hx,hy]]).map(p=>p.join(',')).join(' ');
     h+=`<polyline points="${line2}" fill="none" stroke="rgba(255,170,0,.82)" stroke-width="20" stroke-linejoin="round"/><polygon points="${x2},${y2} ${hx-uy*24},${hy+ux*24} ${hx+uy*24},${hy-ux*24}" fill="rgba(255,170,0,.82)"/>`;
   }
+  h+=rvArrowsSVG();
   sv.innerHTML=h;
 }
 /* ================= game setup (time control) ================= */
@@ -3092,38 +3142,177 @@ function showRushEnd(){
 }
 function rushShare(){const sc=RUSH?RUSH.score:0;shareOut(`Chess Battle Puzzle Rush: ${pl(sc,'mate')} in 3 minutes. Beat that:`,SITE_URL,'Score copied')}
 
-/* ================= game review: where the game turned ================= */
-function armyOf(b,w){let v=0;for(const p of b)if(p&&p.w===w&&p.t!=='K')v+=VAL[p.t];return v}
-function reviewData(){
-  if(!S||!S.frames||S.frames.length<3)return null;
-  const me=fixedSide()!=null?fixedSide():(S.over&&S.over.win!=null?S.over.win:1);
-  const bal=S.frames.map(f=>armyOf(f.b,me)-armyOf(f.b,1-me));
-  let worst=null,best=null;
-  for(let i=1;i<bal.length;i++){const d=bal[i]-bal[i-1];
-    if(d<0&&(!worst||d<worst.d))worst={i,d};
-    if(d>0&&(!best||d>best.d))best={i,d}}
-  return {me,bal,worst,best};
+/* ================= game review: free for everyone =================
+   Every turn is checked by an engine that knows the Chess Battle rules: gold from captures, buying
+   reinforcements, no repeat buys, the suicide rule and stalemate wins. Each turn gets a grade, the best
+   alternative and a plain-English reason, so players learn why. */
+const RVC={best:['Best','#4be3b4','★'],excellent:['Excellent','#7fdcb0','!'],good:['Good','#8fb4ff','✓'],inacc:['Inaccuracy','#ffcc2e','?!'],mistake:['Mistake','#ff9a3d','?'],blunder:['Blunder','#ff5e78','??'],miss:['Missed win','#ff7ad9','✕'],forced:['Only move','#8fb4ff','•']};
+const RV_ORDER=['best','excellent','good','inacc','mistake','blunder','miss'];
+const RV_MS=420;
+const cap1=x=>x?x[0].toUpperCase()+x.slice(1):x;
+const wpc=v=>v>MATE/2?100:v<-MATE/2?0:50+50*(2/(1+Math.exp(-0.00368208*v))-1);
+function rvPlayed(pb,nb,w){
+  const vac=[],arr=[];
+  for(let i=0;i<64;i++){const a=pb[i],c=nb[i];
+    if(a&&a.w===w&&(!c||c.w!==w||(a.id&&c.id&&a.id!==c.id)))vac.push(i);
+    if(c&&c.w===w&&(!a||a.w!==w||(a.id&&c.id&&a.id!==c.id)))arr.push(i)}
+  if(vac.length===1&&arr.length===1){const cp=pb[arr[0]];return [{type:'move',from:vac[0],to:arr[0],cap:cp&&cp.w!==w?VAL[cp.t]:0}]}
+  if(!vac.length&&arr.length)return arr.map(sq=>({type:'buy',t:nb[sq].t,sq}));
+  return null;
 }
-function lostPiece(i,me){const a=S.frames[i-1].b,b=S.frames[i].b;for(const t of ['Q','R','B','N','P']){const c0=a.filter(p=>p&&p.w===me&&p.t===t).length,c1=b.filter(p=>p&&p.w===me&&p.t===t).length;if(c1<c0)return NAME[t]}return 'material'}
-function wonPiece(i,me){const a=S.frames[i-1].b,b=S.frames[i].b;for(const t of ['Q','R','B','N','P']){const c0=a.filter(p=>p&&p.w===1-me&&p.t===t).length,c1=b.filter(p=>p&&p.w===1-me&&p.t===t).length;if(c1<c0)return NAME[t]}return 'material'}
+function actText(acts,b){
+  if(!acts||!acts.length)return '—';
+  const a=acts[0];
+  if(a.type==='move'){const p=b[a.from],c=b[a.to];if(!p)return `${sqName(a.from)}–${sqName(a.to)}`;
+    let t=c&&c.w!==p.w?`${cap1(NAME[p.t])} takes ${NAME[c.t]} on ${sqName(a.to)}`:`${cap1(NAME[p.t])} ${sqName(a.from)}–${sqName(a.to)}`;
+    if(p.t==='P'&&(a.to<8||a.to>=56))t+=', promotes';return t}
+  return 'Buy '+acts.map(x=>`${NAME[x.t]} on ${sqName(x.sq)}`).join(' + ');
+}
+function rvGrade(r){
+  if(!r)return null;
+  const wb=wpc(r.bestV),wp=wpc(r.playedV),drop=Math.max(0,wb-wp);
+  let cls;
+  if(r.forced)cls='forced';
+  else if(r.same||drop<=.6)cls='best';
+  else if((r.term||r.bestV>MATE/2)&&r.playedV<MATE/2&&r.playedV<900)cls='miss';
+  else if(drop<=3)cls='excellent';else if(drop<=7)cls='good';else if(drop<=14)cls='inacc';else if(drop<=25)cls='mistake';else cls='blunder';
+  const acc=r.same||r.forced?100:Math.max(0,Math.min(100,103.1668*Math.exp(-0.04354*drop)-3.1669));
+  return {cls,drop,acc};
+}
+/* why: one or two sentences in Chess Battle terms */
+function rvWhy(m){
+  const {r,pb,nb,w,played,g}=m,best=r.best,b0=best&&best[0],bt=actText(best,pb),pt=actText(played,pb),out=[],tags=[];
+  const pmove=played&&played[0].type==='move',bmove=b0&&b0.type==='move';
+  const good=g.cls==='best'||g.cls==='excellent'||g.cls==='forced';
+  if(inCheck(nb,w)){out.push('Your king was still under attack when the turn ended. That loses on the spot under the suicide rule. Always check your king before ending your turn.');tags.push('Suicide rule')}
+  if(r.pterm==='mate'){out.push('Checkmate. Their king is attacked, has no safe square, and no buy can block it.');tags.push('Checkmate')}
+  else if(r.pterm==='stalemate'){out.push('Stalemate win: they have no safe move and nothing they can afford to buy.');tags.push('Stalemate win')}
+  if(!out.length&&!good){
+    if(g.cls==='miss'){out.push(r.term==='mate'?`${bt} was checkmate.`:r.term==='stalemate'?`${bt} left them no safe move and nothing to buy: a stalemate win.`:`${bt} started a forced win.`);tags.push(r.term==='stalemate'?'Stalemate win':'Checkmate')}
+    if(r.playedV<-MATE/2&&r.bestV>-MATE/2){out.push(`This lets them force a win${r.reply?`, starting with ${actText([r.reply],nb).toLowerCase()}`:''}.`);tags.push('King safety')}
+    const rp=r.reply,rc=rp&&rp.type==='move'?nb[rp.to]:null;
+    if(out.length<2&&rc&&rc.w===w&&rc.t!=='K'&&g.drop>=6){out.push(pmove&&played[0].to===rp.to?`That puts your ${NAME[rc.t]} on ${sqName(rp.to)} where they can take it for ${VAL[rc.t]} gold.`:`Your ${NAME[rc.t]} on ${sqName(rp.to)} is left hanging. They can take it and earn ${VAL[rc.t]} gold.`);tags.push('Hanging piece')}
+    if(out.length<2&&bmove&&b0.cap&&!(pmove&&played[0].cap>=b0.cap)){const c=pb[b0.to];out.push(`${bt} wins their ${NAME[c.t]} and +${VAL[c.t]} gold.`);tags.push('Free capture')}
+    if(out.length<2&&r.chk&&b0&&b0.type==='buy'){out.push('You were in check. Buying a piece to block the attack was the way out.');tags.push('Blocking buy')}
+    if(out.length<2&&!pmove&&bmove){out.push(`Buying used up your turn. ${bt} mattered more right now.`);tags.push('Tempo')}
+    if(out.length<2&&pmove&&b0&&b0.type==='buy'){const gold=m.gold;out.push(`You had ${gold} gold banked. Spending it (${bt.toLowerCase()}) was stronger than moving.`);tags.push('Spend your gold')}
+    if(out.length<2&&!pmove&&b0&&b0.type==='buy'&&!out.length){out.push(`A better buy: ${bt.toLowerCase()}.`);tags.push('Buying')}
+    if(out.length<2&&r.bestChk&&!r.playedChk){out.push(`${bt} gives check, and a check must be answered before they can buy or attack.`);tags.push('Check')}
+    if(out.length<2&&bmove&&pb[b0.from]&&pb[b0.from].t==='P'&&(b0.to<8||b0.to>=56)){out.push('Promoting makes a free queen, worth 12 gold in the shop.');tags.push('Promotion')}
+    if(!out.length){const d=(Math.min(r.bestV,3000)-Math.max(r.playedV,-3000))/100;out.push(`${bt} kept a stronger position${d>=.5&&d<20?`, about ${d.toFixed(1)} pawns better`:''}.`)}
+  }
+  if(!out.length){
+    if(pmove&&played[0].cap){const c=pb[played[0].to];out.push(`Good capture: their ${NAME[c.t]} and +${VAL[c.t]} gold.`);tags.push('Capture')}
+    else if(!pmove&&played){out.push(r.chk?'Blocking buy: the new piece shields your king.':'Good buy. Gold only helps once it’s on the board.');tags.push(r.chk?'Blocking buy':'Buying')}
+    else if(r.playedChk){out.push('Check. They must deal with it before anything else.');tags.push('Check')}
+    else if(g.cls==='forced')out.push('The only safe move.');
+    else out.push(g.cls==='best'?'The engine’s top choice.':'Nearly as strong as the top choice.');
+  }
+  return {why:out.slice(0,2).join(' '),tags:[...new Set(tags)].slice(0,2)};
+}
+/* analysis runs in a worker one turn at a time; results are kept on the frames so reopening is instant */
+let rvWorker=null,rvReq=0;
+function rvRun(job){
+  return new Promise(res=>{
+    const sync=()=>setTimeout(()=>{let r=null;try{r=analyzeTurn(job.st,job.w,job.pl,job.ms)}catch(e){}res(r)},0);
+    if(rvWorker===null){try{const bw=botWorker;botWorker=null;rvWorker=getWorker()||false;botWorker=bw}catch(e){rvWorker=false}}
+    if(!rvWorker){sync();return}
+    const id=++rvReq;let done=false;
+    const h=e=>{if(e.data.id!==id||done)return;done=true;rvWorker.removeEventListener('message',h);res(e.data.res)};
+    rvWorker.addEventListener('message',h);
+    try{rvWorker.postMessage({an:1,id,st:job.st,w:job.w,pl:job.pl,ms:job.ms})}catch(e){done=true;rvWorker=false;sync()}
+  });
+}
+const rvStrip=b=>b.map(p=>p?{t:p.t,w:p.w}:null);
+function rvMe(frames){return frames._me!==undefined?frames._me:(S&&frames===S.frames?fixedSide():null)}
+async function analyzeGame(frames,onProg){
+  if(frames._rv&&frames._rv.n===frames.length&&frames._rv.last===frames[frames.length-1])return frames._rv;
+  if(frames._rvP)return frames._rvP;
+  frames._rvP=(async()=>{
+    const moves=[],idx=[];
+    for(let i=1;i<frames.length;i++){const a=frames[i-1],b=frames[i];if(a.g&&b.g&&a.t!=null)idx.push(i)}
+    let k=0;
+    for(const i of idx){
+      const a=frames[i-1],b=frames[i],w=a.t,played=rvPlayed(a.b,b.b,w);
+      const st={b:rvStrip(a.b),g:a.g.slice(),lb:a.lb.slice()},pl={b:rvStrip(b.b),g:b.g.slice(),lb:b.lb.slice()};
+      let r=null;if(played)r=await rvRun({st,w,pl,ms:RV_MS});
+      if(r){if(r.same&&genActs(st,w,false).length===1)r.forced=true;
+        const g=rvGrade(r),m={i,w,r,g,pb:a.b,nb:b.b,played,gold:a.g[w]};Object.assign(m,rvWhy(m));moves.push(m)}
+      k++;if(onProg)onProg(k/idx.length);
+    }
+    const acc=[0,1].map(w=>{const l=moves.filter(m=>m.w===w);return l.length?Math.round(l.reduce((s,m)=>s+m.g.acc,0)/l.length):null});
+    const rv={n:frames.length,last:frames[frames.length-1],moves,acc,partial:idx.length<frames.length-1};frames._rv=rv;frames._rvP=null;return rv;
+  })();
+  return frames._rvP;
+}
+let RV_FRAMES=null;
+function rvFrames(){return RP&&RP.frames&&RP.frames[0]&&RP.frames[0].g?RP.frames:S&&S.frames}
 function openReview(){
-  const d=reviewData();if(!d){toast('Play a few more moves to get a review.');return}
-  const {bal,worst,best,me}=d,mx=Math.max(4,...bal.map(Math.abs)),W=320,H=110,n=bal.length;
-  const x=i=>(i/(Math.max(1,n-1)))*W,y=v=>H/2-v/mx*(H/2-6);
-  const path=bal.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
-  const area=`${path} L${x(n-1).toFixed(1)} ${H/2} L0 ${H/2} Z`;
-  const turn=i=>Math.ceil(i/2);
-  const mark=(o,c)=>o?`<circle cx="${x(o.i).toFixed(1)}" cy="${y(bal[o.i]).toFixed(1)}" r="6" fill="${c}" stroke="#0b1130" stroke-width="2"/>`:'';
+  const frames=rvFrames();
+  if(!frames||frames.length<3){toast('Play a few more moves to get a review.');return}
+  if(!frames[0].g){toast('This game was saved before reviews existed. Play a new one to review it.');return}
+  RV_FRAMES=frames;
   $('sheetTitle').textContent='Game review';
-  $('sheetBody').innerHTML=`<p class="row-s" style="margin:0">Army value, you versus your opponent, after every turn. Above the line you’re ahead.</p>
-    <svg class="rv-graph" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="Army balance over the game"><line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="rgba(255,255,255,.18)" stroke-dasharray="4 4"/><path d="${area}" fill="rgba(255,204,46,.14)"/><path d="${path}" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linejoin="round"/>${mark(worst,'#ff5e78')}${mark(best,'#4be3b4')}</svg>
-    <div>${worst?`<div class="rv-item"><span class="rv-ic bad">${worst.d}</span><div><div class="row-t">Turning point · turn ${turn(worst.i)}</div><div class="row-s">You lost a ${esc(lostPiece(worst.i,me))} here. Look at the move just before it: what was left unprotected?</div></div><button class="ghost" type="button" data-act="rvshow" data-i="${Math.max(0,worst.i-1)}">Show me</button></div>`:''}
-    ${best?`<div class="rv-item"><span class="rv-ic good">+${best.d}</span><div><div class="row-t">Best moment · turn ${turn(best.i)}</div><div class="row-s">You won a ${esc(wonPiece(best.i,me))}.</div></div><button class="ghost" type="button" data-act="rvshow" data-i="${best.i}">Show me</button></div>`:''}
-    ${!worst&&!best?'<div class="lb-empty">No material changed hands. A quiet game.</div>':''}</div>
-    <div style="height:10px"></div><button class="b3d block" type="button" data-act="replay">Replay the whole game</button>`;
-  $('sheetWrap').hidden=false;
+  const done=frames._rv&&frames._rv.n===frames.length&&frames._rv.last===frames[frames.length-1];
+  if(!done){
+    $('sheetBody').innerHTML=`<div class="rv-load"><div class="rv-spin">${svgPiece('N','tw')}</div><div class="row-t">Reviewing every move…</div><div class="bar rv-bar"><i id="rvBar" style="width:0%"></i></div><p class="row-s">The review engine knows the Chess Battle rules: gold from captures, buying reinforcements, no repeat buys, the suicide rule and stalemate wins.</p><p class="row-s" style="color:var(--mint);font-weight:700">Free for every player, every game.</p></div>`;
+    $('sheetWrap').hidden=false;
+    analyzeGame(frames,f=>{const b=$('rvBar');if(b)b.style.width=(f*100).toFixed(0)+'%'}).then(()=>{if(RV_FRAMES===frames&&!$('sheetWrap').hidden&&$('sheetTitle').textContent==='Game review')rvSummary(frames)});
+    return;
+  }
+  $('sheetWrap').hidden=false;rvSummary(frames);
 }
-function reviewShow(i){closeSheet();const fr=S.frames.slice();enterReplay(fr,'Review');rpShow(Math.min(i,fr.length-1))}
+function rvSummary(frames){
+  const rv=frames._rv,me=rvMe(frames),names=frames._names||(S&&frames===S.frames?[nameOf(0),nameOf(1)]:['Black','White']);
+  const sides=me==null?[1,0]:[me,1-me];
+  const lbl=w=>me==null?SIDE[w]:w===me?'You':(names[w]&&names[w]!=='You'?names[w]:'Opponent');
+  const cnt=(w,c)=>rv.moves.filter(m=>m.w===w&&m.g.cls===c).length;
+  // graph: chances for the viewer after every turn
+  const view=me==null?1:me,pts=[[0,50]].concat(rv.moves.map(m=>{const v=m.w===view?m.r.playedV:-m.r.playedV;return [m.i,wpc(v)]}));
+  const W=320,H=96,n=frames.length-1||1,x=i=>i/n*W,y=v=>H-v/100*H;
+  const path=pts.map((p,k)=>`${k?'L':'M'}${x(p[0]).toFixed(1)} ${y(p[1]).toFixed(1)}`).join(' ');
+  const dots=rv.moves.filter(m=>['inacc','mistake','blunder','miss'].includes(m.g.cls)).map(m=>{const v=m.w===view?m.r.playedV:-m.r.playedV;return `<circle cx="${x(m.i).toFixed(1)}" cy="${y(wpc(v)).toFixed(1)}" r="${m.w===view?5:3.5}" fill="${RVC[m.g.cls][1]}" stroke="#0b1130" stroke-width="1.5"/>`}).join('');
+  const key=rv.moves.filter(m=>(me==null||m.w===me)&&['inacc','mistake','blunder','miss'].includes(m.g.cls)).sort((a,b)=>b.g.drop-a.g.drop).slice(0,3).sort((a,b)=>a.i-b.i);
+  const top=rv.moves.filter(m=>(me==null||m.w===me)&&m.g.cls==='best'&&(m.played[0].cap||m.r.pterm||m.r.playedChk)).slice(-1)[0];
+  const row=m=>{const c=RVC[m.g.cls];return `<button class="rv-item" type="button" data-act="rvgo" data-i="${m.i}"><span class="rv-ic" style="--rc:${c[1]}">${c[2]}</span><div style="min-width:0"><div class="row-t">Turn ${Math.ceil(m.i/2)} · ${esc(c[0])}${m.tags[0]?` <span class="rv-tag">${esc(m.tags[0])}</span>`:''}</div><div class="row-s">${esc(actText(m.played,m.pb))}. ${esc(m.why)}${m.g.cls!=='best'&&m.r.best?` <b>Best: ${esc(actText(m.r.best,m.pb))}.</b>`:''}</div></div></button>`};
+  $('sheetBody').innerHTML=`<div class="rv-acc">${sides.map(w=>`<div class="rv-pl${w===me?' me':''}"><span class="avatar ${w?'tw':'tb'}">${svgPiece('K')}</span><div><b>${rv.acc[w]==null?'–':rv.acc[w]+'%'}</b><span>${esc(lbl(w))} · accuracy</span></div></div>`).join('')}</div>
+    <svg class="rv-graph" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="Winning chances over the game"><rect x="0" y="0" width="${W}" height="${H/2}" fill="rgba(255,255,255,.05)"/><line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="rgba(255,255,255,.2)" stroke-dasharray="4 4"/><path d="${path} L${x(pts[pts.length-1][0]).toFixed(1)} ${H} L0 ${H} Z" fill="rgba(255,204,46,.12)"/><path d="${path}" fill="none" stroke="var(--gold)" stroke-width="2.4" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>${dots}</svg>
+    <p class="row-s" style="margin:-6px 0 10px">${me==null?'White’s':'Your'} winning chances after every turn. Above the line is good for ${me==null?'White':'you'}.</p>
+    <div class="rv-tbl"><span></span>${sides.map(w=>`<b>${esc(lbl(w))}</b>`).join('')}${RV_ORDER.map(c=>`<span class="rv-cl" style="--rc:${RVC[c][1]}"><i>${RVC[c][2]}</i>${RVC[c][0]}</span>${sides.map(w=>`<b class="${cnt(w,c)?'':'z'}">${cnt(w,c)}</b>`).join('')}`).join('')}</div>
+    <div class="sec-t" style="margin:16px 0 4px">${key.length?'Moments to learn from':'Clean game'}</div>
+    <div class="rv-list">${key.length?key.map(row).join(''):`<div class="lb-empty">No inaccuracies, mistakes or blunders${me==null?'':' from you'}. Well played.</div>`}${top?`<div class="sec-t" style="margin:14px 0 4px">Best moment</div>${row(top)}`:''}</div>
+    <div style="height:12px"></div><button class="b3d block shine" type="button" data-act="rvgo" data-i="1">Step through every move</button>
+    <p class="row-s" style="text-align:center;margin-top:10px">Game review is free for everyone.</p>`;
+}
+/* step through: the replay bar becomes a coach */
+function rvStart(i){
+  const frames=RV_FRAMES||rvFrames();if(!frames||!frames._rv)return;closeSheet();
+  if(!(RP&&RP.frames===frames)){enterReplay(frames,'Game review');if(!RP)return}
+  RP.rv=frames._rv;RP.rvMe=rvMe(frames);$('rpLabel').textContent='Game review';$('replayBar').classList.add('rv-mode');$('scr-game').classList.add('rv-on');rpShow(i);requestAnimationFrame(fitBoard);
+}
+function rvCoach(i){
+  const el=$('rvCoach');if(!el)return;
+  if(!RP||!RP.rv){el.hidden=true;RP&&(RP.rvAr=null);return}
+  const m=RP.rv.moves.find(x=>x.i===i);
+  if(!m){RP.rvAr=null;el.hidden=false;el.style.removeProperty('--rc');el.innerHTML=i===0?`<div class="rvc-why">Start of the game. Use the arrows to step through every turn and see what the engine thinks.</div>`:`<div class="rvc-why">No review for this position.</div>`;return}
+  const c=RVC[m.g.cls],me=RP.rvMe,who=me==null?SIDE[m.w]:m.w===me?'You':'Them';
+  const pov=me==null?1:me,ev=m.w===pov?m.r.playedV:-m.r.playedV,evs=ev>MATE/2?'Win':ev<-MATE/2?'Lost':`${ev>=0?'+':'−'}${Math.abs(ev/100).toFixed(1)}`;
+  el.hidden=false;el.style.setProperty('--rc',c[1]);
+  el.innerHTML=`<div class="rvc-top"><span class="rvc-b">${c[2]}</span><div style="min-width:0"><div class="rvc-t"><span class="rvc-n">${Math.ceil(i/2)}</span>${esc(who)}: ${esc(actText(m.played,m.pb))}</div><div class="rvc-k">${esc(c[0])}${m.tags.map(t=>` <span class="rv-tag">${esc(t)}</span>`).join('')}</div></div><span class="rvc-ev" title="Engine evaluation, in pawns"><b>${evs}</b><small>${me==null?'White':'you'}</small></span></div><div class="rvc-why">${esc(m.why)}</div>${m.g.cls!=='best'&&m.g.cls!=='forced'&&m.r.best?`<div class="rvc-best"><span>Best</span>${esc(actText(m.r.best,m.pb))}</div>`:''}`;
+  const ar=[],mk=[];
+  const add=(acts,col)=>{for(const a of acts||[]){if(a.type==='move')ar.push({f:a.from,t:a.to,c:col});else mk.push({sq:a.sq,c:col})}};
+  if(m.g.cls!=='best'&&m.g.cls!=='forced')add(m.r.best,'rgba(75,227,180,.85)');
+  add(m.played,m.g.cls==='best'||m.g.cls==='forced'?'rgba(75,227,180,.85)':c[1]);
+  RP.rvAr={ar,mk};
+}
+function rvArrowsSVG(){
+  if(!RP||!RP.rvAr)return '';let h='';
+  const cen=i=>{const [r,c]=vpos(i);return [c*100+50,r*100+50]};
+  for(const m of RP.rvAr.mk){const [x,y]=cen(m.sq);h+=`<circle cx="${x}" cy="${y}" r="40" fill="none" stroke="${m.c}" stroke-width="9"/><text x="${x}" y="${y-28}" text-anchor="middle" font-size="22" font-weight="900" fill="${m.c}">+</text>`}
+  for(const a of RP.rvAr.ar){const [x1,y1]=cen(a.f),[x2,y2]=cen(a.t),L=Math.hypot(x2-x1,y2-y1)||1,ux=(x2-x1)/L,uy=(y2-y1)/L,hx=x2-ux*34,hy=y2-uy*34,sx=x1+ux*22,sy=y1+uy*22;
+    h+=`<line x1="${sx}" y1="${sy}" x2="${hx}" y2="${hy}" stroke="${a.c}" stroke-width="18" stroke-linecap="round"/><polygon points="${x2},${y2} ${hx-uy*24},${hy+ux*24} ${hx+uy*24},${hy-ux*24}" fill="${a.c}"/>`}
+  return h;
+}
 
 /* ================= clips: a short video of the end of the game ================= */
 async function pieceImages(){
@@ -3300,7 +3489,7 @@ function flipTo(view,cb){
 function suicide(w){
   closeTurnClock();pushMoveLabel('??');
   busy=true;S.over={win:1-w,why:'Suicide'};S.sel=null;S.tgts=[];S.buy=null;
-  S.log.push(`${SIDE[w]} left their king in check. ${SIDE[1-w]} wins.`);S.frames.push({b:S.b.slice(),last:S.last.slice()});
+  S.log.push(`${SIDE[w]} left their king in check. ${SIDE[1-w]} wins.`);S.frames.push(curFrame());
   renderAll();vibrate(60);push();
   setTimeout(()=>{busy=false;showResult()},520);
 }
@@ -3314,7 +3503,7 @@ function passTurn(captured){
   S.quiet=S.prog?0:(S.quiet||0)+1;S.prog=false;
   closeTurnClock();pushMoveLabel();HV=null;
   S.turn=1-S.turn;beginTurn();if(S.over&&S.over.why==='Checkmate'&&S.moves.length)S.moves[S.moves.length-1]=S.moves[S.moves.length-1].replace(/\+?$/,'#');
-  if(S.clock&&!S.over&&clockLive())S.clockT=performance.now();S.frames.push({b:S.b.slice(),last:S.last.slice()});snapHuman();push();
+  if(S.clock&&!S.over&&clockLive())S.clockT=performance.now();S.frames.push(curFrame());snapHuman();push();
   renderBoard();$('tray').classList.add('locked');
   setTimeout(()=>{
     if(!S||S.gid!==gid)return;
@@ -3515,8 +3704,9 @@ function enterReplay(frames,label){
 }
 function rpShow(i){
   if(!RP)return;RP.i=Math.max(0,Math.min(RP.frames.length-1,i));const f=RP.frames[RP.i];
-  S.b=f.b.map(p=>p?{...p}:null);S.last=f.last||[];renderBoard();
+  S.b=f.b.map(p=>p?{...p}:null);S.last=f.last||[];if(RP.rv)rvCoach(RP.i);renderBoard();renderArrows();
   $('rpRange').value=RP.i;$('rpPos').textContent=`Move ${RP.i} / ${RP.frames.length-1}`;
+  const rb=$('rpReview');if(rb)rb.hidden=!!RP.rv||!(RP.frames[0]&&RP.frames[0].g)||RP.frames.length<3;
 }
 function rpPlay(){
   if(!RP)return;
@@ -3527,7 +3717,7 @@ function rpPlay(){
 }
 function exitReplay(){
   if(!RP)return;if(RP.timer)clearInterval(RP.timer);
-  const real=RP.real,syn=RP.synthetic,back=RP.back;RP=null;
+  const real=RP.real,syn=RP.synthetic,back=RP.back;RP=null;const co=$('rvCoach');if(co)co.hidden=true;$('replayBar').classList.remove('rv-mode');$('scr-game').classList.remove('rv-on');fitKey='';renderArrows();
   if(syn){S=null;boardEl.classList.remove('replay');boardEl.style.removeProperty('--sq-l');boardEl.style.removeProperty('--sq-d');$('tray').hidden=false;$('replayBar').hidden=true;resetDom();go(back||'me');return}
   if(real){S.b=real.b;S.last=real.last;S.sel=real.sel;S.tgts=real.tgts;S.buy=real.buy}
   boardEl.classList.remove('replay');$('tray').hidden=false;$('replayBar').hidden=true;
@@ -3670,11 +3860,11 @@ function previewSound(id){
 }
 
 /* ---------- replays (compact) ---------- */
-const encFrame=f=>f.b.map(p=>p?(p.w?p.t:p.t.toLowerCase()):'.').join('')+'|'+(f.last||[]).join(',');
+const encFrame=f=>f.b.map(p=>p?(p.w?p.t:p.t.toLowerCase()):'.').join('')+'|'+(f.last||[]).join(',')+(f.g?`|${f.g.join(',')}|${(f.lb||[]).map(x=>x||'').join(',')}|${f.t}`:'');
 function decFrames(list){
   let prev=null,nid=1;const out=[];
   for(const s of list){
-    const [bs,ls]=String(s).split('|'),b=Array(64).fill(null);
+    const [bs,ls,gs,lbs,ts]=String(s).split('|'),b=Array(64).fill(null);
     for(let i=0;i<64;i++){const ch=bs[i];if(ch&&ch!=='.')b[i]={t:ch.toUpperCase(),w:ch===ch.toUpperCase()?1:0,id:0}}
     if(prev){
       const gone=[];
@@ -3684,13 +3874,15 @@ function decFrames(list){
         if(k>=0){c.id=gone[k].id;gone.splice(k,1)}else c.id=nid++}
     }else for(let i=0;i<64;i++)if(b[i])b[i].id=nid++;
     nid=Math.max(nid,...b.filter(Boolean).map(p=>p.id+1));
-    out.push({b,last:ls?ls.split(',').filter(x=>x!=='').map(Number):[]});prev=b;
+    const fr={b,last:ls?ls.split(',').filter(x=>x!=='').map(Number):[]};
+    if(gs!=null&&ts!=null){fr.g=gs.split(',').map(Number);fr.lb=(lbs||',').split(',').map(x=>x||null);fr.t=+ts}
+    out.push(fr);prev=b;
   }
   return out;
 }
 const loadReps=()=>{try{return JSON.parse(store.get('cb-reps')||'[]')}catch(e){return[]}};
 function saveRep(t,label,res,frames){
-  try{const reps=loadReps();reps.unshift({t,label,res,f:frames.slice(0,300).map(encFrame)});store.set('cb-reps',JSON.stringify(reps.slice(0,15)))}catch(e){}
+  try{const reps=loadReps();reps.unshift({t,label,res,me:fixedSide(),n:[nameOf(0),nameOf(1)],f:frames.slice(0,300).map(encFrame)});store.set('cb-reps',JSON.stringify(reps.slice(0,15)))}catch(e){}
 }
 
 /* ---------- tracking ---------- */
@@ -4330,7 +4522,7 @@ document.addEventListener('click',e=>{
     case 'rushquit':endRush();break;
     case 'sharerush':rushShare();break;
     case 'review':openReview();break;
-    case 'rvshow':reviewShow(+a.dataset.i);break;
+    case 'rvgo':rvStart(+a.dataset.i);break;
     case 'clip':makeClip();break;
     case 'clipshare':shareClip();break;
     case 'setfront':setFront(a.dataset.id);break;
@@ -4379,7 +4571,7 @@ document.addEventListener('click',e=>{
     case 'settitle':P.equip.title=a.dataset.id;saveP();sfx('tap');openEdit();renderMe();break;
     case 'sharecard':shareCard();break;
     case 'closemodal':$('modal').hidden=true;break;
-    case 'rep':{if(S&&!S.over&&S.mode!=='puzzle'){toast('Finish your current game first. Tap Resume on Play.');break}if(S&&(S.over||S.mode==='puzzle'))S=null;const r=loadReps().find(x=>x.t===+a.dataset.t);if(r)enterReplay(decFrames(r.f),r.label);break}
+    case 'rep':{if(S&&!S.over&&S.mode!=='puzzle'){toast('Finish your current game first. Tap Resume on Play.');break}if(S&&(S.over||S.mode==='puzzle'))S=null;const r=loadReps().find(x=>x.t===+a.dataset.t);if(r){const fr=decFrames(r.f);fr._me=r.me;fr._names=r.n;enterReplay(fr,r.label)}break}
     case 'claim':claim(+a.dataset.l);break;
     case 'av':P.av=a.dataset.v;saveP();netSyncProfile();renderMe();if(!$('sheetWrap').hidden)openEdit();break;
     case 'avc':P.avc=a.dataset.v;saveP();netSyncProfile();renderMe();if(!$('sheetWrap').hidden)openEdit();break;
