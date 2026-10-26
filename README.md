@@ -40,14 +40,13 @@ See `docs/NEXT_STEPS.md` for push notifications, app stores, payments and the re
 
 ## Game review (free for everyone)
 
-After any game, tap **Review**. An engine built for Chess Battle's rules (gold from captures, buying, no repeat buys, the suicide rule, stalemate wins) checks every turn and gives:
+Every game gets a full review, free, with no limits. It's ready the moment the game ends because each turn is graded quietly in the background while you play.
 
-- accuracy for both players and a winning-chances graph
-- a grade for every turn: Best, Excellent, Good, Inaccuracy, Mistake, Blunder or Missed win
-- the best move or buy, shown with arrows, and a plain-English reason ("Your knight on e1 is left hanging", "You had 6 gold banked, spending it was stronger")
-- a step-through coach for the whole game
-
-Saved games on your profile can be reviewed too. No paywall.
+- **Engine built for Chess Battle:** principal-variation search with a transposition table and check extensions, searching 6–9 moves deep on most positions. It knows gold from captures, buying (including several buys in one turn), no repeat buys, blocking buys, the suicide rule and stalemate wins. A quick pass grades every turn instantly; a deeper pass then sharpens every grade.
+- **Grades:** Brilliant (a sound sacrifice), Great (the only strong move), Best, Excellent, Good, Only move, Inaccuracy, Mistake, Missed win, Blunder. Grades come from how much the turn changed your winning chances.
+- **Summary:** accuracy rings for both players, an estimated game rating, an interactive winning-chances graph you can scrub, a grade table, key-moment cards with mini boards, and lessons drawn from your own mistakes.
+- **Coach:** steps through the game on the real board with a winning-chances bar, the grade badge on the square, the best move as an arrow, the engine's best line (which you can play out on the board), and a plain-English reason. Arrow keys, swipe or "Next mistake" to move around.
+- **Practice:** "Try to find a better move" resets the position so you can play it yourself; the engine checks your answer. "Practice my mistakes" runs through all of them in a row.
 
 ## Nation Guards
 
